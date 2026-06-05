@@ -1,0 +1,5 @@
+@startuml
+interface Repository {
+  + save(item: Object): void
+}
+@enduml

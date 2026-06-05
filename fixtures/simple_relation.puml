@@ -1,0 +1,5 @@
+@startuml
+class Order
+class User
+User "1" -- "*" Order
+@enduml

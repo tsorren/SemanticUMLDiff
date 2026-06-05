@@ -1,0 +1,20 @@
+name: 'Semantic UML Diff'
+description: 'Deterministic semantic UML diff system for GitHub Pull Requests'
+inputs:
+  base_uml_dir:
+    description: 'Path to the directory containing PlantUML diagrams for the base branch'
+    required: true
+  pr_uml_dir:
+    description: 'Path to the directory containing PlantUML diagrams for the PR branch'
+    required: true
+  github_token:
+    description: 'GitHub token for posting PR comments'
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.base_uml_dir }}
+    - ${{ inputs.pr_uml_dir }}
+    - ${{ inputs.github_token }}

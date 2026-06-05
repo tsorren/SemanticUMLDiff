@@ -1,0 +1,143 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Compiled extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Pyenv
+.python-version
+
+# =========================
+# Testing
+# =========================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+
+# mypy
+.mypy_cache/
+
+# Ruff
+.ruff_cache/
+
+# Hypothesis
+.hypothesis/
+
+# =========================
+# IDEs / Editors
+# =========================
+.vscode/
+.idea/
+*.iml
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Generated UML artifacts
+# =========================
+artifacts/
+generated/
+out/
+tmp/
+
+# PlantUML outputs
+*.svg
+*.png
+
+# Optional:
+# ignore generated .puml outputs
+# if they are regenerated in CI
+# *.puml
+
+# =========================
+# Coverage / reports
+# =========================
+coverage.xml
+junit.xml
+reports/
+
+# =========================
+# Docker
+# =========================
+*.pid
+docker-compose.override.yml
+
+# =========================
+# GitHub Actions artifacts
+# =========================
+*.tar
+*.gz
+*.zip
+
+# =========================
+# Local runtime files
+# =========================
+*.db
+*.sqlite3
+
+# =========================
+# Secrets
+# =========================
+secrets/
+*.pem
+*.key
+
+# =========================
+# Semantic UML Diff outputs
+# =========================
+semantic_diff_output/
+diff_output/
+rendered/
+snapshots/
+
+# =========================
+# Temporary parser/debug files
+# =========================
+debug/
+scratch/

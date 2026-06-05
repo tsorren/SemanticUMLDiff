@@ -1,0 +1,8 @@
+@startuml
+class User {
+  - name: String
+  - age: Integer
+  + getName(): String
+  + getAge(): Integer
+}
+@enduml
