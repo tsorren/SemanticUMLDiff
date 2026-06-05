@@ -85,6 +85,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+## Support and Issues
+
+If you encounter any problems, errors, or unexpected outputs while using the Semantic UML Diff action, please [open an issue](https://github.com/tsorren/SemanticUMLDiff/issues) on this repository. Provide as much context as possible, including your `action.yml` configuration and the PlantUML diagrams causing the issue if they can be shared publicly.
+
+By using this Action, you agree to the terms in the `LICENSE` (MIT) and understand that the Developers offer community-driven support via GitHub Issues.
+
 ## Development
 
 This project is built following **Spec Driven Development** guided by AI. See [`SPEC.md`](SPEC.md) and the `specs/` folder for details on the architecture, domain, and agent interaction workflow.
