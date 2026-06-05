@@ -15,12 +15,12 @@ class PlantUMLParser:
         self.current_class: Optional[str] = None
 
         # Regex compiled
-        self.re_entity = re.compile(r'^(abstract\s+class|class|interface|enum)\s+(\w+)(?:\s*\{)?$')
-        self.re_method = re.compile(r'^([+\-#~])?\s*(\w+)\s*\((.*?)\)(?:\s*:\s*(.+))?$')
-        self.re_attr = re.compile(r'^([+\-#~])?\s*(\w+)(?:\s*:\s*(.+))?$')
-        # Simple relation regex matching words and common UML arrows
+        self.re_entity = re.compile(r'^(abstract\s+class|class|interface|enum)\s+([\w\.]+)(?:\s*\{)?$')
+        self.re_method = re.compile(r'^(?:\{method\}\s*)?(?:\{static\}\s*)?(?:\{abstract\}\s*)?([+\-#~])?\s*(\w+)\s*\((.*?)\)(?:\s*:\s*(.+))?$')
+        self.re_attr = re.compile(r'^(?:\{field\}\s*)?(?:\{static\}\s*)?([+\-#~])?\s*(\w+)(?:\s*:\s*(.+))?$')
+        # Simple relation regex matching words, namespaces and common UML arrows
         self.re_relation = re.compile(
-            r'^(\w+)\s*(?:"(.*?)")?\s*([o\*<\|\-]*[.\-]+[o\*>\|\-]*)\s*(?:"(.*?)")?\s*(\w+)(?:\s*:\s*(.*))?$'
+            r'^([\w\.]+)\s*(?:"(.*?)")?\s*([o\*<\|\-]*[.\-]+[o\*>\|\-]*)\s*(?:"(.*?)")?\s*([\w\.]+)(?:\s*:\s*(.*))?$'
         )
 
     def parse(self, raw_text: str) -> UMLModel:
