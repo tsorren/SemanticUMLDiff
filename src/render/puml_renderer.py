@@ -33,7 +33,7 @@ def render_puml(base: UMLModel, pr: UMLModel, diff: DiffResult, spec: RenderSpec
         else:
             c = pr_classes.get(class_name)
             bg_color = (
-                COLOR_ADDED if color == "green" 
+                COLOR_ADDED if color == "green"
                 else (COLOR_MODIFIED if color == "yellow" else "")
             )
 
@@ -91,7 +91,7 @@ def _render_members(
 ) -> List[str]:
     lines: List[str] = []
     member_diffs = [
-        d for d in diff.changes 
+        d for d in diff.changes
         if d.context == class_name and d.entity_type in ("attribute", "method")
     ]
 
@@ -100,7 +100,7 @@ def _render_members(
         for a in pr_c.attributes:
             sig = f"{a.visibility} {a.name}: {a.type}".strip()
             diff_item = next(
-                (d for d in member_diffs if d.entity_type == "attribute" and d.entity_name == a.name), 
+                (d for d in member_diffs if d.entity_type == "attribute" and d.entity_name == a.name),
                 None
             )
 
@@ -120,7 +120,7 @@ def _render_members(
     if base_c:
         for a in base_c.attributes:
             diff_item = next(
-                (d for d in member_diffs if d.entity_type == "attribute" and d.entity_name == a.name), 
+                (d for d in member_diffs if d.entity_type == "attribute" and d.entity_name == a.name),
                 None
             )
             sig = f"{a.visibility} {a.name}: {a.type}".strip()
@@ -134,7 +134,7 @@ def _render_members(
         for m in pr_c.methods:
             sig = f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}".strip()
             diff_item = next(
-                (d for d in member_diffs if d.entity_type == "method" and d.entity_name == m.name), 
+                (d for d in member_diffs if d.entity_type == "method" and d.entity_name == m.name),
                 None
             )
 
@@ -154,7 +154,7 @@ def _render_members(
     if base_c:
         for m in base_c.methods:
             diff_item = next(
-                (d for d in member_diffs if d.entity_type == "method" and d.entity_name == m.name), 
+                (d for d in member_diffs if d.entity_type == "method" and d.entity_name == m.name),
                 None
             )
             sig = f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}".strip()
