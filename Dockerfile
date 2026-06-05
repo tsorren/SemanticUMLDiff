@@ -1,26 +1,21 @@
 FROM python:3.12-slim
 
-# Install Java and Graphviz for PlantUML
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    default-jre \
-    graphviz \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends default-jre graphviz wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Download PlantUML
-RUN wget https://github.com/plantuml/plantuml/releases/download/v1.2024.4/plantuml-1.2024.4.jar -O /opt/plantuml.jar
-
-# Set up the Python project
 WORKDIR /app
 
-# Copy the pyproject.toml first to cache dependencies
-COPY pyproject.toml ./
-RUN pip install .
+# Download a stable version of PlantUML
+RUN wget -q https://github.com/plantuml/plantuml/releases/download/v1.2024.4/plantuml-1.2024.4.jar -O /app/plantuml.jar
 
-# Copy the source code
-COPY src/ ./src/
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Install Python dependencies natively
+RUN pip install --no-cache-dir networkx==3.* requests==2.*
 
-ENTRYPOINT ["/entrypoint.sh"]
+COPY src/ /app/src/
+
+# Set Python Path so imports work
+ENV PYTHONPATH="/app/src"
+
+ENTRYPOINT ["python", "/app/src/main.py"]
