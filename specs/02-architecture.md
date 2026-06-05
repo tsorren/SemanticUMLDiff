@@ -242,6 +242,10 @@ The GitHub Action is designed to be called within a larger workflow that runs on
 - optional image preview.
 - **Sticky Update**: The Action will search for an existing comment it previously created (using a hidden HTML marker like `<!-- semantic-uml-diff-comment -->`) and update it, rather than spamming the PR with new comments.
 
+## Technical Debt & Future Work
+
+* **Rename Detection:** Currently, renaming a class, attribute, or method is processed as a `REMOVED` entity and a newly `ADDED` entity. This is a deliberate simplification for the MVP. The `DiffItem` and `ChangeType` enums are designed to be extensible so a `RENAMED` state can be cleanly added in future iterations when structural similarity heuristics are developed.
+
 ---
 
 ## Discord Integration Design
