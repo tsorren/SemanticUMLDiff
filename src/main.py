@@ -50,8 +50,6 @@ def main() -> None:
         print("No PlantUML files found in the specified directories.")
         sys.exit(0)
         
-    parser = PlantUMLParser()
-    
     # 4. Run pipeline
     for module_file in all_modules:
         module_name = module_file.replace(".puml", "")
@@ -63,8 +61,11 @@ def main() -> None:
         base_text = base_file_path.read_text(encoding="utf-8") if base_file_path.exists() else ""
         
         try:
-            pr_model = parser.parse(pr_text, module_name)
-            base_model = parser.parse(base_text, module_name)
+            pr_parser = PlantUMLParser(module_name)
+            base_parser = PlantUMLParser(module_name)
+            
+            pr_model = pr_parser.parse(pr_text)
+            base_model = base_parser.parse(base_text)
             
             run_integration_pipeline(base_model, pr_model, config)
         except Exception as e:
