@@ -78,8 +78,8 @@ This project is built following **Spec Driven Development** guided by AI. See [`
 ### Current Status
 - [x] Phase 0: Bootstrap
 - [x] Phase 1: Domain Model
-- [ ] Phase 2: PlantUML Parser MVP
-- [ ] Phase 3: Normalization Engine
+- [x] Phase 2: PlantUML Parser MVP
+- [x] Phase 3: Normalization Engine
 - [ ] Phase 4: Semantic Diff Engine
 - [ ] Phase 5: Graph Reduction Engine
 - [ ] Phase 6: Diff Visualization
