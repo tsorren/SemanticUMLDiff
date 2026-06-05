@@ -32,8 +32,11 @@ ignore = []
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
+pythonpath = ["src"]
 
 [tool.mypy]
 python_version = "3.12"
 strict = true
 ignore_missing_imports = true
+mypy_path = "src"
+explicit_package_bases = true

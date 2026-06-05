@@ -74,3 +74,14 @@ jobs:
 ## Development
 
 This project is built following **Spec Driven Development** guided by AI. See [`SPEC.md`](SPEC.md) and the `specs/` folder for details on the architecture, domain, and agent interaction workflow.
+
+### Current Status
+- [x] Phase 0: Bootstrap
+- [x] Phase 1: Domain Model
+- [ ] Phase 2: PlantUML Parser MVP
+- [ ] Phase 3: Normalization Engine
+- [ ] Phase 4: Semantic Diff Engine
+- [ ] Phase 5: Graph Reduction Engine
+- [ ] Phase 6: Diff Visualization
+- [ ] Phase 7: GitHub Integration
+- [ ] Phase 8: Discord Integration
