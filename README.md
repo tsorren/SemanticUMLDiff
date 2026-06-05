@@ -21,6 +21,20 @@ This action assumes that you have already generated `.puml` files for both your 
 | `pr_uml_dir` | Path to the directory containing PlantUML diagrams for the PR branch (with new changes). | Yes | N/A |
 | `github_token` | GitHub token for posting PR comments. | No | `${{ github.token }}` |
 
+### Environment Variables
+
+To configure the publishing behavior and image hosting, set the following environment variables:
+
+| Variable | Description | Default |
+| --- | --- | --- |
+| `PUBLISH_GITHUB` | Enable or disable posting sticky comments to the GitHub PR. | `true` |
+| `PUBLISH_DISCORD` | Enable or disable sending rich embed notifications to Discord. | `true` |
+| `IMAGE_HOSTING_PROVIDER` | Where to host the diff image for the GitHub comment (`discord`, `plantuml_server`, `none`). | `discord` |
+| `DISCORD_WEBHOOK_URL` | The Discord Webhook URL for notifications and/or CDN uploading. | N/A |
+| `PLANTUML_JAR_PATH` | Path to the local `plantuml.jar` executable. | `plantuml.jar` |
+
+> **Note on Image Hosting (`IMAGE_HOSTING_PROVIDER`)**: GitHub PR comments require a publicly accessible URL to embed images. This action cleverly uses Discord as a free CDN (`discord`) by uploading the locally generated diagram to the Discord webhook and extracting the public URL for the GitHub comment. Alternatively, you can use `plantuml_server` for a stateless encoding without uploading a file.
+
 ### Example Workflow
 
 ```yaml

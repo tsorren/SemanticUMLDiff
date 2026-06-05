@@ -401,3 +401,22 @@ The architecture is acceptable when:
 - only changed modules are processed,
 - output is meaningful for code review,
 - and the workflow can run unattended in GitHub Actions.
+
+---
+
+## 5. Integration Pipeline & Publishing
+
+To provide immediate feedback in the code review process, the system implements a modular, extensible integration pipeline.
+
+### Configurable Publishers
+The pipeline executes based on environment configurations (`PUBLISH_GITHUB`, `PUBLISH_DISCORD`), allowing specific targets to be enabled or disabled gracefully:
+1. **GitHub Publisher:** Searches for a sticky comment using a hidden markdown marker (`<!-- semantic-uml-diff-comment -->`). If found, it uses `PATCH` to update it (avoiding spam). Otherwise, it creates a new comment using `POST`.
+2. **Discord Publisher:** Posts a rich embed (showing counts of added, removed, and modified elements) and directly attaches the generated diagram.
+
+### Image Hosting & CDN Strategy (`IMAGE_HOSTING_PROVIDER`)
+GitHub markdown does not allow embedding local files directly in issue comments via standard API calls; it requires a public URL (`![Diagram](https://...)`).
+To solve this without demanding custom infrastructure:
+- The system defines an `ImageUploader` Protocol.
+- **`discord` (DiscordUploader):** By default, it uploads the physical `.png` file (generated locally via `plantuml.jar`) to a Discord webhook. It parses the response to extract the public `attachment.url` and passes this URL to the `GitHubPublisher`. This effectively uses Discord as a free CDN.
+- **`plantuml_server` (PlantUMLServerUploader):** A fallback that completely skips file uploads by mathematically encoding the PlantUML string into a stateless Kroki/PlantUML URL.
+- **Extensibility:** New uploaders (like Google Drive or AWS S3) can be trivially added by implementing the `upload(puml_text, png_bytes) -> str` method.
