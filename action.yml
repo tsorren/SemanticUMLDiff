@@ -1,7 +1,8 @@
 name: 'Semantic UML Diff'
 description: 'Generates semantic diff diagrams for PlantUML architectures and posts them to PRs.'
-icon: git-pull-request
-color: purple
+branding:
+  icon: git-pull-request
+  color: purple
 inputs:
   base_uml_dir:
     description: 'Path to the directory containing base PlantUML files'
