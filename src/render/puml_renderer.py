@@ -74,9 +74,25 @@ def render_puml(
     else:
         packages[""] = list(spec.included_nodes)
 
+    # Filter nodes within each package to only those that actually exist in the model
+    # (either in base_classes if status is removed, or in pr_classes otherwise)
+    filtered_packages: Dict[str, List[str]] = {}
+    for pkg, nodes in packages.items():
+        valid_nodes = []
+        for class_name in nodes:
+            status = highlight_dict.get(class_name)
+            if status == "removed":
+                c = base_classes.get(class_name)
+            else:
+                c = pr_classes.get(class_name)
+            if c:
+                valid_nodes.append(class_name)
+        if valid_nodes:
+            filtered_packages[pkg] = valid_nodes
+
     # Detect package status
     package_status: Dict[str, str] = {}
-    for pkg in packages.keys():
+    for pkg in filtered_packages.keys():
         if pkg:
             diff_item = next((d for d in diff.changes if d.entity_type == "package" and d.entity_name == pkg), None)
             if diff_item:
@@ -87,7 +103,7 @@ def render_puml(
                 elif diff_item.change_type == ChangeType.MODIFIED:
                     package_status[pkg] = "package_modified"
 
-    for pkg, nodes in packages.items():
+    for pkg, nodes in filtered_packages.items():
         if pkg:
             stereo = f" <<{package_status[pkg]}>>" if pkg in package_status else ""
             lines.append(f'package "{pkg}"{stereo} {{')

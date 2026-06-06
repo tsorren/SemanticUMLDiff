@@ -178,3 +178,25 @@ A change is acceptable when:
 - Historical snapshot storage.
 - Change metrics and impact analysis.
 - Architecture trend reports.
+
+---
+
+## Agent Mandatory Pre-Prompt Checklist
+
+Any agent/model working on this codebase **MUST** verify these rules before editing or implementing new features:
+
+1. **Visual Style Constraints (No Regressions):**
+   - **No `<strike>` or `<s>` tags:** For deleted classes or members, do *not* wrap them in strikeout tags. Trust only the clean red `<color:red>` text as settled in Phase 10.
+   - **Visibility outside `<color>` tags:** Keep PlantUML visibility symbols (`+`, `-`, `#`, `~`) *outside* of `<color>` tags (e.g. `+ <color:green>member</color>`). Wrapping them inside colors breaks PlantUML's native circle icons.
+   - **Enum Constraints:** Enum values must *not* contain visibility icons or trailing colons (`:`).
+   - **No Empty Packages:** Ensure package blocks in PlantUML diagrams are omitted if they don't contain any visible class nodes.
+
+2. **Semantic Comparison & Scope:**
+   - **Context-aware Member Diffs:** When storing class member diffs (methods/attributes), always scope the keys by class context: `(class_name, member_name)` rather than just `member_name` to avoid namespace collisions between classes sharing method names.
+   - **Parameter Renames:** If `method_parameter_style` is `types_only`, parameter name changes must not trigger a visible orange highlight.
+
+3. **Verification Steps:**
+   - Run `uv run pytest` to ensure all tests pass.
+   - Run `uv run ruff check src tests` and `uv run mypy src tests` to verify linting and typing.
+   - Always regenerate the demo diagrams (`uv run python generate_demo.py`) and verify `docs/demo.png` and `docs/demo_complete.png` visually.
+

@@ -51,10 +51,10 @@ skinparam ranksep 30
 
 package "com.ecommerce.checkout" <<package_added>> {
 class "CheckoutService" as com.ecommerce.checkout.CheckoutService <<added>> {
-  <color:green>- db: Database</color>
-  <color:green>- stripeClient: Stripe</color>
-  <color:green>+ createOrder(Cart): Order</color>
-  <color:green>+ createOrder(Cart, boolean): Order</color>
+  - <color:green>db: Database</color>
+  - <color:green>stripeClient: Stripe</color>
+  + <color:green>createOrder(Cart): Order</color>
+  + <color:green>createOrder(Cart, boolean): Order</color>
 }
 }
 
@@ -64,9 +64,9 @@ class "Order" as com.ecommerce.order.Order <<modified>> {
   + total: double
 }
 class "OrderService" as com.ecommerce.order.OrderService <<removed>> {
-  <color:red><strike>- db: Database</strike></color>
-  <color:red><strike>+ createOrder(Cart): Order</strike></color>
-  <color:red><strike>+ cancelOrder(String): void</strike></color>
+  - <color:red>db: Database</color>
+  + <color:red>createOrder(Cart): Order</color>
+  + <color:red>cancelOrder(String): void</color>
 }
 }
 

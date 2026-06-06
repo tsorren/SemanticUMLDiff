@@ -49,21 +49,18 @@ skinparam ranksep 30
   }
 </style>
 
-package "grupo5.donaciones.infraestructure" <<package_removed>> {
-}
-
 package "grupo5.donaciones.models.entities.bienes" <<package_modified>> {
 class "Bien" as grupo5.donaciones.models.entities.bienes.Bien <<modified>> {
   <color:orange>-</color> descripcion: String
-  <color:green>+ imagenUrl: String</color>
-  <color:red><strike>+ fotoUrl: String</strike></color>
+  + <color:green>imagenUrl: String</color>
+  + <color:red>fotoUrl: String</color>
   + estaVencido(<color:orange>java.time.LocalDate</color>): boolean
 }
 enum "Estado" as grupo5.donaciones.models.entities.bienes.Estado <<modified>> {
-  + NUEVO:
-  <color:green>+ RUSTICO:</color>
-  + USADO:
-  <color:red><strike>+ DESGASTADO:</strike></color>
+  NUEVO
+  <color:green>RUSTICO</color>
+  USADO
+  <color:red>DESGASTADO</color>
   ==
 }
 }
@@ -73,16 +70,16 @@ class "Donacion" as grupo5.donaciones.models.entities.donaciones.Donacion <<modi
   + fecha: java.time.LocalDate
 }
 class "DonacionColectiva" as grupo5.donaciones.models.entities.donaciones.DonacionColectiva <<added>> {
-  <color:green>+ meta: Double</color>
-  <color:green>+ montoAcumulado: Double</color>
+  + <color:green>meta: Double</color>
+  + <color:green>montoAcumulado: Double</color>
 }
 class "Donante" as grupo5.donaciones.models.entities.donaciones.Donante <<modified>> {
   + puntaje: Double
-  <color:green>+ registrarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</color>
+  + <color:green>registrarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</color>
   <color:orange>-</color> anonimizar(): void
-  <color:green>+ vaciarHistorial(): void</color>
-  <color:red><strike>+ agregarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</strike></color>
-  <color:red><strike>+ quitarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</strike></color>
+  + <color:green>vaciarHistorial(): void</color>
+  + <color:red>agregarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</color>
+  + <color:red>quitarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</color>
 }
 class "ItemDonacion" as grupo5.donaciones.models.entities.donaciones.ItemDonacion <<impacted>> {
   + cantidad: Integer
@@ -91,24 +88,24 @@ class "ItemDonacion" as grupo5.donaciones.models.entities.donaciones.ItemDonacio
 
 package "grupo5.donaciones.models.entities.personas" <<package_modified>> {
 enum "Genero" as grupo5.donaciones.models.entities.personas.Genero <<removed>> {
-  <color:red><strike>+ HOMBRE:</strike></color>
-  <color:red><strike>+ MUJER:</strike></color>
-  <color:red><strike>+ NO_BINARIO:</strike></color>
-  <color:red><strike>+ PREFIERO_NO_DECIR:</strike></color>
+  <color:red>HOMBRE</color>
+  <color:red>MUJER</color>
+  <color:red>NO_BINARIO</color>
+  <color:red>PREFIERO_NO_DECIR</color>
   ==
 }
 class "Humana" as grupo5.donaciones.models.entities.personas.Humana <<modified>> {
   + apellido: String
   + fechaNacimiento: java.time.LocalDate
   + nombre: String
-  <color:green>+ genero: String</color>
-  <color:orange>-</color> anonimizar(): void
+  + <color:green>genero: String</color>
+  + anonimizar(): void
 }
 class "Juridica" as grupo5.donaciones.models.entities.personas.Juridica <<modified>> {
   + razonSocial: String
   + rubro: String
   + <color:orange>registrarRepresentante</color>(grupo5.donaciones.models.entities.personas.Humana): void
-  <color:orange>-</color> anonimizar(): void
+  + anonimizar(): void
   + quitarRepresentante(grupo5.donaciones.models.entities.personas.Humana): void
 }
 abstract class "Persona" as grupo5.donaciones.models.entities.personas.Persona <<impacted>> {
@@ -129,7 +126,7 @@ class "LectorCSV" as grupo5.donaciones.models.ports.LectorCSV <<moved>> {
 
 package "grupo5.donaciones.models.privacidad" {
 interface "Anonimizable" as grupo5.donaciones.models.privacidad.Anonimizable <<impacted>> {
-  <color:orange>-</color> anonimizar(): void
+  + anonimizar(): void
 }
 }
 
