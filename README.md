@@ -121,3 +121,40 @@ This project is built following **Spec Driven Development** guided by AI. See [`
 - [x] Phase 6: Diff Visualization
 - [x] Phase 7: GitHub Integration
 - [x] Phase 8: Discord Integration
+- [x] Phase 9: GitHub Action Packaging
+- [x] Phase 10: Iterative Improvements & Stabilization
+- [x] Phase 11: Testing & CI
+
+### Local Development
+
+This project uses [Hatch](https://hatch.pypa.io/) and standard `pyproject.toml` configurations.
+
+To set up the development environment, install the project in editable mode along with its `dev` dependencies:
+
+```bash
+# Clone the repository
+git clone https://github.com/tsorren/SemanticUMLDiff.git
+cd SemanticUMLDiff
+
+# Create a virtual environment and activate it (optional but recommended)
+python -m venv .venv
+source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+
+# Install editable package and dev dependencies
+pip install -e .[dev]
+```
+
+#### Running Tests & Linters
+
+We enforce a strict CI pipeline. You should verify these locally before committing:
+
+```bash
+# Run the test suite
+python -m pytest tests/
+
+# Run the linter
+ruff check src tests
+
+# Run the static type checker
+mypy src tests
+```

@@ -908,3 +908,68 @@ Subgraphs reducidos.
 * funciona automáticamente en PRs,
 * y genera outputs reproducibles.
 
+
+
+---
+
+# PHASE 10 — Iterative Improvements & Stabilization
+
+# Objetivo
+
+Refinar las implementaciones tempranas basándose en el uso real, mejorando la robustez del parser, la estética de la renderización y garantizando la tolerancia a los límites de las integraciones.
+
+---
+
+# Historial de Decisiones Arquitectónicas (Post-MVP)
+
+A lo largo del proyecto, muchas de las ideas iniciales documentadas en las primeras fases fueron iteradas para construir un sistema más robusto:
+
+## 1. Evolución del Parser (Fase 2)
+*   **Problema:** Las expresiones regulares iniciales propuestas para extraer clases y métodos eran muy frágiles y fallaban ante modificadores abstractos, estáticos o de visibilidad que estuvieran ubicados en diferentes posiciones (ej. + {abstract} method()). Además, no soportaban _Fully Qualified Names_ (paquete.subpaquete.Clase).
+*   **Solución:** Se abandonó la estrategia de un único regex monolítico. Se implementó un sistema de preprocesado que _limpia_ iterativamente los modificadores ({abstract}, {static}, visibilidad) de las firmas antes de procesarlas mediante regex simplificadas.
+
+## 2. Refinamiento Estético del Renderer (Fase 5 y 6)
+*   **Problema:** Los diagramas se veían muy ruidosos con texto tachado (<s:red>) para elementos eliminados, y las rutas completas de los paquetes en los parámetros de los métodos dificultaban la lectura de los componentes UML.
+*   **Solución:** Se eliminaron los tachados (ahora se confía únicamente en el resaltado de color rojo). Se agregaron flags de configuración (method_parameter_style, layout_orthogonal_lines, group_by_package) que permiten renderizar un UML mucho más conciso, ocultando los nombres de parámetros y dejando solo los tipos.
+
+## 3. Límites de Integración con Discord (Fase 8)
+*   **Problema:** La API de Discord rechaza mensajes que contengan más de 10 _embeds_. Un Pull Request grande que modificase más de 10 módulos fallaba, rompiendo el Pipeline.
+*   **Solución:** Se implementó una lógica de **Chunking** interno dentro de DiscordPublisher para segmentar silenciosamente los envíos en múltiples peticiones HTTP si se supera el límite de 10 embeds.
+
+---
+
+# PHASE 11 — Testing & CI
+
+# Objetivo
+
+Asegurar que los casos borde iterados nunca sufran una regresión y habilitar la automatización de la integración continua.
+
+---
+
+# Tareas Realizadas
+
+## T-1101
+Implementar Tests de Parser (Edge Cases).
+
+### Done cuando
+* El parser procesa exitosamente interfaces, enums y modificadores {abstract}/{static} de herramientas de terceros (ej. Java a PlantUML).
+
+---
+
+## T-1102
+Implementar Integración con Mocks.
+
+### Done cuando
+* Se verificó la correcta agregación de resultados de múltiples módulos usando unittest.mock.
+* Se testeó que el Chunking de Discord fragmente correctamente 12+ embeds sin hacer llamadas HTTP reales a Discord.
+
+---
+
+## T-1103
+Configurar GitHub Actions CI.
+
+### Done cuando
+* Se dispara un workflow con pytest, 
+uff, y mypy ante cada commit o PR en main.
+
+---
