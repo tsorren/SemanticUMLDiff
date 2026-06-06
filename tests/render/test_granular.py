@@ -7,7 +7,7 @@ def test_format_modified_method_visibility() -> None:
     pr_m = UMLMethod("name", ("int a",), "void", "-")
 
     text = MemberFormatter.format_modified_method(base_m, pr_m, "types_only")
-    assert text == "<color:orange>-</color> name(int): void"
+    assert text == "- <color:orange>name</color>(<color:orange>int</color>): <color:orange>void</color>"
 
 def test_format_modified_method_name() -> None:
     base_m = UMLMethod("oldName", ("int a",), "void", "+")

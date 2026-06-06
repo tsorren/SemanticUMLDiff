@@ -48,6 +48,7 @@ def render_puml(
 
     lines.append(f"skinparam nodesep {diagram_spacing}")
     lines.append(f"skinparam ranksep {diagram_spacing}")
+    lines.append("skinparam packagePadding 8")
     lines.append("")
 
     # Inject Theme CSS

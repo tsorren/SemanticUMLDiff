@@ -3,6 +3,7 @@ left to right direction
 skinparam linetype poly
 skinparam nodesep 30
 skinparam ranksep 30
+skinparam packagePadding 8
 
 <style>
   classDiagram {
@@ -63,7 +64,7 @@ class "DonationItem" as group5.donations.models.entities.donations.DonationItem 
 class "Donor" as group5.donations.models.entities.donations.Donor <<modified>> {
   + score: Double
   + <color:green>registerDonation(Donation): void</color>
-  <color:orange>-</color> anonymize(): void
+  - <color:orange>anonymize</color>(): <color:orange>void</color>
   + <color:green>clearHistory(): void</color>
   + <color:red>addDonation(Donation): void</color>
   + <color:red>removeDonation(Donation): void</color>
@@ -72,7 +73,7 @@ class "Donor" as group5.donations.models.entities.donations.Donor <<modified>> {
 
 package "group5.donations.models.entities.goods" <<package_modified>> {
 class "Good" as group5.donations.models.entities.goods.Good <<modified>> {
-  <color:orange>-</color> description: String
+  - <color:orange>description</color>: <color:orange>String</color>
   + <color:green>imageUrl: String</color>
   + <color:red>photoUrl: String</color>
   + isExpired(<color:orange>LocalDate</color>): boolean

@@ -69,12 +69,14 @@ class MemberFormatter:
         cleaned_type = _clean_type(pr_attr.type)
         typ = cleaned_type if pr_attr.type == base_attr.type else f"<color:orange>{cleaned_type}</color>"
 
-        if pr_attr.visibility == base_attr.visibility:
-            vis_part = f"{pr_attr.visibility} " if pr_attr.visibility else ""
-            return f"{vis_part}{name}: {typ}".strip()
-        else:
-            vis = f"<color:orange>{pr_attr.visibility}</color>"
-            return f"{vis} {name}: {typ}".strip()
+        if pr_attr.visibility != base_attr.visibility:
+            if not name.startswith("<color:"):
+                name = f"<color:orange>{name}</color>"
+            if not typ.startswith("<color:"):
+                typ = f"<color:orange>{typ}</color>"
+
+        vis_part = f"{pr_attr.visibility} " if pr_attr.visibility else ""
+        return f"{vis_part}{name}: {typ}".strip()
 
     @staticmethod
     def format_method(method: UMLMethod, method_parameter_style: str, is_removed: bool = False, is_added: bool = False) -> str:
@@ -119,14 +121,23 @@ class MemberFormatter:
                 else:
                     formatted_params.append(pr_params_display[i])
 
-        params_str = ", ".join(formatted_params)
+        # If visibility changed, highlight name, parameters, and return type
+        if pr_m.visibility != base_m.visibility:
+            if not name.startswith("<color:"):
+                name = f"<color:orange>{name}</color>"
+            if not ret.startswith("<color:"):
+                ret = f"<color:orange>{ret}</color>"
+            new_params = []
+            for p in formatted_params:
+                if not p.startswith("<color:"):
+                    new_params.append(f"<color:orange>{p}</color>")
+                else:
+                    new_params.append(p)
+            formatted_params = new_params
 
-        if pr_m.visibility == base_m.visibility:
-            vis_part = f"{pr_m.visibility} " if pr_m.visibility else ""
-            return f"{vis_part}{name}({params_str}): {ret}".strip()
-        else:
-            vis = f"<color:orange>{pr_m.visibility}</color>"
-            return f"{vis} {name}({params_str}): {ret}".strip()
+        params_str = ", ".join(formatted_params)
+        vis_part = f"{pr_m.visibility} " if pr_m.visibility else ""
+        return f"{vis_part}{name}({params_str}): {ret}".strip()
 
     @staticmethod
     def render_class_members(

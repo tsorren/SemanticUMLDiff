@@ -3,6 +3,7 @@ left to right direction
 skinparam linetype poly
 skinparam nodesep 30
 skinparam ranksep 30
+skinparam packagePadding 8
 
 <style>
   classDiagram {
