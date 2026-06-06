@@ -55,18 +55,18 @@ class "CollectiveDonation" as group5.donations.models.entities.donations.Collect
   + <color:green>accumulatedAmount: Double</color>
 }
 class "Donation" as group5.donations.models.entities.donations.Donation <<modified>> {
-  + date: java.time.LocalDate
+  + date: LocalDate
 }
 class "DonationItem" as group5.donations.models.entities.donations.DonationItem <<impacted>> {
   + quantity: Integer
 }
 class "Donor" as group5.donations.models.entities.donations.Donor <<modified>> {
   + score: Double
-  + <color:green>registerDonation(group5.donations.models.entities.donations.Donation): void</color>
+  + <color:green>registerDonation(Donation): void</color>
   <color:orange>-</color> anonymize(): void
   + <color:green>clearHistory(): void</color>
-  + <color:red>addDonation(group5.donations.models.entities.donations.Donation): void</color>
-  + <color:red>removeDonation(group5.donations.models.entities.donations.Donation): void</color>
+  + <color:red>addDonation(Donation): void</color>
+  + <color:red>removeDonation(Donation): void</color>
 }
 }
 
@@ -75,7 +75,7 @@ class "Good" as group5.donations.models.entities.goods.Good <<modified>> {
   <color:orange>-</color> description: String
   + <color:green>imageUrl: String</color>
   + <color:red>photoUrl: String</color>
-  + isExpired(<color:orange>java.time.LocalDate</color>): boolean
+  + isExpired(<color:orange>LocalDate</color>): boolean
 }
 enum "Status" as group5.donations.models.entities.goods.Status <<modified>> {
   NEW
@@ -96,7 +96,7 @@ enum "Gender" as group5.donations.models.entities.people.Gender <<removed>> {
 }
 class "Individual" as group5.donations.models.entities.people.Individual <<modified>> {
   + lastName: String
-  + birthDate: java.time.LocalDate
+  + birthDate: LocalDate
   + firstName: String
   + <color:green>gender: String</color>
   + anonymize(): void
@@ -104,9 +104,9 @@ class "Individual" as group5.donations.models.entities.people.Individual <<modif
 class "Organization" as group5.donations.models.entities.people.Organization <<modified>> {
   + legalName: String
   + industry: String
-  + <color:orange>registerRepresentative</color>(group5.donations.models.entities.people.Individual): void
+  + <color:orange>registerRepresentative</color>(Individual): void
   + anonymize(): void
-  + removeRepresentative(group5.donations.models.entities.people.Individual): void
+  + removeRepresentative(Individual): void
 }
 abstract class "Person" as group5.donations.models.entities.people.Person <<impacted>> {
   + document: String
@@ -117,10 +117,10 @@ abstract class "Person" as group5.donations.models.entities.people.Person <<impa
 package "group5.donations.models.ports" <<package_modified>> {
 class "CSVReader" as group5.donations.models.ports.CSVReader <<moved>> {
   .. (moved from: group5.donations.infrastructure.CSVReader) ..
-  + loadDonors(String): java.util.List
+  + loadDonors(String): List
 }
 interface "DonorLoader" as group5.donations.models.ports.DonorLoader <<modified>> {
-  + loadDonors(String): java.util.List
+  + loadDonors(String): List
 }
 }
 

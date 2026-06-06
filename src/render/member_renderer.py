@@ -1,3 +1,4 @@
+import re
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
@@ -6,6 +7,12 @@ if TYPE_CHECKING:
 
 from domain.diff_models import ChangeType
 from domain.models import UMLAttribute, UMLMethod
+
+
+def _clean_type(s: str) -> str:
+    if not s:
+        return ""
+    return re.sub(r'(?:[a-zA-Z_][a-zA-Z0-9_]*\.)+([a-zA-Z_][a-zA-Z0-9_]*)', r'\1', s)
 
 
 class MemberFormatter:
@@ -18,7 +25,7 @@ class MemberFormatter:
     @staticmethod
     def _format_params(params: tuple[str, ...], method_parameter_style: str) -> list[str]:
         if method_parameter_style == "names_and_types":
-            return list(params)
+            return [_clean_type(p) for p in params]
         # Default: types_only
         types = []
         for p in params:
@@ -30,7 +37,7 @@ class MemberFormatter:
                     types.append(" ".join(parts[:-1]))
                 else:
                     types.append(p.strip())
-        return types
+        return [_clean_type(t) for t in types]
 
     @staticmethod
     def format_attribute(attr: UMLAttribute, is_removed: bool = False, is_added: bool = False, is_enum: bool = False) -> str:
@@ -38,7 +45,8 @@ class MemberFormatter:
             text = attr.name.strip()
             vis_part = ""
         else:
-            text = f"{attr.name}: {attr.type}".strip()
+            cleaned_type = _clean_type(attr.type)
+            text = f"{attr.name}: {cleaned_type}".strip()
             vis_part = f"{attr.visibility} " if attr.visibility else ""
 
         if is_removed:
@@ -58,7 +66,8 @@ class MemberFormatter:
             return name.strip()
 
         name = pr_attr.name if pr_attr.name == base_attr.name else f"<color:orange>{pr_attr.name}</color>"
-        typ = pr_attr.type if pr_attr.type == base_attr.type else f"<color:orange>{pr_attr.type}</color>"
+        cleaned_type = _clean_type(pr_attr.type)
+        typ = cleaned_type if pr_attr.type == base_attr.type else f"<color:orange>{cleaned_type}</color>"
 
         if pr_attr.visibility == base_attr.visibility:
             vis_part = f"{pr_attr.visibility} " if pr_attr.visibility else ""
@@ -70,7 +79,8 @@ class MemberFormatter:
     @staticmethod
     def format_method(method: UMLMethod, method_parameter_style: str, is_removed: bool = False, is_added: bool = False) -> str:
         params = MemberFormatter._format_params(method.parameters, method_parameter_style)
-        text = f"{method.name}({', '.join(params)}): {method.return_type}".strip()
+        cleaned_ret = _clean_type(method.return_type)
+        text = f"{method.name}({', '.join(params)}): {cleaned_ret}".strip()
         vis_part = f"{method.visibility} " if method.visibility else ""
         if is_removed:
             return f"{vis_part}<color:red>{text}</color>"
@@ -86,7 +96,8 @@ class MemberFormatter:
         If method_parameter_style is types_only, parameter name changes won't trigger an orange highlight.
         """
         name = pr_m.name if pr_m.name == base_m.name else f"<color:orange>{pr_m.name}</color>"
-        ret = pr_m.return_type if pr_m.return_type == base_m.return_type else f"<color:orange>{pr_m.return_type}</color>"
+        cleaned_ret = _clean_type(pr_m.return_type)
+        ret = cleaned_ret if pr_m.return_type == base_m.return_type else f"<color:orange>{cleaned_ret}</color>"
 
         # Handle parameters
         base_params_full = base_m.parameters
