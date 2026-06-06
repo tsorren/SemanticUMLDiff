@@ -1,7 +1,9 @@
 import os
-from typing import List, Tuple, Dict, Set
+from typing import List, Tuple
+
 from domain.diff_models import ChangeType, DiffItem, DiffResult
-from domain.models import UMLClass, UMLModel, UMLRelation
+from domain.models import UMLClass, UMLMethod, UMLModel, UMLRelation
+
 
 def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffResult:
     changes: List[DiffItem] = []
@@ -40,7 +42,7 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
     # 1. Compare Classes
     added_classes = {name: c for name, c in pr_classes.items() if name not in base_classes}
     removed_classes = {name: c for name, c in base_classes.items() if name not in pr_classes}
-    
+
     # Similarity detection for MOVED classes
     moved_classes_target = set()
     moved_classes_source = set()
@@ -49,20 +51,20 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
         short_name = get_short_name(add_name)
         # Find candidates in removed classes
         candidates = [rm_name for rm_name, rm_c in removed_classes.items() if get_short_name(rm_name) == short_name]
-        
+
         for rm_name in candidates:
             rm_c = removed_classes[rm_name]
-            
+
             # Simple similarity: matched methods + attrs / total methods + attrs
             add_members = set(f"{m.name}({','.join(m.parameters)})" for m in add_c.methods) | set(a.name for a in add_c.attributes)
             rm_members = set(f"{m.name}({','.join(m.parameters)})" for m in rm_c.methods) | set(a.name for a in rm_c.attributes)
-            
+
             total = len(add_members | rm_members)
             if total == 0:
                 sim = 1.0 # Empty classes with same name
             else:
                 sim = len(add_members & rm_members) / total
-                
+
             if sim >= 0.75:
                 # Mark as moved!
                 changes.append(DiffItem(
@@ -75,10 +77,10 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
                 ))
                 moved_classes_target.add(add_name)
                 moved_classes_source.add(rm_name)
-                
+
                 # Also compare members so we catch minor changes inside the moved class!
                 _compare_members(rm_c, add_c, add_name, changes)
-                
+
                 # Remove from added/removed
                 del added_classes[add_name]
                 del removed_classes[rm_name]
@@ -115,15 +117,18 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
     # 2. Track Packages
     base_pkgs = set(get_package(name) for name in base_classes if get_package(name))
     pr_pkgs = set(get_package(name) for name in pr_classes if get_package(name))
-    
+
     for pkg in pr_pkgs - base_pkgs:
-        if pkg: changes.append(DiffItem(entity_type="package", entity_name=pkg, change_type=ChangeType.ADDED))
-        
+        if pkg:
+            changes.append(DiffItem(entity_type="package", entity_name=pkg, change_type=ChangeType.ADDED))
+
     for pkg in base_pkgs - pr_pkgs:
-        if pkg: changes.append(DiffItem(entity_type="package", entity_name=pkg, change_type=ChangeType.REMOVED))
-        
+        if pkg:
+            changes.append(DiffItem(entity_type="package", entity_name=pkg, change_type=ChangeType.REMOVED))
+
     for pkg in pr_pkgs & base_pkgs:
-        if not pkg: continue
+        if not pkg:
+            continue
         # A package is modified if any class inside it was added, removed, or modified
         pkg_changed = False
         for ch in changes:
@@ -160,7 +165,9 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
             ))
         else:
             base_r = base_rels[key]
-            if base_r.relation_type != r.relation_type or base_r.multiplicity_source != r.multiplicity_source or base_r.multiplicity_target != r.multiplicity_target:
+            if base_r.relation_type != r.relation_type or \
+           base_r.multiplicity_source != r.multiplicity_source or \
+           base_r.multiplicity_target != r.multiplicity_target:
                 changes.append(DiffItem(
                     entity_type="relation",
                     entity_name=f"{r.source} {r.relation_type} {r.target}",
@@ -217,7 +224,7 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
             ))
 
     # Compare methods with FULL signature as key
-    def method_key(m):
+    def method_key(m: UMLMethod) -> str:
         return f"{m.name}({','.join(m.parameters)})"
 
     base_methods = {method_key(m): m for m in base_c.methods}

@@ -1,10 +1,11 @@
-from domain.diff_models import ChangeType, DiffItem
-from domain.models import UMLAttribute, UMLClass, UMLMethod, UMLModel
 from diff.compute import compute_diff
+from domain.diff_models import ChangeType
+from domain.models import UMLAttribute, UMLClass, UMLMethod, UMLModel
+
 
 def test_root_package_auto_detection() -> None:
     # 3 classes: com.app.core.A, com.app.core.B, and a third party lib org.lib.Util
-    base_model = UMLModel(
+    model1 = UMLModel(
         module_name="test",
         classes=(
             UMLClass(name="com.app.core.A", kind="class"),
@@ -12,16 +13,19 @@ def test_root_package_auto_detection() -> None:
             UMLClass(name="org.lib.Util", kind="class")
         )
     )
-    pr_model = UMLModel(
+    model2 = UMLModel(
         module_name="test",
         classes=(
             UMLClass(name="com.app.core.A", kind="class"),
             UMLClass(name="com.app.core.B", kind="class"),
-            UMLClass(name="com.app.core.C", kind="class"), # Added
-            UMLClass(name="org.lib.Util2", kind="class") # Added external
+            UMLClass(name="com.app.core.C", kind="class"), # added
+            UMLClass(name="org.lib.Util", kind="class")
         )
     )
-    pass
+    diff = compute_diff(model1, model2, root_package="com.app.core")
+    class_adds = [c for c in diff.changes if c.entity_type == "class" and c.change_type == ChangeType.ADDED]
+    assert len(class_adds) == 1
+    assert class_adds[0].entity_name == "com.app.core.C"
 
 def test_root_package_filtering() -> None:
     base_model = UMLModel(
@@ -40,7 +44,7 @@ def test_root_package_filtering() -> None:
         )
     )
     diff = compute_diff(base_model, pr_model, root_package="com.app.core")
-    
+
     # org.lib.Util should be filtered out
     class_adds = [c for c in diff.changes if c.entity_type == "class" and c.change_type == ChangeType.ADDED]
     assert len(class_adds) == 0
@@ -67,7 +71,7 @@ def test_method_overloading() -> None:
             ),
         )
     )
-    
+
     diff = compute_diff(base_model, pr_model)
     method_adds = [c for c in diff.changes if c.entity_type == "method" and c.change_type == ChangeType.ADDED]
     assert len(method_adds) == 1
@@ -101,14 +105,14 @@ def test_class_moved() -> None:
             ),
         )
     )
-    
+
     diff = compute_diff(base_model, pr_model)
     class_mods = [c for c in diff.changes if c.entity_type == "class" and c.change_type == ChangeType.MODIFIED and c.context == "moved"]
     assert len(class_mods) == 1
     assert class_mods[0].entity_name == "pkg2.A"
     assert class_mods[0].before == "pkg1.A"
     assert class_mods[0].after == "pkg2.A"
-    
+
     # And there should be an attribute added
     attr_adds = [c for c in diff.changes if c.entity_type == "attribute" and c.change_type == ChangeType.ADDED]
     assert len(attr_adds) == 1

@@ -1,8 +1,8 @@
-from typing import List, Optional, Dict
 import re
+from typing import Dict, List, Optional
 
 from domain.diff_models import ChangeType, DiffResult
-from domain.models import UMLClass, UMLModel, UMLRelation
+from domain.models import UMLClass, UMLMethod, UMLModel, UMLRelation
 from domain.render_models import RenderSpec
 from render.themes import get_theme
 
@@ -44,7 +44,7 @@ def render_puml(
 
     if not group_by_package:
         lines.append("set namespaceSeparator none")
-        
+
     lines.append(f"skinparam nodesep {diagram_spacing}")
     lines.append(f"skinparam ranksep {diagram_spacing}")
     lines.append("")
@@ -97,26 +97,26 @@ def render_puml(
                 c = base_classes.get(class_name)
             else:
                 c = pr_classes.get(class_name)
-            
+
             if not c:
                 continue
 
             stereo_str = f" <<{status}>>" if status else ""
-            
+
             # Short name for class block if grouping by package
             display_name = class_name.rsplit(".", 1)[-1] if pkg else class_name
-            
+
             lines.append(f'{c.kind} "{display_name}" as {class_name}{stereo_str} {{')
 
             base_c = base_classes.get(class_name)
             pr_c = pr_classes.get(class_name)
-            
+
             # Check if this class was moved
             if status == "moved":
                 diff_item = next((d for d in diff.changes if d.entity_type == "class" and d.entity_name == class_name and d.context == "moved"), None)
                 if diff_item and diff_item.before:
                     lines.append(f"  .. (moved from: {diff_item.before}) ..")
-            
+
             members_lines = _render_members(
                 base_c, pr_c, class_name, diff,
                 is_removed=(status == "removed"),
@@ -127,7 +127,7 @@ def render_puml(
             for mline in members_lines:
                 lines.append(mline)
             lines.append("}")
-            
+
         if pkg:
             lines.append("}")
             lines.append("")
@@ -183,7 +183,7 @@ def _render_members(
         if is_enum:
             vis = ""
             text = text.split(":")[0].strip()
-        
+
         vis_part = f"{vis} " if vis else ""
         if color:
             return f"  {vis_part}<color:{color}>{text}</color>"
@@ -232,7 +232,7 @@ def _render_members(
                 formatted.append(p.strip())
         return ", ".join(formatted)
 
-    def method_key(m):
+    def method_key(m: UMLMethod) -> str:
         return f"{m.name}({','.join(m.parameters)})"
 
     if pr_c:

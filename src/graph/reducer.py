@@ -57,7 +57,7 @@ def reduce_graph(base: UMLModel, pr: UMLModel, diff: DiffResult, context_depth: 
 
     # 3. Context Expansion (distance = context_depth)
     included_nodes: Set[str] = set(seed_nodes)
-    
+
     if context_depth > 0:
         current_level = set(seed_nodes)
         for _ in range(context_depth):
