@@ -6,6 +6,17 @@ This tool automatically detects changes in your codebase's architectural structu
 
 ![Semantic Diff Demo](docs/demo.png)
 
+### Complete Demo
+
+To see a complete, fully featured semantic diff on a complex domain model (including method rename detection, class movement, package changes, enum modifications, and contextual graph reduction), expand the section below:
+
+<details>
+<summary><b>🔍 Click to expand the Complete Semantic Diff Diagram</b></summary>
+
+![Complete Semantic Diff Demo](docs/demo_complete.png)
+
+</details>
+
 ## Overview
 
 SemanticUMLDiff:

@@ -1,0 +1,149 @@
+@startuml
+left to right direction
+skinparam linetype poly
+skinparam nodesep 30
+skinparam ranksep 30
+
+<style>
+  classDiagram {
+    class {
+      BackgroundColor transparent
+      HeaderBackgroundColor transparent
+      Shadowing 0
+      FontName Arial
+    }
+    .added {
+      BackgroundColor #D4EDDA
+      LineColor #28A745
+    }
+    .removed {
+      BackgroundColor #F8D7DA
+      LineColor #DC3545
+    }
+    .modified {
+      BackgroundColor #FFF3CD
+      LineColor #FFA500
+    }
+    .moved {
+      BackgroundColor #FFF3CD
+      LineColor #FFA500
+    }
+    .impacted {
+      BackgroundColor #F8F9FA
+      LineColor #6C757D
+      LineStyle 4
+      FontColor #6C757D
+    }
+    .package_added {
+      BackgroundColor #E8F5E9
+      LineColor #28A745
+    }
+    .package_removed {
+      BackgroundColor #FFEBEE
+      LineColor #DC3545
+    }
+    .package_modified {
+      BackgroundColor transparent
+      LineColor #FFA500
+    }
+  }
+</style>
+
+package "grupo5.donaciones.infraestructure" <<package_removed>> {
+}
+
+package "grupo5.donaciones.models.entities.bienes" <<package_modified>> {
+class "Bien" as grupo5.donaciones.models.entities.bienes.Bien <<modified>> {
+  <color:orange>-</color> descripcion: String
+  <color:green>+ imagenUrl: String</color>
+  <color:red><strike>+ fotoUrl: String</strike></color>
+  + estaVencido(<color:orange>java.time.LocalDate</color>): boolean
+}
+enum "Estado" as grupo5.donaciones.models.entities.bienes.Estado <<modified>> {
+  + NUEVO:
+  <color:green>+ RUSTICO:</color>
+  + USADO:
+  <color:red><strike>+ DESGASTADO:</strike></color>
+  ==
+}
+}
+
+package "grupo5.donaciones.models.entities.donaciones" <<package_modified>> {
+class "Donacion" as grupo5.donaciones.models.entities.donaciones.Donacion <<modified>> {
+  + fecha: java.time.LocalDate
+}
+class "DonacionColectiva" as grupo5.donaciones.models.entities.donaciones.DonacionColectiva <<added>> {
+  <color:green>+ meta: Double</color>
+  <color:green>+ montoAcumulado: Double</color>
+}
+class "Donante" as grupo5.donaciones.models.entities.donaciones.Donante <<modified>> {
+  + puntaje: Double
+  <color:green>+ registrarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</color>
+  <color:orange>-</color> anonimizar(): void
+  <color:green>+ vaciarHistorial(): void</color>
+  <color:red><strike>+ agregarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</strike></color>
+  <color:red><strike>+ quitarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</strike></color>
+}
+class "ItemDonacion" as grupo5.donaciones.models.entities.donaciones.ItemDonacion <<impacted>> {
+  + cantidad: Integer
+}
+}
+
+package "grupo5.donaciones.models.entities.personas" <<package_modified>> {
+enum "Genero" as grupo5.donaciones.models.entities.personas.Genero <<removed>> {
+  <color:red><strike>+ HOMBRE:</strike></color>
+  <color:red><strike>+ MUJER:</strike></color>
+  <color:red><strike>+ NO_BINARIO:</strike></color>
+  <color:red><strike>+ PREFIERO_NO_DECIR:</strike></color>
+  ==
+}
+class "Humana" as grupo5.donaciones.models.entities.personas.Humana <<modified>> {
+  + apellido: String
+  + fechaNacimiento: java.time.LocalDate
+  + nombre: String
+  <color:green>+ genero: String</color>
+  <color:orange>-</color> anonimizar(): void
+}
+class "Juridica" as grupo5.donaciones.models.entities.personas.Juridica <<modified>> {
+  + razonSocial: String
+  + rubro: String
+  + <color:orange>registrarRepresentante</color>(grupo5.donaciones.models.entities.personas.Humana): void
+  <color:orange>-</color> anonimizar(): void
+  + quitarRepresentante(grupo5.donaciones.models.entities.personas.Humana): void
+}
+abstract class "Persona" as grupo5.donaciones.models.entities.personas.Persona <<impacted>> {
+  + documento: String
+  + id: Long
+}
+}
+
+package "grupo5.donaciones.models.ports" <<package_modified>> {
+interface "CargadorDonantes" as grupo5.donaciones.models.ports.CargadorDonantes <<modified>> {
+  + cargarDonantes(String): java.util.List
+}
+class "LectorCSV" as grupo5.donaciones.models.ports.LectorCSV <<moved>> {
+  .. (moved from: grupo5.donaciones.infraestructure.LectorCSV) ..
+  + cargarDonantes(String): java.util.List
+}
+}
+
+package "grupo5.donaciones.models.privacidad" {
+interface "Anonimizable" as grupo5.donaciones.models.privacidad.Anonimizable <<impacted>> {
+  <color:orange>-</color> anonimizar(): void
+}
+}
+
+grupo5.donaciones.infraestructure.LectorCSV -[#red]-|> grupo5.donaciones.models.ports.CargadorDonantes
+grupo5.donaciones.models.entities.bienes.Bien --> grupo5.donaciones.models.entities.bienes.Estado
+grupo5.donaciones.models.entities.donaciones.DonacionColectiva -[#green]-|> grupo5.donaciones.models.entities.donaciones.Donacion
+grupo5.donaciones.models.entities.donaciones.Donante o-- grupo5.donaciones.models.entities.donaciones.Donacion
+grupo5.donaciones.models.entities.donaciones.Donante --> grupo5.donaciones.models.entities.personas.Persona
+grupo5.donaciones.models.entities.donaciones.Donante --|> grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.donaciones.ItemDonacion --> grupo5.donaciones.models.entities.bienes.Bien
+grupo5.donaciones.models.entities.personas.Humana -[#red]-> grupo5.donaciones.models.entities.personas.Genero
+grupo5.donaciones.models.entities.personas.Humana --|> grupo5.donaciones.models.entities.personas.Persona
+grupo5.donaciones.models.entities.personas.Juridica o-- grupo5.donaciones.models.entities.personas.Humana
+grupo5.donaciones.models.entities.personas.Juridica --|> grupo5.donaciones.models.entities.personas.Persona
+grupo5.donaciones.models.entities.personas.Persona --|> grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.ports.LectorCSV -[#green]-|> grupo5.donaciones.models.ports.CargadorDonantes
+@enduml

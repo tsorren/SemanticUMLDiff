@@ -1,0 +1,89 @@
+@startuml
+
+interface grupo5.donaciones.models.privacidad.Anonimizable {
+	{method} {abstract} +anonimizar () : void
+}
+
+abstract class grupo5.donaciones.models.entities.personas.Persona {
+	{field} +documento : String
+	{field} +id : Long
+}
+
+class grupo5.donaciones.models.entities.personas.Humana {
+	{field} +apellido : String
+	{field} +fechaNacimiento : java.time.LocalDate
+	{field} +nombre : String
+	{field} +genero : String
+	{method} +anonimizar () : void
+}
+
+class grupo5.donaciones.models.entities.personas.Juridica {
+	{field} +razonSocial : String
+	{field} +rubro : String
+	{method} +registrarRepresentante ( paramHumana1 : grupo5.donaciones.models.entities.personas.Humana ) : void
+	{method} +anonimizar () : void
+	{method} +quitarRepresentante ( paramHumana1 : grupo5.donaciones.models.entities.personas.Humana ) : void
+}
+
+class grupo5.donaciones.models.entities.personas.direccion.Direccion {
+	{field} +altura : Integer
+	{field} +calle : String
+	{field} +localidad : String
+	{method} +anonimizar () : void
+}
+
+class grupo5.donaciones.models.entities.donaciones.Donante {
+	{field} +puntaje : Double
+	{method} +registrarDonacion ( paramDonacion1 : grupo5.donaciones.models.entities.donaciones.Donacion ) : void
+	{method} -anonimizar () : void
+	{method} +vaciarHistorial () : void
+}
+
+class grupo5.donaciones.models.entities.donaciones.Donacion {
+	{field} +fecha : java.time.LocalDate
+}
+
+class grupo5.donaciones.models.entities.donaciones.DonacionColectiva {
+	{field} +meta : Double
+	{field} +montoAcumulado : Double
+}
+
+class grupo5.donaciones.models.entities.donaciones.ItemDonacion {
+	{field} +cantidad : Integer
+}
+
+class grupo5.donaciones.models.entities.bienes.Bien {
+	{field} -descripcion : String
+	{field} +imagenUrl : String
+	{method} +estaVencido ( paramLocalDate1 : java.time.LocalDate ) : boolean
+}
+
+enum grupo5.donaciones.models.entities.bienes.Estado {
+	{field} +NUEVO
+	{field} +RUSTICO
+	{field} +USADO
+}
+
+interface grupo5.donaciones.models.ports.CargadorDonantes {
+	{method} {abstract} +cargarDonantes ( paramString1 : String ) : java.util.List
+}
+
+class grupo5.donaciones.models.ports.LectorCSV {
+	{method} +cargarDonantes ( paramString1 : String ) : java.util.List
+}
+
+grupo5.donaciones.models.ports.LectorCSV ..|> grupo5.donaciones.models.ports.CargadorDonantes
+grupo5.donaciones.models.entities.personas.Humana --|> grupo5.donaciones.models.entities.personas.Persona
+grupo5.donaciones.models.entities.personas.Juridica --|> grupo5.donaciones.models.entities.personas.Persona
+grupo5.donaciones.models.entities.personas.Juridica "1" o-- "0..*" grupo5.donaciones.models.entities.personas.Humana : representantes
+grupo5.donaciones.models.entities.personas.Persona --> grupo5.donaciones.models.entities.personas.direccion.Direccion : direccion
+grupo5.donaciones.models.entities.personas.Persona ..|> grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.personas.direccion.Direccion ..|> grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.donaciones.Donante --> grupo5.donaciones.models.entities.personas.Persona : persona
+grupo5.donaciones.models.entities.donaciones.Donante ..|> grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.donaciones.Donante "1" o-- "0..*" grupo5.donaciones.models.entities.donaciones.Donacion : historialDonaciones
+grupo5.donaciones.models.entities.donaciones.ItemDonacion --> grupo5.donaciones.models.entities.bienes.Bien : bien
+grupo5.donaciones.models.entities.bienes.Bien --> grupo5.donaciones.models.entities.bienes.Estado : estado
+grupo5.donaciones.models.entities.donaciones.DonacionColectiva --|> grupo5.donaciones.models.entities.donaciones.Donacion
+
+@enduml

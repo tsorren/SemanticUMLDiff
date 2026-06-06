@@ -8,6 +8,7 @@ from diff.compute import compute_diff
 from graph.reducer import reduce_graph
 from render.puml_renderer import render_puml
 from domain.models import UMLClass, UMLAttribute, UMLMethod, UMLModel, UMLRelation
+from parser.plantuml_parser import PlantUMLParser
 
 os.makedirs('docs', exist_ok=True)
 
@@ -97,3 +98,36 @@ if not os.path.exists("plantuml.jar"):
 print("Rendering docs/demo.png...")
 subprocess.run(["java", "-jar", "plantuml.jar", "docs/demo.puml", "-tpng"])
 print("Generated docs/demo.png!")
+
+# -----------------
+# COMPLETE DEMO
+# -----------------
+print("Generating complete demo diagram...")
+base_complete_path = "fixtures/complete_base.puml"
+pr_complete_path = "fixtures/complete_pr.puml"
+
+if os.path.exists(base_complete_path) and os.path.exists(pr_complete_path):
+    with open(base_complete_path, "r", encoding="utf-8") as f:
+        base_complete_text = f.read()
+    with open(pr_complete_path, "r", encoding="utf-8") as f:
+        pr_complete_text = f.read()
+
+    parser_base = PlantUMLParser("complete_demo")
+    parser_pr = PlantUMLParser("complete_demo")
+
+    base_complete_model = parser_base.parse(base_complete_text)
+    pr_complete_model = parser_pr.parse(pr_complete_text)
+
+    diff_complete = compute_diff(base_complete_model, pr_complete_model)
+    spec_complete = reduce_graph(base_complete_model, pr_complete_model, diff_complete, context_depth=1)
+    puml_complete = render_puml(base_complete_model, pr_complete_model, diff_complete, spec_complete)
+
+    with open("docs/demo_complete.puml", "w", encoding="utf-8") as f:
+        f.write(puml_complete)
+
+    print("Rendering docs/demo_complete.png...")
+    subprocess.run(["java", "-jar", "plantuml.jar", "docs/demo_complete.puml", "-tpng"])
+    print("Generated docs/demo_complete.png!")
+else:
+    print("Error: complete base/pr puml files not found in fixtures.")
+
