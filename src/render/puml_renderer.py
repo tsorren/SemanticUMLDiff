@@ -137,10 +137,12 @@ def _render_members(
                 elif diff_item.change_type == ChangeType.ADDED:
                     lines.append(f"  <color:green>{sig}</color>")
                 elif diff_item.change_type == ChangeType.MODIFIED:
-                    if diff_item.before:
-                        lines.append(f"  <color:red>{_clean_type(diff_item.before)}</color>")
-                    if diff_item.after:
-                        lines.append(f"  <color:green>{_clean_type(diff_item.after)}</color>")
+                    if base_c:
+                        base_a = next((ba for ba in base_c.attributes if ba.name == a.name), None)
+                        if base_a:
+                            b_sig = _clean_type(f"{base_a.visibility} {base_a.name}: {base_a.type}".strip())
+                            lines.append(f"  <color:red>{b_sig}</color>")
+                    lines.append(f"  <color:green>{sig}</color>")
 
     if base_c:
         for a in base_c.attributes:
@@ -158,7 +160,7 @@ def _render_members(
     def _format_params(params: List[str]) -> str:
         formatted = []
         for p in params:
-            if method_parameter_style == "types_only" and ":" in p:
+            if method_parameter_style != "names_and_types" and ":" in p:
                 formatted.append(p.split(":", 1)[1].strip())
             else:
                 formatted.append(p.strip())
@@ -180,10 +182,12 @@ def _render_members(
                 elif diff_item.change_type == ChangeType.ADDED:
                     lines.append(f"  <color:green>{sig}</color>")
                 elif diff_item.change_type == ChangeType.MODIFIED:
-                    if diff_item.before:
-                        lines.append(f"  <color:red>{_clean_type(diff_item.before)}</color>")
-                    if diff_item.after:
-                        lines.append(f"  <color:green>{_clean_type(diff_item.after)}</color>")
+                    if base_c:
+                        base_m = next((bm for bm in base_c.methods if bm.name == m.name), None)
+                        if base_m:
+                            b_sig = _clean_type(f"{base_m.visibility} {base_m.name}({_format_params(base_m.parameters)}): {base_m.return_type}".strip())
+                            lines.append(f"  <color:red>{b_sig}</color>")
+                    lines.append(f"  <color:green>{sig}</color>")
 
     if base_c:
         for m in base_c.methods:
