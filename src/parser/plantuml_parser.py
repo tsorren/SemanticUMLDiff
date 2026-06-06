@@ -83,12 +83,11 @@ class PlantUMLParser:
             # 3. Check for methods and attributes
             if self.current_class:
                 # Common modifier stripping
-                clean_line = line.replace("{method}", "").replace("{field}", "").strip()
+                clean_line = line.replace("{method}", "").replace("{field}", "").replace("{static}", "").replace("{abstract}", "").strip()
                 vis = ""
                 if clean_line and clean_line[0] in "+-#~":
                     vis = clean_line[0]
                     clean_line = clean_line[1:].strip()
-                clean_line = clean_line.replace("{static}", "").replace("{abstract}", "").strip()
 
                 method_match = self.re_method.match(clean_line)
                 if method_match:

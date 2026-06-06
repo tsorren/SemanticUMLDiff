@@ -6,6 +6,7 @@ def test_parse_edge_cases() -> None:
 package com.example.project {
   interface NotificacionSender {
     + {abstract} enviarMensaje(paramString1 : String, sender : NotificacionSender) : boolean
+    {abstract} + otroMensaje() : void
   }
 
   abstract class AbstractSender {
@@ -29,12 +30,16 @@ package com.example.project {
     # 1. Interface
     iface = next(c for c in model.classes if c.name == "NotificacionSender")
     assert iface.kind == "interface"
-    assert len(iface.methods) == 1
-    m1 = iface.methods[0]
-    assert m1.name == "enviarMensaje"
+    assert len(iface.methods) == 2
+    
+    m1 = next(m for m in iface.methods if m.name == "enviarMensaje")
     assert m1.visibility == "+"
     assert m1.return_type == "boolean"
     assert m1.parameters == ("paramString1 : String", "sender : NotificacionSender")
+    
+    m1_b = next(m for m in iface.methods if m.name == "otroMensaje")
+    assert m1_b.visibility == "+"
+    assert m1_b.return_type == "void"
 
     # 2. Abstract Class
     abs_cls = next(c for c in model.classes if c.name == "AbstractSender")
