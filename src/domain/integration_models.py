@@ -33,3 +33,7 @@ class IntegrationConfig:
     layout_orthogonal_lines: bool = False
     method_parameter_style: str = "types_only"
     group_by_package: bool = True
+    theme: str = "modern"
+    diagram_spacing: int = 30
+    root_package: str = ""
+    context_depth: int = 1

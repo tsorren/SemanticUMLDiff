@@ -26,6 +26,22 @@ inputs:
     description: 'Group classes by their namespace/package using PlantUML package blocks'
     required: false
     default: 'true'
+  theme:
+    description: 'Theming style for the PlantUML diagram'
+    required: false
+    default: 'modern'
+  diagram_spacing:
+    description: 'Nodesep and ranksep values for spacing'
+    required: false
+    default: '30'
+  root_package:
+    description: 'Root package prefix for filtering external libraries. If left empty, it will be auto-detected'
+    required: false
+    default: ''
+  context_depth:
+    description: 'Depth of the context graph for impacted classes'
+    required: false
+    default: '1'
 runs:
   using: 'docker'
   image: 'Dockerfile'

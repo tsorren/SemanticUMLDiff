@@ -1,0 +1,2622 @@
+<html lang="en" class=" ncvvacbla idc0_350"><head><script type="text/javascript" async="" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/client" data-ez-gsi="1"></script><script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/SDK.js" defer="defer"></script><script>var __ezHttpConsent={setByCat:function(src,tagType,attributes,category,force,customSetScriptFn=null){var setScript=function(){if(force||window.ezTcfConsent[category]){if(typeof customSetScriptFn==='function'){customSetScriptFn();}else{var scriptElement=document.createElement(tagType);scriptElement.src=src;attributes.forEach(function(attr){for(var key in attr){if(attr.hasOwnProperty(key)){scriptElement.setAttribute(key,attr[key]);}}});var firstScript=document.getElementsByTagName(tagType)[0];firstScript.parentNode.insertBefore(scriptElement,firstScript);}}};if(force||(window.ezTcfConsent&&window.ezTcfConsent.loaded)){setScript();}else if(typeof getEzConsentData==="function"){getEzConsentData().then(function(ezTcfConsent){if(ezTcfConsent&&ezTcfConsent.loaded){setScript();}else{console.error("cannot get ez consent data");force=true;setScript();}});}else{force=true;setScript();console.error("getEzConsentData is not a function");}},};</script>
+<script>var ezTcfConsent=window.ezTcfConsent?window.ezTcfConsent:{loaded:false,store_info:false,develop_and_improve_services:false,measure_ad_performance:false,measure_content_performance:false,select_basic_ads:false,create_ad_profile:false,select_personalized_ads:false,create_content_profile:false,select_personalized_content:false,understand_audiences:false,use_limited_data_to_select_content:false,};function getEzConsentData(){return new Promise(function(resolve){document.addEventListener("ezConsentEvent",function(event){var ezTcfConsent=event.detail.ezTcfConsent;resolve(ezTcfConsent);});});}</script>
+<script>if(typeof _setEzCookies!=='function'){function _setEzCookies(ezConsentData){var cookies=window.ezCookieQueue;for(var i=0;i<cookies.length;i++){var cookie=cookies[i];if(ezConsentData&&ezConsentData.loaded&&ezConsentData[cookie.tcfCategory]){document.cookie=cookie.name+"="+cookie.value;}}}}
+window.ezCookieQueue=window.ezCookieQueue||[];if(typeof addEzCookies!=='function'){function addEzCookies(arr){window.ezCookieQueue=[...window.ezCookieQueue,...arr];}}
+addEzCookies([{name:"ezopvc_173770",value:"1; Path=/; Domain=plantuml.com; Expires=Sat, 06 Jun 2026 14:09:20 UTC",tcfCategory:"understand_audiences",isEzoic:"true",},{name:"ezoab_173770",value:"mod69-c; Path=/; Domain=plantuml.com; Max-Age=7200",tcfCategory:"store_info",isEzoic:"true",},{name:"active_template::173770",value:"pub_site.1780753160; Path=/; Domain=plantuml.com; Expires=Mon, 08 Jun 2026 13:39:20 UTC",tcfCategory:"store_info",isEzoic:"true",},{name:"ezoadgid_173770",value:"-1; Path=/; Domain=plantuml.com; Max-Age=1800",tcfCategory:"understand_audiences",isEzoic:"true",}]);if(window.ezTcfConsent&&window.ezTcfConsent.loaded){_setEzCookies(window.ezTcfConsent);}else if(typeof getEzConsentData==="function"){getEzConsentData().then(function(ezTcfConsent){if(ezTcfConsent&&ezTcfConsent.loaded){_setEzCookies(window.ezTcfConsent);}else{console.error("cannot get ez consent data");_setEzCookies(window.ezTcfConsent);}});}else{console.error("getEzConsentData is not a function");_setEzCookies(window.ezTcfConsent);}</script><script type="text/javascript" data-ezscrex="false" data-cfasync="false">window._ezaq = Object.assign({"edge_cache_status":32,"edge_response_time":920,"url":"https://plantuml.com/style"}, typeof window._ezaq !== "undefined" ? window._ezaq : {});</script><script type="text/javascript" data-ezscrex="false" data-cfasync="false">window._ezaq = Object.assign({"ab_test_id":"mod69-c"}, typeof window._ezaq !== "undefined" ? window._ezaq : {});window.__ez=window.__ez||{};window.__ez.tf={"lcpm":"false"};window.__ez=window.__ez||{};window.__ez.fs={"AdaptiveExclusion":"true","AffiliateWidgets":"false","FloatingInterstitialBanditSplit":"false","FloorBanditSplit":"true","FloorEscalation":"true","FlyingCarpet":"false","OutstreamReserveBanditSplit":"true","RefreshFloorBanditSplit":"true","TimeoutBanditSplit":"true"};</script><script data-ezscrex="false" data-cfasync="false" data-pagespeed-no-defer="">var __ez=__ez||{};__ez.stms=Date.now();__ez.evt={};__ez.script={};__ez.ck=__ez.ck||{};__ez.template={};__ez.template.isOrig=false;window.__ezScriptHost="//www.ezojs.com";__ez.queue=__ez.queue||function(){var e=0,i=0,t=[],n=!1,o=[],r=[],s=!0,a=function(e,i,n,o,r,s,a){var l=arguments.length>7&&void 0!==arguments[7]?arguments[7]:window,d=this;this.name=e,this.funcName=i,this.parameters=null===n?null:w(n)?n:[n],this.isBlock=o,this.blockedBy=r,this.deleteWhenComplete=s,this.isError=!1,this.isComplete=!1,this.isInitialized=!1,this.proceedIfError=a,this.fWindow=l,this.isTimeDelay=!1,this.process=function(){f("... func = "+e),d.isInitialized=!0,d.isComplete=!0,f("... func.apply: "+e);var i=d.funcName.split("."),n=null,o=this.fWindow||window;i.length>3||(n=3===i.length?o[i[0]][i[1]][i[2]]:2===i.length?o[i[0]][i[1]]:o[d.funcName]),null!=n&&n.apply(null,this.parameters),!0===d.deleteWhenComplete&&delete t[e],!0===d.isBlock&&(f("----- F'D: "+d.name),p())}},l=function(e,i,t,n,o,r,s){var a=arguments.length>7&&void 0!==arguments[7]?arguments[7]:window,l=this;this.name=e,this.path=i,this.async=o,this.defer=r,this.isBlock=t,this.blockedBy=n,this.isInitialized=!1,this.isError=!1,this.isComplete=!1,this.proceedIfError=s,this.fWindow=a,this.isTimeDelay=!1,this.isPath=function(e){return"/"===e[0]&&"/"!==e[1]},this.getSrc=function(e){return void 0!==window.__ezScriptHost&&this.isPath(e)?window.__ezScriptHost+e:e},this.process=function(){l.isInitialized=!0,f("... file = "+e);var i=this.fWindow?this.fWindow.document:document,t=i.createElement("script");t.src=this.getSrc(this.path),!0===o?t.async=!0:!0===r&&(t.defer=!0),t.onerror=function(){var e={url:window.location.href,name:l.name,path:l.path,user_agent:window.navigator.userAgent};"undefined"!=typeof _ezaq&&(e.pageview_id=_ezaq.page_view_id);var i=encodeURIComponent(JSON.stringify(e)),t=new XMLHttpRequest;t.open("GET","//g.ezoic.net/ezqlog?d="+i,!0),t.send(),f("----- ERR'D: "+l.name),l.isError=!0,!0===l.isBlock&&p()},t.onreadystatechange=t.onload=function(){var e=t.readyState;f("----- F'D: "+l.name),e&&!/loaded|complete/.test(e)||(l.isComplete=!0,!0===l.isBlock&&p())},i.getElementsByTagName("head")[0].appendChild(t)}},d=function(e,i){this.name=e,this.path="",this.async=!1,this.defer=!1,this.isBlock=!1,this.blockedBy=[],this.isInitialized=!0,this.isError=!1,this.isComplete=i,this.proceedIfError=!1,this.isTimeDelay=!1,this.process=function(){}};function c(e,i,n,s,a,d,c,u,f){var p=new l(e,i,n,s,a,d,c,f);!0===u?o[e]=p:r[e]=p,t[e]=p,h(p)}function h(e){!0!==u(e)&&0!=s&&e.process()}function u(e){if(!0===e.isTimeDelay&&!1===n)return f(e.name+" blocked = TIME DELAY!"),!0;if(w(e.blockedBy))for(var i=0;i<e.blockedBy.length;i++){var o=e.blockedBy[i];if(!1===t.hasOwnProperty(o))return f(e.name+" blocked = "+o),!0;if(!0===e.proceedIfError&&!0===t[o].isError)return!1;if(!1===t[o].isComplete)return f(e.name+" blocked = "+o),!0}return!1}function f(e){var i=window.location.href,t=new RegExp("[?&]ezq=([^&#]*)","i").exec(i);"1"===(t?t[1]:null)&&console.debug(e)}function p(){++e>200||(f("let's go"),m(o),m(r))}function m(e){for(var i in e)if(!1!==e.hasOwnProperty(i)){var t=e[i];!0===t.isComplete||u(t)||!0===t.isInitialized||!0===t.isError?!0===t.isError?f(t.name+": error"):!0===t.isComplete?f(t.name+": complete already"):!0===t.isInitialized&&f(t.name+": initialized already"):t.process()}}function w(e){return"[object Array]"==Object.prototype.toString.call(e)}return window.addEventListener("load",(function(){setTimeout((function(){n=!0,f("TDELAY -----"),p()}),5e3)}),!1),{addFile:c,addFileOnce:function(e,i,n,o,r,s,a,l,d){t[e]||c(e,i,n,o,r,s,a,l,d)},addDelayFile:function(e,i){var n=new l(e,i,!1,[],!1,!1,!0);n.isTimeDelay=!0,f(e+" ...  FILE! TDELAY"),r[e]=n,t[e]=n,h(n)},addFunc:function(e,n,s,l,d,c,u,f,p,m){!0===c&&(e=e+"_"+i++);var w=new a(e,n,s,l,d,u,f,m);!0===p?o[e]=w:r[e]=w,t[e]=w,h(w)},addDelayFunc:function(e,i,n){var o=new a(e,i,n,!1,[],!0,!0);o.isTimeDelay=!0,f(e+" ...  FUNCTION! TDELAY"),r[e]=o,t[e]=o,h(o)},items:t,processAll:p,setallowLoad:function(e){s=e},markLoaded:function(e){if(e&&0!==e.length){if(e in t){var i=t[e];!0===i.isComplete?f(i.name+" "+e+": error loaded duplicate"):(i.isComplete=!0,i.isInitialized=!0)}else t[e]=new d(e,!0);f("markLoaded dummyfile: "+t[e].name)}},logWhatsBlocked:function(){for(var e in t)!1!==t.hasOwnProperty(e)&&u(t[e])}}}();__ez.evt.add=function(e,t,n){e.addEventListener?e.addEventListener(t,n,!1):e.attachEvent?e.attachEvent("on"+t,n):e["on"+t]=n()},__ez.evt.remove=function(e,t,n){e.removeEventListener?e.removeEventListener(t,n,!1):e.detachEvent?e.detachEvent("on"+t,n):delete e["on"+t]};__ez.script.add=function(e){var t=document.createElement("script");t.src=e,t.async=!0,t.type="text/javascript",document.getElementsByTagName("head")[0].appendChild(t)};__ez.dot=__ez.dot||{};__ez.queue.addFileOnce('/detroitchicago/boise.js', '/detroitchicago/boise.js?gcb=195-5&cb=5', true, [], true, false, true, false);__ez.queue.addFileOnce('/parsonsmaize/abilene.js', '/parsonsmaize/abilene.js?gcb=195-5&cb=37cb48c9b5', true, [], true, false, true, false);__ez.queue.addFileOnce('/parsonsmaize/mulvane.js', '/parsonsmaize/mulvane.js?gcb=195-5&cb=e75e48eec0', true, ['/parsonsmaize/abilene.js'], true, false, true, false);__ez.queue.addFileOnce('/detroitchicago/birmingham.js', '/detroitchicago/birmingham.js?gcb=195-5&cb=539c47377c', true, ['/parsonsmaize/abilene.js'], true, false, true, false);</script><script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/boise.js" async=""></script><script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/abilene.js" async=""></script>
+<script data-ezscrex="false" type="text/javascript" data-cfasync="false">window._ezaq = Object.assign({"ad_cache_level":1,"adpicker_placement_cnt":0,"ai_placeholder_cache_level":1,"ai_placeholder_placement_cnt":-1,"domain":"plantuml.com","domain_id":173770,"ezcache_level":1,"ezcache_skip_code":0,"has_bad_image":0,"has_bad_words":0,"is_sitespeed":0,"lt_cache_level":0,"response_size":68764,"response_size_orig":60044,"response_time_orig":886,"template_id":134,"url":"https://plantuml.com/style","word_count":2384,"worst_bad_word_level":0}, typeof window._ezaq !== "undefined" ? window._ezaq : {});__ez.queue.markLoaded('ezaqBaseReady');</script>
+<link rel="preload" as="script" href="https://securepubads.g.doubleclick.net/tag/js/gpt.js">
+<link rel="preload" as="script" href="https://go.ezodn.com/hb/dall.js?cb=195-5-177">
+<script type="text/javascript">(function(){function storageAvailable(type){var storage;try{storage=window[type];var x='__storage_test__';storage.setItem(x,x);storage.removeItem(x);return true;}
+catch(e){return e instanceof DOMException&&(e.code===22||e.code===1014||e.name==='QuotaExceededError'||e.name==='NS_ERROR_DOM_QUOTA_REACHED')&&(storage&&storage.length!==0);}}
+function remove_ama_config(){if(storageAvailable('localStorage')){localStorage.removeItem("google_ama_config");}}
+remove_ama_config()})()</script>
+<script type="text/javascript">var ezoicTestActive = true</script>
+<script type="text/javascript" data-ezscrex="false" data-cfasync="false">
+window.ezAnalyticsStatic = true;
+
+function analyticsAddScript(script) {
+	var ezDynamic = document.createElement('script');
+	ezDynamic.type = 'text/javascript';
+	ezDynamic.innerHTML = script;
+	document.head.appendChild(ezDynamic);
+}
+function getCookiesWithPrefix() {
+    var allCookies = document.cookie.split(';');
+    var cookiesWithPrefix = {};
+
+    for (var i = 0; i < allCookies.length; i++) {
+        var cookie = allCookies[i].trim();
+
+        for (var j = 0; j < arguments.length; j++) {
+            var prefix = arguments[j];
+            if (cookie.indexOf(prefix) === 0) {
+                var cookieParts = cookie.split('=');
+                var cookieName = cookieParts[0];
+                var cookieValue = cookieParts.slice(1).join('=');
+                cookiesWithPrefix[cookieName] = decodeURIComponent(cookieValue);
+                break; // Once matched, no need to check other prefixes
+            }
+        }
+    }
+
+    return cookiesWithPrefix;
+}
+function productAnalytics() {
+	var d = {"pr":[1,6,3],"aop":{"14":0,"26":0,"4":134,"7":0},"omd5":"cb4c81c6aa46c8158358a3acec0aba37"};
+	d.u = _ezaq.url;
+	d.p = _ezaq.page_view_id;
+	d.v = _ezaq.visit_uuid;
+	d.ab = _ezaq.ab_test_id;
+	d.e = JSON.stringify(_ezaq);
+	d.ref = document.referrer;
+	d.dw = document.documentElement.clientWidth || window.innerWidth || 0;
+	d.dh = window.screen.height || 0;
+	d.vpw = window.innerWidth || document.documentElement.clientWidth || 0;
+	d.vph = window.innerHeight || document.documentElement.clientHeight || 0;
+	d.doch = Math.max((document.body && document.body.scrollHeight) || 0, (document.documentElement && document.documentElement.scrollHeight) || 0, (document.body && document.body.offsetHeight) || 0, (document.documentElement && document.documentElement.offsetHeight) || 0, (document.body && document.body.clientHeight) || 0, (document.documentElement && document.documentElement.clientHeight) || 0);
+	d.c = getCookiesWithPrefix('active_template', 'ez', 'lp_');
+	if(typeof ez_utmParams !== 'undefined') {
+		d.utm = ez_utmParams;
+	}
+	d.qs = window.location.search;
+
+	var dataText = JSON.stringify(d);
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST','/ezais/analytics?cb=1', true);
+	xhr.onload = function () {
+		if (xhr.status!=200) {
+            return;
+		}
+
+        if(document.readyState !== 'loading') {
+            analyticsAddScript(xhr.response);
+            return;
+        }
+
+        var eventFunc = function() {
+            if(document.readyState === 'loading') {
+                return;
+            }
+            document.removeEventListener('readystatechange', eventFunc, false);
+            analyticsAddScript(xhr.response);
+        };
+
+        document.addEventListener('readystatechange', eventFunc, false);
+	};
+	xhr.setRequestHeader('Content-Type','text/plain');
+	xhr.send(dataText);
+}
+__ez.queue.addFunc("productAnalytics", "productAnalytics", null, true, ['ezaqBaseReady'], false, false, false, true);
+</script><script type="text/javascript" data-ezscrex="false" data-cfasync="false" async="">
+function productEzoicAds() {
+if(window.ezDisableAds === true) {
+	return;
+}
+window.google_reactive_ads_global_state = {
+                adCount: {},
+                floatingAdsStacking: { maxZIndexListeners: [], maxZIndexRestrictions: {}, nextRestrictionId: 0 },
+                messageValidationEnabled: false,
+                reactiveTypeDisabledByPublisher: {},
+                reactiveTypeEnabledInAsfe: {},
+                sideRailAvailableSpace: [],
+                sideRailOverlappableElements: [],
+                stateForType: {},
+                tagSpecificState: {},
+                wasPlaTagProcessed: true,
+                wasReactiveAdConfigReceived: { 1: true, 2: true, 8: true },
+                wasReactiveAdVisible: {},
+                wasReactiveTagRequestSent: true,
+                description: "Can't disable auto ads programmatically on the page, so here we are!"
+            };
+var d = {"ab":"","km":{},"pv":"","vu":"c0818c01-8503-461c-5bf7-c1170757479e","r":{"r":[{"p":" ezoic_pub_ad_placeholder-677-bottom_of_page-728x90-677-nonexxxnonexxxxxxezmaxscaleval100 ","s":677,"h":90,"w":728},{"p":" ezoic_pub_ad_placeholder-677-bottom_of_page-468x60-677-nonexxxnonexxxxxxezmaxscaleval100 ","s":677},{"p":" ezoic_pub_ad_placeholder-677-bottom_of_page-234x60-677-nonexxxnonexxxxxxezmaxscaleval100 ","s":677},{"p":" ezoic_pub_ad_placeholder-677-bottom_of_page-320x50-677-nonexxxnonexxxxxxezmaxscaleval100 ","s":677},{"p":" ezoic_pub_ad_placeholder-677-bottom_of_page-320x100-677-nonexxxnonexxxxxxezmaxscaleval100 ","s":677},{"p":" ezoic_pub_ad_placeholder-678-top_of_page-300x250-678-nonexxxnonexxxxxxezmaxscaleval100 ","s":678,"h":250,"w":300,"r":true}],"a":{"12":true,"677":true,"678":true,"679":true,"680":true,"681":true,"682":true,"683":true},"g":-1,"l":{"0":2,"1":3,"2":2,"3":1,"4":-1,"5":-1},"m":{"0":2,"1":3,"2":2,"3":1,"4":-1,"5":-1},"v":0,"ve":false,"hr":false,"sa":false},"cr":"","tid":134,"tn":"pub_site","url":"","wc":2384,"ff":1,"dhh":"","dw":0,"dh":0,"vpw":0,"vph":0,"doch":0};
+d.ab = _ezaq.ab_test_id;
+d.pv = _ezaq.page_view_id;
+d.vu = _ezaq.visit_uuid;
+d.url = window.location.href;
+d.dw = document.documentElement.clientWidth || window.innerWidth || 0;
+d.dh = window.screen.height || 0;
+d.vpw = window.innerWidth || document.documentElement.clientWidth || 0;
+d.vph = window.innerHeight || document.documentElement.clientHeight || 0;
+d.doch = Math.max((document.body && document.body.scrollHeight) || 0, (document.documentElement && document.documentElement.scrollHeight) || 0, (document.body && document.body.offsetHeight) || 0, (document.documentElement && document.documentElement.offsetHeight) || 0, (document.body && document.body.clientHeight) || 0, (document.documentElement && document.documentElement.clientHeight) || 0);
+var dynamicAddScript = function(script) {
+	if(window.ezFinishedStatic === true) {
+		console.error("attempted to load dynamic script again");
+		return;
+	}
+	var errorMessages = [];
+	function errorHandler(event) {
+	  var errorObj = event.error;
+	  if (errorObj && errorObj.stack && errorObj.stack.indexOf('dynamicAddScript') !== -1) {
+		var errorMessage = {
+		  Message: event.message,
+		  LineNo: event.lineno,
+		  ColumnNo: event.colno,
+		  Stack: errorObj.stack
+		};
+		errorMessages.push(errorMessage);
+	  }
+
+	  if (typeof window.onerror === 'function') {
+		window.onerror.apply(this, arguments);
+	  }
+	}
+ 	window.addEventListener('error', errorHandler);
+
+	var ezDynamic = document.createElement('script');
+	ezDynamic.type = 'text/javascript';
+	ezDynamic.innerHTML = script;
+	document.head.appendChild(ezDynamic);
+
+	window.removeEventListener('error', errorHandler);
+	if (window.ezFinishedStatic !== true || typeof window.ezstaticerrors !== 'undefined') {
+		d.Script = script;
+		d.ErrorMessages = JSON.stringify(errorMessages);
+		d.ErrorStaticMessages = window.ezstaticerrors || '';
+		var dataTxt = JSON.stringify(d);
+		if (dataTxt.length > 0) {
+			var logXHR = new XMLHttpRequest();
+			logXHR.open('POST','/ezais/log?cb=1', true);
+			logXHR.setRequestHeader('Content-Type','application/json');
+			logXHR.send(dataTxt);
+		}
+	}
+};
+function collectFP(cb) {
+	var lib = (typeof ce !== "undefined") ? ce : (typeof FingerprintJS !== "undefined" ? FingerprintJS : null);
+	if (!lib) { cb(); return; }
+	try {
+		lib.load().then(function(agent) { return agent.get(); }).then(function(res) {
+			try {
+				var c = res.components || {};
+				d.fp = {
+					pr: window.devicePixelRatio || 0,
+					hc: (c.hardwareConcurrency && c.hardwareConcurrency.value) ? c.hardwareConcurrency.value : (navigator.hardwareConcurrency || 0),
+					dm: navigator.deviceMemory || 0,
+					ch: c.canvas && c.canvas.value && c.canvas.value.text ? c.canvas.value.text : '',
+					wr: c.webGlBasics && c.webGlBasics.value ? (c.webGlBasics.value.rendererUnmasked || c.webGlBasics.value.renderer || '') : '',
+					wv: c.webGlBasics && c.webGlBasics.value ? (c.webGlBasics.value.vendorUnmasked || c.webGlBasics.value.vendor || '') : '',
+					af: c.audio && c.audio.value !== undefined ? String(c.audio.value) : '',
+					ft: c.fonts && c.fonts.value ? c.fonts.value.join(',') : ''
+				};
+			} catch(e) {}
+			cb();
+		}).catch(function() { cb(); });
+	} catch(e) { cb(); }
+}
+function persistAdDemoCookie() {
+	try {
+		var params = new URLSearchParams(window.location.search);
+		var cookieName = "ez_ad_demo_173770";
+		var state = {};
+		var current = document.cookie.match(new RegExp('(?:^|; )' + cookieName.replace(/([.$?*|{}()\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
+		if (current && current[1]) {
+			current[1].split(',').forEach(function(part) {
+				var idx = part.indexOf('=');
+				if (idx > 0) {
+					state[part.slice(0, idx)] = part.slice(idx + 1);
+				}
+			});
+		}
+		var changed = false;
+		var maxAds = params.get('ez_ad_demo');
+		if (maxAds !== null && /^[0-9]+$/.test(maxAds)) {
+			state.m = maxAds;
+			state.q = '0';
+			state.s = '0';
+			state.i = '0';
+			changed = true;
+		}
+		var anchor = params.get('ez_ad_demo_anchor');
+		if (anchor === '0' || anchor === '1') {
+			state.a = anchor;
+			changed = true;
+		}
+		var outstream = params.get('ez_ad_demo_outstream');
+		if (outstream === '0' || outstream === '1') {
+			state.o = outstream;
+			changed = true;
+		}
+		var qubit = params.get('ez_ad_demo_qubit');
+		if (qubit === '0' || qubit === '1') {
+			state.q = qubit;
+			changed = true;
+		}
+		if (!changed) {
+			return;
+		}
+		var parts = [];
+		if (state.m !== undefined) { parts.push('m=' + state.m); }
+		if (state.a !== undefined) { parts.push('a=' + state.a); }
+		if (state.o !== undefined) { parts.push('o=' + state.o); }
+		if (state.s !== undefined) { parts.push('s=' + state.s); }
+		if (state.i !== undefined) { parts.push('i=' + state.i); }
+		if (state.q !== undefined) { parts.push('q=' + state.q); }
+		document.cookie = cookieName + '=' + parts.join(',') + '; path=/; max-age=86400; SameSite=Lax';
+	} catch(e) {}
+}
+persistAdDemoCookie();
+collectFP(function() {
+var dataText = JSON.stringify(d);
+if (dataText.length > 0) {
+	var startTime = Date.now() - __ez.stms;
+
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST','/ezais/dynamic?cb=1', true);
+	xhr.onload = function () {
+		if (xhr.status!=200) {
+            return;
+		}
+
+        if(document.readyState !== 'loading') {
+            dynamicAddScript(xhr.response);
+            return;
+        }
+
+        var eventFunc = function() {
+            if(document.readyState === 'loading') {
+                return;
+            }
+            document.removeEventListener('readystatechange', eventFunc, false);
+            dynamicAddScript(xhr.response);
+        };
+
+        document.addEventListener('readystatechange', eventFunc, false);
+	};
+	xhr.setRequestHeader('Content-Type','text/plain');
+	xhr.send(dataText);
+}
+});
+}
+
+function callDynamicAfterConsent() {
+	if (window.__tcfapi) {
+		window.__tcfapi("addEventListener", 2, function (tcdata, success) {
+			if (success) {
+				if(tcdata.gdprApplies == true) {
+					if(tcdata.eventStatus === "useractioncomplete" || tcdata.eventStatus === "tcloaded") {
+						__ez.queue.addFunc("productEzoicAds", "productEzoicAds", null, true, ['ezaqReady'], false, false, false, true);
+					}
+				} else {
+					__ez.queue.addFunc("productEzoicAds", "productEzoicAds", null, true, ['ezaqReady'], false, false, false, true);
+				}
+			}
+		});
+	} else {
+		__ez.queue.addFunc("productEzoicAds", "productEzoicAds", null, true, ['ezaqReady'], false, false, false, true);
+	}
+}
+
+
+if (window.__tcfapi) {
+	callDynamicAfterConsent();
+} else {
+	if (typeof window.ezCMPQueue !== "undefined") {
+		window.ezCMPQueue.push(callDynamicAfterConsent);
+	} else {
+		__ez.queue.addFunc("productEzoicAds", "productEzoicAds", null, true, ['ezaqReady'], false, false, false, true);
+	}
+}
+</script><!-- base href="https://plantuml.com/style" -->
+<meta name="flattr:id" content="1ew3x0">
+
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "url": "https://plantuml.com",
+  "name": "PlantUML",
+  "sameAs" : ["https://twitter.com/plantuml","https://en.wikipedia.org/wiki/PlantUML","https://www.wikidata.org/wiki/Q18346546"],
+  "logo": "https://cdn-0.plantuml.com/logo3.png",
+  "contactPoint": [{
+    "@type": "ContactPoint",
+    "email": "plantuml@gmail.com",
+    "url": "https://plantuml.com",
+    "contactType": "customer service"
+  }]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "item": {
+      "@id": "https://plantuml.com",
+      "name": "Home"
+    }
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "item": {
+      "@id": "https://plantuml.com/sitemap-language-specification",
+      "name": "Language specification"
+    }
+  },{
+    "@type": "ListItem",
+    "position": 3,
+    "item": {
+      "@id": "https://plantuml.com/style",
+      "name": "CSS Style"
+  }
+  }]
+}
+</script>
+<link rel="canonical" href="https://plantuml.com/style">
+<link rel="alternate" hreflang="x-default" href="https://plantuml.com/style">
+<link rel="alternate" hreflang="de" href="https://plantuml.com/de/style">
+<link rel="alternate" hreflang="en" href="https://plantuml.com/style">
+<link rel="alternate" hreflang="es" href="https://plantuml.com/es/style">
+<link rel="alternate" hreflang="fr" href="https://plantuml.com/fr/style">
+<link rel="alternate" hreflang="ja" href="https://plantuml.com/ja/style">
+<link rel="alternate" hreflang="ko" href="https://plantuml.com/ko/style">
+<link rel="alternate" hreflang="zh" href="https://plantuml.com/zh/style">
+
+<link rel="shortcut icon" href="https://plantuml.com/favicon.ico">
+
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-house.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-text-news.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-rocket-3-start.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-server.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-play.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-forum.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-add-to-online-cart.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-forum-message.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-palette-fill.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-cpu.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-books-library.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-signpost-fill.svg">
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-library.svg">
+
+<link rel="preload" as="image" href="https://plantuml.com/flags22.png">
+
+<link rel="preload" as="image" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-uxwing-light-mode-toggle.svg">
+
+
+<!-- link rel="preload" as="image" href="https://img.shields.io/liberapay/patrons/plantuml.svg?logo=liberapay" -->
+
+
+<title>PlantUML Styles: Modern CSS-like Styling for Diagrams</title>
+<meta name="description" content="Modernize your PlantUML diagrams with CSS-like styles using the style tag. Create nice, customizable visuals and easily transition from deprecated skinparam.">
+
+<meta property="og:type" content="article">
+<!-- volt:dokuwiki titleog: -->
+<!-- volt:dokuwiki descriptionog: -->
+
+<meta property="og:url" content="https://plantuml.com/style">
+<meta property="og:site_name" content="PlantUML.com">
+
+<!-- meta property="og:image" content="https://plantuml.com/og-style" -->
+<meta name="twitter:image" content="https://plantuml.com/og-style">
+<meta property="og:locale" content="en">
+
+<meta name="twitter:card" content="summary">
+<!-- volt:dokuwiki titletwitter: -->
+<!-- volt:dokuwiki descriptiontwitter: -->
+<meta name="twitter:site" content="@PlantUML">
+<meta name="twitter:creator" content="@PlantUML">
+
+<script>
+if (window.location.href.indexOf("/en/") == -1) {
+var lg = navigator.language.substring(0,2);
+if (lg=="de") window.location.href = "/de/style";
+if (lg=="es") window.location.href = "/es/style";
+if (lg=="fr") window.location.href = "/fr/style";
+if (lg=="ja") window.location.href = "/ja/style";
+if (lg=="ko") window.location.href = "/ko/style";
+if (lg=="ru") window.location.href = "/ru/style";
+if (lg=="zh") window.location.href = "/zh/style";
+}
+</script>
+
+
+
+
+
+
+<!-- https://www.w3schools.com/colors/colors_picker.asp -->
+<!-- filter css https://codepen.io/sosuke/pen/Pjoqqp -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+.scale {
+}
+
+li {
+	margin: 2px;
+}
+#external li {
+	margin: 13px;
+}
+
+
+.pezoic {
+margin:0;
+padding:0;
+max-width: calc(100vw - 420px);
+overflow-x: hidden;
+}
+@media screen and (max-width: 1190px) {
+.pezoic {
+max-width: calc(100vw - 250px);
+}
+}
+
+
+.coptable {
+	max-width: 90%;
+}
+
+.mytab {
+	display:inline-block;
+	border-radius: 3px;
+	border: 1px solid #e1e4e8;
+}
+
+.mytab:hover {
+	border: 1px dashed #0366d6;
+	cursor: pointer;
+	color: #0366d6;
+	background: #f6f8fa;
+}
+
+.cop {
+	margin: 25px 10px 0 10px;
+}
+.cop:hover {
+	cursor: pointer; 
+	filter: invert(30%) sepia(75%) saturate(4001%) hue-rotate(201deg) brightness(88%) contrast(98%);
+}
+.cop2 {
+	margin: 25px 10px 0 10px;
+}
+.cop2:hover {
+	cursor: pointer; 
+}
+.msg {
+	position: absolute;
+	color:#339966;
+	background-color: #FFF;
+	margin-top: 55px;
+	display:none;
+	border-radius: 3px;
+	border: 1px solid #4dff00;
+}
+
+.mycell0 {
+	float: left;
+	vertical-align : top;
+	padding:10px;
+}
+.mycell0 code:hover {
+	cursor: default; 
+	color: #000;
+}
+
+.mycell {
+	float: right;
+	vertical-align : top;
+	padding:10px;
+	max-width: 55vw;
+	overflow-x: auto;
+}
+
+.mycell0 pre {
+	max-width: 55vw;
+	overflow-x: auto;
+}
+
+.cod {
+	background: #edeff3;
+	padding: 2px 5px;
+	border-radius: 3px;
+}
+.colo {
+	display: inline-block;
+	background: #edeff3;
+	padding: 7px 12px;
+	border-radius: 3px;
+}
+.tag,.tagg,.tago,.tagr {
+	text-rendering: optimizeLegibility;
+	display: inline-block;
+	padding: 3px 5px 2px 4px;
+	text-decoration: none;
+	white-space: nowrap;
+	border: 1px solid #999;
+	text-transform: uppercase;
+	text-align: center;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 90%;
+}
+.tag {
+	background-color: #EEEEEE;
+}
+.tagg {
+	background-color: #98FB98;
+}
+.tago {
+	background-color: #fafa00;
+}
+.tagr {
+	background-color: #FF4500;
+}
+
+
+a {
+    text-decoration:none;
+    color:#0366d6;
+}
+a:hover {
+    text-decoration:underline;
+}
+
+.menu1 {
+    display: flex;
+    flex-direction: row;
+    border: 0;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+	white-space: nowrap;
+}
+.menu1 a {
+	white-space: nowrap;
+    padding: 0 8px;
+    text-decoration: none;
+    color:#5e6d7d;
+    line-height: 30px;
+    height: 30px;
+}
+.menu1 a:hover{
+    background: #fefefe;
+    color:#0366d6;
+}
+
+.menuside2 {
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+	justify-content: center;
+}
+
+.menuside2 img {
+vertical-align: top;
+padding: 0 8px;
+filter: brightness(0) saturate(100%) invert(42%) sepia(22%) saturate(385%) hue-rotate(170deg) brightness(92%) contrast(84%);
+}
+
+.menuside2 a {
+    padding: 6px 0;
+    text-decoration: none;
+    color:#5e6d7d;
+}
+
+.menuside2 a:hover {
+	color:#0366d6;
+	background: #fefefe;
+}
+
+.menuside2 a:hover img {
+filter: brightness(0) saturate(100%) invert(23%) sepia(44%) saturate(7029%) hue-rotate(203deg) brightness(94%) contrast(98%);
+}
+
+.breadcrumb {
+    z-index:1;
+	font-size:14px;
+	text-align: center;
+	display: inline-block;
+	overflow: hidden;
+	border-radius: 5px;
+}
+
+
+.breadcrumb a {
+	text-decoration: none;
+	outline: none;
+	display: block;
+	float: left;
+	font-size: 12px;
+	line-height: 24px;
+	color: #373f49;
+	padding: 0 10px 0 35px;
+	background: #f0f1f1;
+	background: linear-gradient(#f0f1f1, #c6d2d2);
+	position: relative;
+}
+.breadcrumb a:first-child {
+	padding-left: 21px;
+	border-radius: 5px 0 0 5px; /*to match with the parent's radius*/
+}
+.breadcrumb a:first-child:before {
+	left: 14px;
+}
+.breadcrumb a:last-child {
+	visibility: hidden;
+}
+
+.breadcrumb a.active, .breadcrumb a:hover{
+	color: #0366d6;
+	background: #c6d2d2;
+	background: linear-gradient(#e3e4e4, #b8c7c7);
+}
+.breadcrumb a.active:after, .breadcrumb a:hover:after {
+	background: #c6d2d2;
+	background: linear-gradient(135deg, #e3e4e4, #b8c7c7);
+}
+
+.breadcrumb a:after {
+	content: '';
+	position: absolute;
+	top: 0; 
+	right: -12px; /*half of square's length*/
+	/*same dimension as the line-height of .breadcrumb a */
+	width: 24px; 
+	height: 24px;
+	transform: scale(0.707) rotate(45deg);
+	/*we need to prevent the arrows from getting buried under the next link*/
+	z-index: 1;
+	/*background same as links but the gradient will be rotated to compensate with the transform applied*/
+	background: #f0f1f1;
+	background: linear-gradient(135deg, #f0f1f1, #c6d2d2);
+	/*stylish arrow design using box shadow*/
+	box-shadow: 
+		2px -2px 0 2px rgba(0,0,0,0.1), 
+		3px -3px 0 2px rgba(255,255,255,0.1);
+	/*
+		5px - for rounded arrows and 
+		50px - to prevent hover glitches on the border created using shadows*/
+	border-radius: 0 5px 0 50px;
+}
+
+/*we dont need an arrow after the last link*/
+.breadcrumb a:last-child:after {
+	content: none;
+	visibility: hidden;
+}
+
+
+.lga,.lga a,.lgi,.lgi a {
+	font-size:13px;
+	text-align: center;
+    color: #fff;
+    padding: 0 5px;
+    margin: 0;
+}
+.lga,.lga a {
+    background-color: #008;
+}
+.lgi,.lgi a {
+    background-color: #888;
+}
+.lga:hover,.lga:hover a {
+    text-decoration: none;
+    color: #BBB;
+}
+.lgi:hover,.lgi:hover a {
+    text-decoration: none;
+    color: #CCC;
+}
+
+</style>
+
+<style>
+.backtop {
+	margin:0px 10px;
+}
+.backtop:hover {
+	cursor: pointer;
+	filter: invert(30%) sepia(75%) saturate(4001%) hue-rotate(201deg) brightness(88%) contrast(98%);
+}
+</style>
+
+
+
+
+<style>
+/* Dropdown Button */
+.dropbtn {
+  padding: 0px;
+  border: none;
+  background: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin: 0 10px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content img {
+vertical-align:middle;
+margin: 0 8px 0 1px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  font-size: small;
+  font-weight: normal;
+  color: black;
+  padding: 5px 10px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+  color: #0366d6;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+</style>
+<style>
+
+
+body {
+	font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size: 14px;
+	line-height: 1.5;
+	margin: auto;
+	overflow-x: hidden;
+    background: #fefefe;
+}
+
+h1.chap { font-size: 1.8em; }
+h2.chap { font-size: 1.35em; }
+h3, h3.chap { font-size: 1.15em; }
+h4 { font-size: 1.05em; }
+table { font-size: inherit; }
+
+</style>
+
+
+  <style>
+    .dyn {
+      display: flex;
+      flex-direction: row;
+      gap: 3em;
+      align-items: stretch;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+    .dyn textarea {
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.4;
+      min-width: 30ch;
+      max-width: 90ch;
+      box-sizing: border-box;
+      resize: both;
+      white-space: pre;
+      overflow: auto;
+      field-sizing: content;
+      align-self: stretch;
+      border: 1px solid #888;
+      border-radius: 3px;
+      margin: 0;
+      padding: 4px 8px;
+      background: #fefefe;
+    }
+    .dyn > div {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      display: flex;
+    }
+    .dyn > div > div {
+      margin: 0;
+      padding: 0;
+    }
+    .dyn img {
+      margin: 0;
+      padding: 0;
+    }
+    .scale {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #dde;
+      border-radius: 4px;
+    }
+  </style>
+
+
+
+
+<script>window.pushMST_config={"vapidPK":"BBodn2vLFoDO5AdCfmOOzNmcUsn52kTA6JNZNYVFymzEdWHonz_bkUcsaTkPXHvNGRkRUSAxMbup-H0l2sb1h_Q","enableOverlay":true,"swPath":"/sw.js","i18n":{}};
+  var pushmasterTag = document.createElement('script');
+  pushmasterTag.src = "https://cdn.pushmaster-cdn.xyz/scripts/publishers/629f5e297baecc00098a271b/SDK.js";
+  pushmasterTag.setAttribute('defer','');
+
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(pushmasterTag, firstScriptTag);
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/google-analytics_analytics.js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TKZNNQT9CZ');
+</script>
+
+
+
+<script>
+var llg = "en";
+var az=0;
+var amdark=0;
+function ljs(n) {
+	if (az) return false;
+    var sc = document.createElement("script");
+    sc.type = "text/javascript";
+    sc.src = "/btn-"+n+".js";
+	document.body.innerHTML = "<i style='position:absolute;top:30%;width:100%;'><center>Loading in progress...";
+    document.body.appendChild(sc);
+}
+function ctc(id) {
+document.getElementById('img'+id).classList.remove('cop'); document.getElementById('img'+id).classList.add('cop2');
+document.getElementById('pre'+id).style.backgroundColor = '#4dff00';
+document.getElementById('msg'+id).style.display = 'inline';
+
+setTimeout(function() { document.getElementById('img'+id).classList.remove('cop2'); document.getElementById('img'+id).classList.add('cop'); document.getElementById('pre'+id).style.backgroundColor = ''; document.getElementById('msg'+id).style.display = 'none';}, 800);      
+
+
+	text = document.getElementById('pre'+id).innerText;
+    if (window.clipboardData && window.clipboardData.setData)
+        return window.clipboardData.setData("Text", text);
+    else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var ta = document.createElement("textarea");
+        ta.textContent = text;
+        ta.style.position = "fixed";
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+            return document.execCommand("copy");
+        }
+        catch (ex) {
+            return false;
+        }
+        finally {
+            document.body.removeChild(ta);
+        }
+    }
+}
+</script>
+
+
+
+<script async="" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/googlesyndication_adsbygoogle.js"></script>
+
+<script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/min.js" data-cfasync="false"></script><script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/mulvane.js" async=""></script><script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/birmingham.js" async=""></script>
+<script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/cmp.min.js" data-cfasync="false"></script>
+<script type="text/javascript">
+var ezoTemplate = 'pub_site';
+var ezouid = '1';
+var ezoFormfactor = '1';
+</script><script data-ezscrex="false" type="text/javascript">
+var soc_app_id = '0';
+var did = 173770;
+var ezdomain = 'plantuml.com';
+var ezoicSearchable = 1;
+</script>
+<script type="text/javascript" style="display:none;" async="">if (typeof window.__ez !== 'undefined' && window.__ez?.queue?.addFileOnce) {window.__ez.queue.addFileOnce('identity', 'https://go.ezodn.com/detroitchicago/indy.js?cb=122&gcb=0', true, [], true, false, false, true);} </script><script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/indy.js" async=""></script>
+<script>window.__ezSocialLoginConfig = {"providers":{"google":{"enabled":true,"clientId":"626901221629-15ss1s412okbv1qg834f6e3h8chm6ubk.apps.googleusercontent.com"},"facebook":{"enabled":false},"apple":{"enabled":false}},"routes":{"facebookStart":"https://identity.ezoic.com/social-login/facebook/start","facebookCallback":"https://identity.ezoic.com/social-login/facebook/callback","facebookResult":"https://identity.ezoic.com/social-login/facebook/result","appleStart":"https://identity.ezoic.com/social-login/apple/start","appleCallback":"https://identity.ezoic.com/social-login/apple/callback","appleResult":"https://identity.ezoic.com/social-login/apple/result"},"domainId":173770};window.__ezOneTapClientId = "626901221629-15ss1s412okbv1qg834f6e3h8chm6ubk.apps.googleusercontent.com";</script><style id="googleidentityservice_button_styles">.qJTHM{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;color:#202124;direction:ltr;-webkit-touch-callout:none;font-family:Roboto-Regular,arial,sans-serif;-webkit-font-smoothing:antialiased;font-weight:400;margin:0;overflow:hidden;-webkit-text-size-adjust:100%}.ynRLnc{left:-9999px;position:absolute;top:-9999px}.L6cTce{display:none}.bltWBb{overflow-wrap:break-word;word-break:break-word}.hSRGPd{color:#1a73e8;cursor:pointer;font-weight:500;text-decoration:none}.Bz112c-W3lGp{height:16px;width:16px}.Bz112c-E3DyYd{height:20px;width:20px}.Bz112c-r9oPif{height:24px;width:24px}.Bz112c-u2z5K{height:36px;width:36px}.Bz112c-uaxL4e{border-radius:10px}.LgbsSe-Bz112c{display:block}.S9gUrf-YoZ4jf{border:none;margin:0;padding:0}.S9gUrf-YoZ4jf *{border:none;margin:0;padding:0}.fFW7wc-ibnC6b>.aZ2wEe>div{border-color:#4285f4}.P1ekSe-ZMv3u{transition:height .2s linear}.P1ekSe-ZMv3u>div:first-child{background-color:#1a73e8!important;transition:width .3s linear}.P1ekSe-ZMv3u>div:nth-child(2){background-image:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(90deg,#1a73e8,#1a73e8)!important}.P1ekSe-ZMv3u>div:nth-child(3){background-image:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(90deg,#1a73e8,#1a73e8)!important}.haAclf{display:inline-block}.nsm7Bb-HzV7m-LgbsSe{border-radius:4px;-moz-box-sizing:border-box;box-sizing:border-box;transition:background-color .218s,border-color .218s;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;-webkit-appearance:none;background-color:#fff;background-image:none;border:1px solid #dadce0;color:#3c4043;cursor:pointer;font-family:Google Sans,arial,sans-serif;font-size:14px;height:40px;letter-spacing:.25px;outline:none;overflow:hidden;padding:0 12px;position:relative;text-align:center;vertical-align:middle;white-space:nowrap;width:auto}@media screen and (-ms-high-contrast:active){.nsm7Bb-HzV7m-LgbsSe{border:2px solid windowText;color:windowText}}@media screen and (preferes-contrast:more){.nsm7Bb-HzV7m-LgbsSe{color:#000}}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe{font-size:14px;height:32px;letter-spacing:.25px;padding:0 10px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe{font-size:11px;height:20px;letter-spacing:.3px;padding:0 8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe{padding:0;width:40px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe{width:32px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe{width:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK{border-radius:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.pSzOP-SxQuSe{border-radius:16px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.purZT-SxQuSe{border-radius:10px}.nsm7Bb-HzV7m-LgbsSe.i5vt6e-to915-Ia7Qfc{border:1px solid #8e918f;background-color:#131314;color:#e3e3e3}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc{border:none;color:#fff}.nsm7Bb-HzV7m-LgbsSe.MFS4be-v3pZbf-Ia7Qfc{background-color:#1a73e8}.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{background-color:#202124;color:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{color:#fff}}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:18px;margin-right:8px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:14px;min-width:14px;width:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:10px;min-width:10px;width:10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin-left:8px;margin-right:-4px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:10px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:4px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:3px;border-bottom-left-radius:3px;display:-moz-box;display:flex;-moz-box-pack:center;justify-content:center;-moz-box-align:center;align-items:center;background-color:#fff;height:36px;margin-left:-10px;margin-right:12px;min-width:36px;width:36px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c,.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:28px;margin-left:-8px;margin-right:10px;min-width:28px;width:28px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:16px;margin-left:-6px;margin-right:8px;min-width:16px;width:16px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:3px;margin-left:2px;margin-right:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:8px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb{display:-moz-box;display:flex;-moz-box-align:center;align-items:center;-moz-box-orient:horizontal;-moz-box-direction:normal;flex-direction:row;-moz-box-pack:justify;justify-content:space-between;flex-wrap:nowrap;height:100%;position:relative;width:100%}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX{-moz-box-pack:center;justify-content:center}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{-moz-box-flex:1;flex-grow:1;font-family:Google Sans,arial,sans-serif;font-weight:500;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-weight:300}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX .nsm7Bb-HzV7m-LgbsSe-BPrWId{-moz-box-flex:0;flex-grow:0}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe{transition:background-color .218s;bottom:0;left:0;position:absolute;right:0;top:0}.nsm7Bb-HzV7m-LgbsSe:focus,.nsm7Bb-HzV7m-LgbsSe:hover{box-shadow:none;border-color:rgb(210,227,252);outline:none}.nsm7Bb-HzV7m-LgbsSe:focus-within{outline:2px solid #00639b;border-color:transparent}.nsm7Bb-HzV7m-LgbsSe:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.08)}.nsm7Bb-HzV7m-LgbsSe:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.1)}.nsm7Bb-HzV7m-LgbsSe.i5vt6e-to915-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.08)}.nsm7Bb-HzV7m-LgbsSe.i5vt6e-to915-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.i5vt6e-to915-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.12)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.24)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.32)}.nsm7Bb-HzV7m-LgbsSe .n1UuX-DkfjY{border-radius:50%;display:-moz-box;display:flex;height:20px;margin-left:-4px;margin-right:8px;min-width:20px;width:20px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-family:Roboto;font-size:12px;text-align:left}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .fmcmS,.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .ssJRIf{overflow:hidden;text-overflow:ellipsis}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{display:-moz-box;display:flex;-moz-box-align:center;align-items:center;color:#5f6368;fill:#5f6368;font-size:11px;font-weight:400}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#e8eaed;fill:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff,.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#000;fill:#000}}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .Bz112c{height:18px;margin:-3px -3px -3px 2px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:3px;border-bottom-right-radius:3px;margin-left:12px;margin-right:-10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.L5Fo6c-sM5MNb{border:0;display:block;left:0;position:relative;top:0}.L5Fo6c-bF1uUb{border-radius:4px;bottom:0;cursor:pointer;left:0;position:absolute;right:0;top:0}.L5Fo6c-bF1uUb:focus{border:none;outline:none}sentinel{}</style><link id="googleidentityservice" type="text/css" media="all" href="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/style.css" rel="stylesheet"></head>
+
+<body>
+    <style>
+body, .container, #A1, #B3, #C5, #C6, #C7, #D7, #D8 {
+    margin: 0;
+    padding: 0;
+}
+        body {
+            overflow-y: scroll;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto auto;
+            grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+        }
+
+        #A1 {
+            grid-column: 1;
+            grid-row: 1 / -1;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 0 10px;
+            overflow: hidden;
+            background: #edeff3;
+            color: white;
+        }
+
+        #A1::after {
+            content: "";
+            position: absolute;
+            top: 30px;
+            right: 0;
+            width: 1px;
+            height: calc(100vh - 30px);
+            background: #d4d8de;
+        }
+
+        #B3 {
+            grid-column: 2 / 6;
+            grid-row: 1;
+            position: sticky;
+            top: 0;
+            height: 30px;
+            padding: 0;
+            z-index: 10;
+            overflow: hidden;
+            background: #edeff3;
+            border-bottom: 1px solid #d4d8de;
+        }
+
+        #D7 {
+            grid-column: 2;
+            grid-row: 2;
+            margin: 0;
+            padding: 0;
+            padding-left: 30px;
+            line-height: 1.6;
+        }
+
+        #D8 {
+            grid-column: 2;
+            grid-row: 3;
+            position: sticky;
+            bottom: 0;
+            z-index: 5;
+            background: #fefefe;
+        }
+
+        #C5 {
+            grid-column: 3;
+            grid-row: 1 / -1;
+            position: sticky;
+            top: 40px;
+            align-self: start;
+            height: calc(98vh - 60px);
+            overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+        }
+        
+        #C6 {
+            grid-column: 4;
+            grid-row: 1 / -1;
+            position: sticky;
+            top: 40px;
+            align-self: start;
+            height: calc(98vh - 60px);
+            max-width: 200px;
+            overflow: hidden;
+            margin: 0 10px;
+            padding: 8px 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+        }
+        
+        #C7 {
+            grid-column: 5;
+            grid-row: 1 / -1;
+            position: sticky;
+            top: 40px;
+            align-self: start;
+            height: calc(98vh - 60px);
+            margin: 0 20px 0 0;
+            overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+        }
+        
+ #toc {
+ z-index:15;
+ overflow-x: hidden;
+ overflow-y: auto;
+ background: #f6f8fa;
+ border-width: 2px;
+ border-style: groove;
+ border-radius: 3px;
+ border-color: #e1e4e8;
+ margin: 0 5px;
+ padding: 0;
+ max-height: 100%;
+}
+
+#toc ul {
+margin: 0;
+list-style-type: none;
+padding: 0;
+}
+
+#toc li {
+    padding:0 10px;
+    margin: 0;
+}
+
+#toc li a {
+    padding:5px 0;
+display: inline-block;
+text-decoration:none;
+width:100%;
+color: #5e6d7d;
+}
+
+#toc li a:hover {
+color: #0366d6;
+}
+
+#toc li:hover {
+background: #fefefe;
+}
+
+        #magic {
+            position: absolute;
+            top: 0;
+            right: 50px;
+            width: 30px;
+            height: 30px;
+            overflow: hidden;
+            background: #edeff3;
+            z-index: 14;
+        }
+
+        #magic:hover {
+            width: calc(100% - 50px);
+        }
+
+        #magic .menu1 {
+            position: absolute;
+            top: 0;
+            right: 30px;
+            height: 30px;
+            padding-left: 10px;
+            background: #edeff3;
+            border-left: 1px solid #d4d8de;
+            border-bottom: 1px solid #d4d8de;
+        }
+
+        #magic > img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            filter: brightness(0) saturate(100%) invert(42%) sepia(22%) saturate(385%) hue-rotate(170deg) brightness(92%) contrast(84%);
+        }
+
+        #magic:hover > img {
+            filter: brightness(0) saturate(100%) invert(23%) sepia(44%) saturate(7029%) hue-rotate(203deg) brightness(94%) contrast(98%);
+        }
+
+        #magic2 {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 30px;
+            overflow: hidden;
+            background: #edeff3;
+            z-index: 16;
+        }
+
+        #magic2 img {
+            margin: 5px 0 0 5px;
+filter: brightness(0) saturate(100%) invert(42%) sepia(22%) saturate(385%) hue-rotate(170deg) brightness(92%) contrast(84%);
+        }
+
+        #magic2:hover img {
+filter: brightness(0) saturate(100%) invert(23%) sepia(44%) saturate(7029%) hue-rotate(203deg) brightness(94%) contrast(98%);
+        }
+
+        .menu1-tail {
+            flex-grow: 1;
+            flex-shrink: 0;
+            height: 30px;
+            position: relative;
+            z-index: 15;
+            background: #edeff3;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            grid-auto-rows: auto;
+            gap: 5px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .merged {
+            grid-column: 1 / -1;
+        }
+        
+        .ezoic-wrap {
+            display: block;
+            overflow: hidden;
+        }
+
+#C6 {
+    display: none;
+}
+
+@media (min-width: 1401px) {
+    #C6:has(#toc li) {
+        display: flex;
+    }
+}
+
+@media (max-width: 1100px) {
+	.ezoic-wrap, #C5, #C7 {
+		display: none;
+	}
+}
+
+@media (max-width: 1200px) {
+	.merged {
+		display: none;
+	}
+}
+
+        
+    </style>
+
+<div class="container">
+
+
+<aside id="C5">
+<!-- Ezoic - side3 - top_of_page -->
+<span id="ezoic-pub-ad-placeholder-681"></span>
+<!-- End Ezoic - side3 - top_of_page -->
+</aside>
+
+<aside id="C7">
+<!-- Ezoic - side4 - top_of_page -->
+<span id="ezoic-pub-ad-placeholder-682"></span>
+<!-- End Ezoic - side4 - top_of_page -->
+</aside>
+
+<footer id="D8">
+
+<p>
+</p><div style="display: flex; justify-content: center;">
+<!-- Ezoic - alpha-new - sidebar_bottom -->
+<span id="ezoic-pub-ad-placeholder-677"></span><span data-ez-ph-id="677"></span>
+<!-- End Ezoic - alpha-new - sidebar_bottom -->
+</div>
+<p>
+
+</p></footer>
+
+    <aside id="A1">
+        <div class="grid">
+            <div class="merged">
+<!-- Ezoic - alpha-bloc - top_of_page -->
+<span id="ezoic-pub-ad-placeholder-678"></span><span data-ez-ph-id="678" style="padding:0;float:none !important;min-width:300px;min-height:250px;max-width:100% !important;line-height:0px;box-sizing:content-box;margin-top:0px !important;margin-right:0px !important;margin-bottom:0px !important;margin-left:0px !important;display:inline-block;"></span>
+<!-- End Ezoic - alpha-bloc - top_of_page -->
+            </div>
+            
+            <div>
+<!-- Ezoic - side1 - top_of_page -->
+<div class="ezoic-wrap">
+  <span id="ezoic-pub-ad-placeholder-679"></span>
+</div>
+<!-- End Ezoic - side1 - top_of_page -->
+            </div>
+            
+            <div>
+
+<!--menu 10-->
+
+<!-- https://stackoverflow.com/questions/22252472/how-to-change-the-color-of-an-svg-element -->
+<!-- https://codepen.io/sosuke/pen/Pjoqqp -->
+
+
+<div class="menuside2">
+<a id="mitem10" href="https://plantuml.com/index"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-house.svg" width="16" height="16">Home</a>
+<a id="mitem20" href="https://plantuml.com/news"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-text-news.svg" width="16" height="16">What's New ?</a>
+<a id="mitem30" href="https://plantuml.com/starting"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-rocket-3-start.svg" width="16" height="16">Getting Started</a>
+<a href="https://www.plantuml.com/plantuml/uml/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-server.svg" width="16" height="16">Online Server</a>
+<a id="mitem40" href="https://plantuml.com/running"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-play.svg" width="16" height="16">Running</a>
+<a id="mitem50" href="https://plantuml.com/faq"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-forum.svg" width="16" height="16">F.A.Q.</a>
+<a id="mitem60" href="https://plantuml.com/download"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-add-to-online-cart.svg" width="16" height="16">Download</a>
+<a id="mitem70" href="https://forum.plantuml.net/"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-forum-message.svg" width="16" height="16">Forum</a>
+<a id="mitem80" href="https://the-lum.github.io/puml-themes-gallery/themes/index.html"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-palette-fill.svg" width="16" height="16">Theme</a>
+<a id="mitem90" href="https://plantuml.com/preprocessing"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-cpu.svg" width="16" height="16">Preprocessing</a>
+<a id="mitem100" href="https://plantuml.com/stdlib"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-books-library.svg" width="16" height="16">Standard Library</a>
+<a href="https://plantuml.com/guide"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-library.svg" width="16" height="16">PDF Guide</a>
+<a href="https://crashedmind.github.io/PlantUMLHitchhikersGuide"><img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-signpost-fill.svg" width="16" height="16">Hitchhiker's Guide</a>
+</div>
+
+            </div>
+            
+            <div>
+<!-- Ezoic - side2 - top_of_page -->
+<div class="ezoic-wrap">
+<span id="ezoic-pub-ad-placeholder-680"></span>
+</div>
+<!-- End Ezoic - side2 - top_of_page -->
+            </div>
+
+
+            <div class="merged">
+<!-- Ezoic - alpha-bloc2 - top_of_page -->
+<span id="ezoic-pub-ad-placeholder-683"></span>
+<!-- End Ezoic - alpha-bloc2 - top_of_page -->
+            </div>
+
+            
+        </div><!-- grid -->
+    </aside>
+
+    <header id="B3">
+<div class="menu1">
+<a id="titem10" href="https://plantuml.com/sequence-diagram">Sequence</a>
+<a id="titem20" href="https://plantuml.com/use-case-diagram">Use Case</a>
+<a id="titem30" href="https://plantuml.com/class-diagram">Class</a>
+<a id="titem40" href="https://plantuml.com/activity-diagram-beta">Activity</a>
+<a id="titem50" href="https://plantuml.com/component-diagram">Component</a>
+<a id="titem60" href="https://plantuml.com/state-diagram">State</a>
+<a id="titem70" href="https://plantuml.com/object-diagram">Object</a>
+<a id="titem80" href="https://plantuml.com/deployment-diagram">Deployment</a>
+<a id="titem90" href="https://plantuml.com/timing-diagram">Timing</a>
+
+<a id="titem99" href="https://plantuml.com/regex">Regex</a>
+<a id="titem100" href="https://plantuml.com/nwdiag">Network</a>
+<a id="titem110" href="https://plantuml.com/salt">Wireframe</a>
+<a id="titem120" href="https://plantuml.com/archimate-diagram">Archimate</a>
+<a id="titem130" href="https://plantuml.com/gantt-diagram">Gantt</a>
+<a id="titem140" href="https://plantuml.com/mindmap-diagram">MindMap</a>
+<a id="titem150" href="https://plantuml.com/wbs-diagram">WBS</a>
+<a id="titem151" href="https://plantuml.com/ebnf">EBNF</a>
+<a id="titem160" href="https://plantuml.com/json">JSON</a>
+<a id="titem170" href="https://plantuml.com/yaml">YAML</a>
+
+<div class="menu1-tail"></div>
+</div>
+        <div id="magic">
+<div class="menu1">
+<a id="titem10" href="https://plantuml.com/sequence-diagram">Sequence</a>
+<a id="titem20" href="https://plantuml.com/use-case-diagram">Use Case</a>
+<a id="titem30" href="https://plantuml.com/class-diagram">Class</a>
+<a id="titem40" href="https://plantuml.com/activity-diagram-beta">Activity</a>
+<a id="titem50" href="https://plantuml.com/component-diagram">Component</a>
+<a id="titem60" href="https://plantuml.com/state-diagram">State</a>
+<a id="titem70" href="https://plantuml.com/object-diagram">Object</a>
+<a id="titem80" href="https://plantuml.com/deployment-diagram">Deployment</a>
+<a id="titem90" href="https://plantuml.com/timing-diagram">Timing</a>
+
+<a id="titem99" href="https://plantuml.com/regex">Regex</a>
+<a id="titem100" href="https://plantuml.com/nwdiag">Network</a>
+<a id="titem110" href="https://plantuml.com/salt">Wireframe</a>
+<a id="titem120" href="https://plantuml.com/archimate-diagram">Archimate</a>
+<a id="titem130" href="https://plantuml.com/gantt-diagram">Gantt</a>
+<a id="titem140" href="https://plantuml.com/mindmap-diagram">MindMap</a>
+<a id="titem150" href="https://plantuml.com/wbs-diagram">WBS</a>
+<a id="titem151" href="https://plantuml.com/ebnf">EBNF</a>
+<a id="titem160" href="https://plantuml.com/json">JSON</a>
+<a id="titem170" href="https://plantuml.com/yaml">YAML</a>
+
+<div class="menu1-tail"></div>
+</div>
+            <img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-left.svg" alt="" style="width:30px;height:30px">
+        </div><!-- magic -->
+        <div id="magic2">
+<a href="https://plantuml.com/en-dark/style">
+<img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/svgrepo-uxwing-light-mode-toggle.svg" width="40" height="20">
+</a>
+        </div><!-- magic2 -->
+    </header>
+
+    <main id="D7">
+
+<style>
+    #haut1 {
+        margin: 15px 0 10px;
+        padding: 0;
+        min-height: 50px;
+    }
+
+    #donate {
+        padding-top: 10px;
+        min-height: 30px;
+    }
+</style>
+
+<div id="haut1">
+
+<!-- c --><div style="float:left;">
+<!-- a simple div with some links -->
+<div class="breadcrumb">
+<a href="https://plantuml.com/sitemap">PlantUML</a>
+<a href="https://plantuml.com/sitemap-language-specification">Language specification</a>
+<a href="https://plantuml.com/style">CSS Style</a>
+<a href="#"></a>
+</div>
+
+
+    <div id="donate">
+
+&nbsp;
+
+<a href="https://github.com/sponsors/plantuml/" style="text-decoration: none;">
+<img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/plantuml.svg">
+</a>
+
+&nbsp;
+
+<a href="https://www.patreon.com/bePatron?patAmt=1&amp;u=527450&amp;rid=152970" style="text-decoration: none;">
+<img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/patreon-122-chocolate.svg">
+</a>
+
+&nbsp;
+
+<a href="https://liberapay.com/plantuml/donate" style="text-decoration: none;">
+<img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/plantuml_002.svg">
+</a>
+
+&nbsp;
+
+<a href="https://plantuml.com/en/paypal" style="text-decoration: none;">
+<img src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/paypal-297-skyblue.svg">
+</a>
+
+<!--
+ 
+
+<a href="https://github.com/sponsors/plantuml" style="text-decoration: none;">
+<img src="https://img.shields.io/github/sponsors/plantuml?label=github">
+</a>
+
+-->
+    </div><!-- donate -->
+</div><!-- c -->
+
+<!-- e --><div style="float:right; margin:3px 0;">
+
+<!-- https://github.com/joielechong/iso-country-flags-svg-collection -->
+
+<!-- https://www.flaticon.com/packs/international-flags -->
+<!-- https://flagicons.lipis.dev/?continent=Europe -->
+<!-- https://flagpedia.net/download/icons -->
+
+<!-- https://www.countryflags.io/ -->
+
+<style>
+#langlist {
+display: flex;
+justify-content: space-between;
+width: 317px;
+height: 16px;
+margin: 3px 10px 3px 0;
+}
+
+.sel2 {
+  border: 2px solid #fefefe;
+}
+.nosel2 {
+  border: 2px solid #fefefe;
+  filter: grayscale(100%) opacity(75%);
+}
+.sel2:hover, .nosel2:hover {
+  cursor: pointer;
+  border: 2px solid #0366d6;
+  border-spacing: 0;
+  filter: grayscale(0%);
+  filter: contrast(200%);
+  filter: brightness(150%);
+}
+#flag1,#flag2,#flag3,#flag4,#flag5,#flag6,#flag7,#flag8 {
+background: url(/flags22.png);
+background-repeat: no-repeat;
+background-clip: content-box;
+width: 22px;
+height: 16px;
+}
+#flag2 {
+background-position: -22px 0px;
+}
+#flag3 {
+background-position: -44px 0px;
+}
+#flag4 {
+background-position: -66px 0px;
+}
+#flag5 {
+background-position: -88px 0px;
+}
+#flag6 {
+background-position: -110px 0px;
+}
+#flag8 {
+background-position: -132px 0px;
+}
+</style>
+
+<div id="langlist">
+
+
+
+<div id="flag1" onclick="location.href='/en/style'" class="sel2"></div>
+
+<div id="flag2" onclick="location.href='/de/style'" class="nosel2"></div>
+
+
+<div id="flag3" onclick="location.href='/es/style'" class="nosel2"></div>
+
+
+<div id="flag4" onclick="location.href='/fr/style'" class="nosel2"></div>
+
+
+<div id="flag5" onclick="location.href='/ja/style'" class="nosel2"></div>
+
+
+<div id="flag6" onclick="location.href='/ko/style'" class="nosel2"></div>
+
+
+<div id="flag8" onclick="location.href='/zh/style'" class="nosel2"></div>
+
+
+
+
+
+</div><!-- langlist -->
+</div><!-- e -->
+
+</div><!-- haut1 -->
+
+<!-- =================== Browser extension promo banner =================== -->
+<style>
+#ext-promo {
+    clear: both;
+    margin: 12px 0 18px;
+    padding: 12px 18px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+#ext-promo .ext-promo-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+#ext-promo .ext-promo-text {
+    flex: 1;
+    min-width: 240px;
+}
+#ext-promo .ext-promo-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+#ext-promo .ext-promo-links a {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+#ext-promo .ext-promo-links a.firefox:hover {
+    background: #a64200;
+}
+#ext-promo .ext-promo-links a.chrome:hover {
+    background: #0250a8;
+}
+</style>
+<style>
+#ext-promo {
+    border: 1px solid #c9e0f7;
+    border-left: 4px solid #0366d6;
+    background: linear-gradient(90deg, #f0f7ff 0%, #f8fbff 100%);
+    color: #24292e;
+}
+#ext-promo .ext-promo-text strong { color: #0366d6; }
+#ext-promo .ext-promo-links a.chrome { background: #0366d6; }
+#ext-promo .ext-promo-links a.firefox { background: #d75500; }
+</style>
+
+<div id="ext-promo">
+    <span class="ext-promo-icon">🧩</span>
+    <div class="ext-promo-text">
+        <strong>New!</strong> Render PlantUML diagrams directly inside GitHub
+        with <a href="https://github.com/plantuml/plantuml-for-github">our official browser extension</a> —
+        No server. No tokens. No tracking. Zero permissions but clipboard. —
+        Try it out and let us know what you think!
+    </div>
+    <div class="ext-promo-links">
+        <a class="chrome" href="https://chromewebstore.google.com/detail/plantuml-for-github/lbokhidfopkdehkmlmpaabacljoediic" target="_blank" rel="noopener">Add to Chrome</a>
+        <a class="firefox" href="https://addons.mozilla.org/en-US/firefox/addon/plantuml-for-github/" target="_blank" rel="noopener">Add to Firefox</a>
+    </div>
+</div>
+<!-- =================== End extension promo banner =================== -->
+
+<p style="clear:both;">
+
+
+<a style="position:relative;top:-38px;" name="9c2c0a93fa096c13"></a>
+<!--heading--></p><h1 class="chap"><div class="dropdown"><button class="dropbtn"><img width="16" height="16" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/edit1.svg"></button><div class="dropdown-content"><a href="http://alphadoc.plantuml.com/doc/dokuwiki/en/style#0"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/dokuwiki.png">Edit in Dokuwiki</a><a href="http://alphadoc.plantuml.com/doc/asciidoc/en/style#0"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/asciidoc32.png">Edit in Asciidoc</a><a href="http://alphadoc.plantuml.com/doc/markdown/en/style#0"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/markdown.png">Edit in Markdown</a></div></div>CSS Styles in PlantUML</h1>
+<p></p>
+PlantUML now supports <strong>CSS-like styling</strong> through the <code class="cod">&lt;style&gt;</code> tag, providing precise control over diagram elements such as <strong>participants, arrows, and global settings</strong>. This new feature is set to replace the older <code class="cod">skinparam</code> approach, which is now <strong>deprecated</strong>.
+<p></p>
+Users can leverage the familiar CSS syntax to apply <strong>global styles</strong> or target <strong>specific diagram types</strong> and individual elements. This allows customization of properties like <strong>colors, fonts, borders, spacing, and sizes</strong>,
+ ensuring a consistent and professional visual presentation. The modular
+ and reusable nature of CSS-like styles greatly simplifies style 
+management and enhances maintainability, as changes can be made 
+centrally and propagated throughout all diagrams.
+<p></p>
+In summary, adopting CSS styles in PlantUML not only modernizes diagram styling but also replaces the deprecated <code class="cod">skinparam</code>, enabling developers and designers to create visually cohesive, polished diagrams with ease.
+<a style="position:relative;top:-38px;" name="bf647454e36069fd"></a>
+<!--heading--><h2 class="chap"><img onclick="window.scrollTo(0,0);" title="Back to top" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/backtop1.svg" width="20" height="20" class="backtop"><div class="dropdown"><button class="dropbtn"><img width="16" height="16" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/edit1.svg"></button><div class="dropdown-content"><a href="http://alphadoc.plantuml.com/doc/dokuwiki/en/style#1"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/dokuwiki.png">Edit in Dokuwiki</a><a href="http://alphadoc.plantuml.com/doc/asciidoc/en/style#1"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/asciidoc32.png">Edit in Asciidoc</a><a href="http://alphadoc.plantuml.com/doc/markdown/en/style#1"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/markdown.png">Edit in Markdown</a></div></div>Getting Started</h2>
+<p></p>
+PlantUML’s styling is designed to be intuitive for anyone familiar with 
+CSS. In this section, we'll cover the basics of the syntax, how to apply
+ styles, and the differences between global and element-specific 
+styling.
+<p></p>
+<h3>Basic syntax and how to apply styles</h3>
+<p></p>
+To begin styling your diagrams, you simply include a <code class="cod">&lt;style&gt;</code>
+ section at the top of your PlantUML file. Inside this section, you can 
+define your style rules using a syntax very similar to standard CSS. 
+These rules are then applied to the various components of your diagram.
+<p></p>
+Here's a basic example:
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+  /* Global style applied to all elements */
+  element {
+    BackGroundColor: #AAA;
+  }
+
+  /* Specific styles for a sequence diagram */
+  sequenceDiagram {
+    participant {
+      FontColor: green;
+      FontSize: 26;
+      FontStyle: italic;
+      LineColor: #E00;
+    }
+    arrow {
+      FontColor: red;
+      LineColor: blue;
+    }
+  }
+&lt;/style&gt;
+
+participant Alice
+participant Bob
+
+Alice -&gt; Bob : hello
+
+@enduml
+</textarea>
+<div id="out3cb32247be253946146266f58ad4d910">
+<div class="mycell">
+<img loading="lazy" width="155" height="155" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-3cb32247be253946146266f58ad4d910.png">
+</div>
+</div>
+</div>
+<p></p>
+In the example above:
+<p></p>
+<ul>
+<li>The <code class="cod">element</code> selector applies a background color to all diagram elements.</li>
+<li>The <code class="cod">sequenceDiagram</code> block targets sequence diagrams specifically, allowing for more refined styling within that context.</li>
+<li>Within the <code class="cod">sequenceDiagram</code> block, the <code class="cod">participant</code> and <code class="cod">arrow</code> selectors define styles for participants and arrows respectively.</li>
+</ul>
+<p></p>
+<h3>Global vs. element-specific styles</h3>
+<p></p>
+<strong>Global styles:</strong>
+<ul>
+<li><strong>Definition</strong>: Rules applied to the <code class="cod">element</code> selector affect every part of your diagram.</li>
+<li><strong>Usage</strong>: Use global styles to set defaults, such as background colors, that should be consistent throughout your entire diagram.</li>
+</ul>
+<p></p>
+<strong>Element-specific styles:</strong>
+<ul>
+<li><strong>Definition</strong>: These styles are applied only to specified parts of the diagram, such as <code class="cod">sequenceDiagram</code>, <code class="cod">participant</code>, or <code class="cod">arrow</code>.</li>
+<li><strong>Usage</strong>: This approach is useful when you need to 
+customize only certain components of your diagram. For instance, if you 
+want to highlight participants in a sequence diagram differently from 
+other elements, you can define rules under the <code class="cod">participant</code> selector.</li>
+</ul>
+<p></p>
+By understanding the distinction between global and element-specific 
+styles, you can effectively manage the appearance of your diagrams. 
+Global styles help maintain consistency, while element-specific styles 
+provide the flexibility to introduce detailed customization where 
+needed.
+<p></p>
+This modular approach allows you to easily update and maintain the 
+visual presentation of your diagrams, ensuring they are both 
+aesthetically pleasing and aligned with your design requirements.
+<a style="position:relative;top:-38px;" name="7d2de70c0d35d1e6"></a>
+<!--heading--><h2 class="chap"><img onclick="window.scrollTo(0,0);" title="Back to top" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/backtop1.svg" width="20" height="20" class="backtop"><div class="dropdown"><button class="dropbtn"><img width="16" height="16" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/edit1.svg"></button><div class="dropdown-content"><a href="http://alphadoc.plantuml.com/doc/dokuwiki/en/style#2"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/dokuwiki.png">Edit in Dokuwiki</a><a href="http://alphadoc.plantuml.com/doc/asciidoc/en/style#2"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/asciidoc32.png">Edit in Asciidoc</a><a href="http://alphadoc.plantuml.com/doc/markdown/en/style#2"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/markdown.png">Edit in Markdown</a></div></div>Detailed property reference</h2>
+<p></p>
+Below is a detailed overview of all the supported CSS-like properties in
+ PlantUML, grouped by functionality. Each table outlines the purpose of 
+the properties within that category.
+<p></p>
+<h3>Typography</h3>
+<p></p>
+<table border="1" cellspacing="0" cellpadding="5">
+<tbody><tr>
+<td><b>
+Property
+</b></td>
+<td><b>
+Description
+</b></td>
+</tr>
+<tr>
+<td>
+<strong>FontName</strong>
+</td>
+<td>
+Sets the font family for text elements.
+</td>
+</tr>
+<tr>
+<td>
+<strong>FontColor</strong>
+</td>
+<td>
+Sets the color of the text.
+</td>
+</tr>
+<tr>
+<td>
+<strong>FontSize</strong>
+</td>
+<td>
+Specifies the size of the text.
+</td>
+</tr>
+<tr>
+<td>
+<strong>FontStyle</strong>
+</td>
+<td>
+Defines the text style (e.g., bold, italic, normal).
+</td>
+</tr>
+</tbody></table>
+<p></p>
+<h3>Color and background</h3>
+<p></p>
+<table border="1" cellspacing="0" cellpadding="5">
+<tbody><tr>
+<td><b>
+Property
+</b></td>
+<td><b>
+Description
+</b></td>
+</tr>
+<tr>
+<td>
+<strong>BackGroundColor</strong>
+</td>
+<td>
+Sets the background color of an element.
+</td>
+</tr>
+<tr>
+<td>
+<strong>HyperLinkColor</strong>
+</td>
+<td>
+Sets the color used for hyperlinks.
+</td>
+</tr>
+</tbody></table>
+<p></p>
+<h3>Borders and corners</h3>
+<p></p>
+<table border="1" cellspacing="0" cellpadding="5">
+<tbody><tr>
+<td><b>
+Property
+</b></td>
+<td><b>
+Description
+</b></td>
+</tr>
+<tr>
+<td>
+<strong>RoundCorner</strong>
+</td>
+<td>
+Sets the radius for rounding the corners of elements.
+</td>
+</tr>
+<tr>
+<td>
+<strong>DiagonalCorner</strong>
+</td>
+<td>
+Applies a diagonal cut effect to element corners.
+</td>
+</tr>
+<tr>
+<td>
+<strong>LineColor</strong>
+</td>
+<td>
+Specifies the color of lines or borders.
+</td>
+</tr>
+<tr>
+<td>
+<strong>LineThickness</strong>
+</td>
+<td>
+Sets the thickness of lines or borders.
+</td>
+</tr>
+<tr>
+<td>
+<strong>LineStyle</strong>
+</td>
+<td>
+Defines the line style (solid, dashed, dotted, etc.).
+</td>
+</tr>
+</tbody></table>
+<p></p>
+<h3>Spacing and sizing</h3>
+<p></p>
+<table border="1" cellspacing="0" cellpadding="5">
+<tbody><tr>
+<td><b>
+Property
+</b></td>
+<td><b>
+Description
+</b></td>
+</tr>
+<tr>
+<td>
+<strong>Padding</strong>
+</td>
+<td>
+Sets the internal spacing within an element.
+</td>
+</tr>
+<tr>
+<td>
+<strong>Margin</strong>
+</td>
+<td>
+Defines the external spacing around an element.
+</td>
+</tr>
+<tr>
+<td>
+<strong>MaximumWidth</strong>
+</td>
+<td>
+Specifies the maximum width an element can occupy.
+</td>
+</tr>
+</tbody></table>
+<p></p>
+<h3>Additional visuals and effects</h3>
+<p></p>
+<table border="1" cellspacing="0" cellpadding="5">
+<tbody><tr>
+<td><b>
+Property
+</b></td>
+<td><b>
+Description
+</b></td>
+</tr>
+<tr>
+<td>
+<strong>Shadowing</strong>
+</td>
+<td>
+Adds a shadow effect by specifying a numeric value for the shadow distance.
+</td>
+</tr>
+<tr>
+<td>
+<strong>HyperlinkUnderlineStyle</strong>
+</td>
+<td>
+Specifies the underline style for hyperlinks.
+</td>
+</tr>
+<tr>
+<td>
+<strong>HyperlinkUnderlineThickness</strong>
+</td>
+<td>
+Specifies the thickness of the hyperlink underline.
+</td>
+</tr>
+<tr>
+<td>
+<strong>HorizontalAlignment</strong>
+</td>
+<td>
+Aligns content horizontally (left, center, or right).
+</td>
+</tr>
+</tbody></table>
+<p></p>
+These properties are designed to offer you a comprehensive set of tools 
+for customizing every visual aspect of your PlantUML diagrams. By 
+combining and adjusting these settings, you can create diagrams that are
+ both functional and visually appealing, tailored to your specific 
+design and presentation needs.
+<a style="position:relative;top:-38px;" name="42f176b242fb965f"></a>
+<!--heading--><h2 class="chap"><img onclick="window.scrollTo(0,0);" title="Back to top" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/backtop1.svg" width="20" height="20" class="backtop"><div class="dropdown"><button class="dropbtn"><img width="16" height="16" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/edit1.svg"></button><div class="dropdown-content"><a href="http://alphadoc.plantuml.com/doc/dokuwiki/en/style#3"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/dokuwiki.png">Edit in Dokuwiki</a><a href="http://alphadoc.plantuml.com/doc/asciidoc/en/style#3"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/asciidoc32.png">Edit in Asciidoc</a><a href="http://alphadoc.plantuml.com/doc/markdown/en/style#3"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/markdown.png">Edit in Markdown</a></div></div>Advanced Examples</h2>
+<p></p>
+In this section, we explore some advanced techniques to leverage the 
+full power of CSS-like styling in PlantUML. You'll learn how to combine 
+multiple styles, use class selectors for custom styling.
+<p></p>
+<p></p>
+<h3>Example 1: sequence – combining multiple styles</h3>
+<p></p>
+This example demonstrates how to define a global style and then override specific styles for elements in a sequence diagram.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+  /* Global style for all elements */
+  element {
+    BackGroundColor: #f5f5f5;
+  }
+
+  /* Specific styles for sequence diagrams */
+  sequenceDiagram {
+    participant {
+      FontColor: darkblue;
+      FontSize: 24;
+      FontStyle: bold;
+    }
+    arrow {
+      LineColor: #008000;
+      FontColor: #006400;
+    }
+  }
+&lt;/style&gt;
+
+participant Alice
+participant Bob
+
+Alice -&gt; Bob : Combined Styles Example
+
+@enduml
+</textarea>
+<div id="outcedb9df1d1b0fc48917061133abcc8c7">
+<div class="mycell">
+<img loading="lazy" width="257" height="150" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-cedb9df1d1b0fc48917061133abcc8c7.png">
+</div>
+</div>
+</div>
+<p></p>
+<p></p>
+<h3>Example 2: sequence – using selectors for custom styles</h3>
+<p></p>
+This example shows how to apply different styles to participants by using custom class selectors based on their roles.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+  sequenceDiagram {
+    .primary {
+      FontColor: darkred;
+      FontSize: 16;
+      FontStyle: bold;
+      BackGroundColor: #ffe6e6;
+    }
+    .secondary {
+      FontColor: gray;
+      FontSize: 14;
+      FontStyle: italic;
+      BackGroundColor: #f0f0f0;
+    }
+    arrow {
+      LineColor: #ff6600;
+      FontColor: #0000ff;
+    }
+  }
+&lt;/style&gt;
+
+participant "Alice (Primary)" as Alice &lt;&lt;primary&gt;&gt;
+participant "Bob (Secondary)" as Bob &lt;&lt;secondary&gt;&gt;
+
+Alice -&gt; Bob : Message
+
+@enduml
+</textarea>
+<div id="out4572e28819ff8fe330f555da0556c97f">
+<div class="mycell">
+<img loading="lazy" width="270" height="170" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-4572e28819ff8fe330f555da0556c97f.png">
+</div>
+</div>
+</div>
+<p></p>
+<p></p>
+<h3>Example 3: classes – custom class style</h3>
+<p></p>
+This class diagram demonstrates how to use a custom class (<code class="cod">mystyle</code>) to override default styles for a particular class.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+classDiagram {
+    RoundCorner 15
+    .mystyle {
+        RoundCorner 5
+        BackgroundColor cyan
+        FontStyle Bold
+        FontColor red
+    }
+}
+&lt;/style&gt;
+class Alice &lt;&lt;&lt;mystyle&gt;&gt;&gt;
+@enduml
+</textarea>
+<div id="out63681df9a4ba07dcc07d3e0f121f09d6">
+<div class="mycell">
+<img loading="lazy" width="84" height="67" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-63681df9a4ba07dcc07d3e0f121f09d6.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>All classes have a default round corner of 15.<br></li>
+<li>The custom class <code class="cod">.mystyle</code> further customizes the appearance of the class <code class="cod">Alice</code>.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 4: classes – multiple custom class styles</h3>
+<p></p>
+This example demonstrates how to apply different custom styles to various classes using multiple class selectors.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+classDiagram {
+    arrow {
+        LineColor blue
+    }
+    class {
+        BackgroundColor #00ff00  
+    }
+    .x {
+        BackgroundColor #00ffff  
+    }
+    .y {
+        BackgroundColor #ff0000  
+    }
+}
+&lt;/style&gt;
+class Customer &lt;&lt;x&gt;&gt;
+class Order &lt;&lt;y&gt;&gt;
+class Product
+Customer --&gt; Order
+@enduml
+</textarea>
+<div id="outf99aceda631e1392df24b0636ca42995">
+<div class="mycell">
+<img loading="lazy" width="229" height="198" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-f99aceda631e1392df24b0636ca42995.png">
+</div>
+</div>
+</div>
+<p></p>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The default background color for classes is bright green (<code class="cod">#00ff00</code>).<br></li>
+<li>The custom selectors <code class="cod">.x</code> and <code class="cod">.y</code> override the background colors to cyan and red respectively.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 5: classes – visibility icon styling</h3>
+<p></p>
+This example illustrates how to style visibility icons (for example, for protected members in class diagrams).
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+visibilityIcon {
+  protected {
+    LineColor DarkGoldenRod
+    BackgroundColor DarkGoldenRod
+  }
+}
+&lt;/style&gt;
+
+class TaskRunner {
+  --
+  {method} + executeTask
+  {method} # executeForAllSubtasks
+}
+class MetadataInspector {
+  --
+  {method} # inspectClassMetadata
+  {method} # inspectFooterMetadata
+}
+TaskRunner &lt;|-- MetadataInspector
+@enduml
+</textarea>
+<div id="out2ecde2347aeffb208b68167f395ecfd6">
+<div class="mycell">
+<img loading="lazy" width="192" height="247" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-2ecde2347aeffb208b68167f395ecfd6.png">
+</div>
+</div>
+</div>
+<p></p>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The <code class="cod">visibilityIcon</code> style targets protected members, setting both their line and background colors to DarkGoldenRod.<br></li>
+<li>This helps visually distinguish protected elements in the diagram.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 6: objects – global and specific styling</h3>
+<p></p>
+This object diagram applies a global style at the root level and a 
+specific style for objects, enabling clear visual distinctions.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+root {
+  FontColor Red
+  BackgroundColor palegreen
+}
+objectDiagram {
+  object {
+      FontColor blue
+      BackgroundColor yellow
+  }
+}
+&lt;/style&gt;
+
+object PaymentService
+object Customer {
+  name = "John Doe"
+  id = 456
+}
+
+PaymentService -&gt; Customer
+@enduml
+</textarea>
+<div id="out21bb0aec47f48a0c6520a497e30055a9">
+<div class="mycell">
+<img loading="lazy" width="305" height="85" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-21bb0aec47f48a0c6520a497e30055a9.png">
+</div>
+</div>
+</div>
+<p></p>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The <code class="cod">root</code> style applies a red font color and a pale green background to the diagram’s root elements.<br></li>
+<li>The style defined in <code class="cod">objectDiagram</code> targets only the objects.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 7: mindmap – basic node styling</h3>
+<p></p>
+This mindmap example shows how to customize nodes with properties such 
+as padding, alignment, border color/thickness, background color, and 
+rounded corners.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startmindmap
+&lt;style&gt;
+node {
+    Padding 10
+    HorizontalAlignment center
+    LineColor blue
+    LineThickness 3.0
+    BackgroundColor gold
+    RoundCorner 40
+}
+&lt;/style&gt;
+
+* Renovation project
+** Planning
+*** Budget &amp; deadlines
+** Execution
+*** Team coordination
+*** Material selection
+** Monitoring
+*** Quality control
+*** Managing unforeseen events
+
+@endmindmap
+</textarea>
+<div id="outa435e289accf862b04b5bf1209cc44e1">
+<div class="mycell">
+<img loading="lazy" width="552" height="308" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-a435e289accf862b04b5bf1209cc44e1.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>All nodes are styled with padding, centered text, blue borders 
+(thickness 3.0), a gold background, and rounded corners (radius 40).</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 8: mindmap – detailed node styling with width constraints</h3>
+<p></p>
+This example further customizes the mindmap with properties like margin,
+ maximum width, and shadowing to handle long text effectively.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startmindmap
+&lt;style&gt;
+node {
+    Padding 12
+    Margin 3
+    HorizontalAlignment center
+    LineColor blue
+    LineThickness 3.0
+    BackgroundColor gold
+    RoundCorner 40
+    MaximumWidth 100
+}
+
+rootNode {
+    LineStyle 8.0-3.0
+    LineColor red
+    BackgroundColor white
+    LineThickness 1.0
+    RoundCorner 0
+    Shadowing 0.0
+}
+
+leafNode {
+    LineColor gold
+    RoundCorner 0
+    Padding 3
+}
+
+arrow {
+    LineStyle 4
+    LineThickness 0.5
+    LineColor green
+}
+&lt;/style&gt;
+
+* Hi =)
+    * sometimes i have node in which i want to write a long text
+        * this results in really huge diagram
+            * of course, i can explicitly split with a\nnew line
+            * but it could be cool if PlantUML was able to split long 
+lines automatically, maybe with an option to specify the maximum width 
+of a node
+@endmindmap
+</textarea>
+<div id="out81a9d42f65f47596507b51f3f0ff3bc9">
+<div class="mycell">
+<img loading="lazy" width="522" height="308" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-81a9d42f65f47596507b51f3f0ff3bc9.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The detailed styling controls spacing and maximum width to prevent overly extended diagrams.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 9: wbs – depth-based styling</h3>
+<p></p>
+This work breakdown structure (WBS) diagram demonstrates how to apply styles based on node depth and assigned class selectors.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startwbs
+&lt;style&gt;
+wbsDiagram {
+  :depth(1) {
+    // Targets top-level nodes like America and Europe
+    BackGroundColor white
+  }
+  
+  .americaStyle * {
+      FontColor red
+      :depth(2) {
+        BackGroundColor blue
+      }
+  }
+}
+&lt;/style&gt;
+
+* World
+** America &lt;&lt;americaStyle&gt;&gt;
+*** Canada
+*** Mexico
+*** USA
+**** Texas
+** Europe &lt;&lt;europeStyle&gt;&gt;
+*** England
+*** Germany
+*** Spain
+@endwbs
+</textarea>
+<div id="out5ab11a20819d4521e72222f0421d8ff3">
+<div class="mycell">
+<img loading="lazy" width="295" height="350" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-5ab11a20819d4521e72222f0421d8ff3.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The styling varies according to the node's depth and assigned class, allowing for clear hierarchical visualization.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 10: json – styling a json diagram</h3>
+<p></p>
+This example styles a JSON diagram by setting properties for nodes and 
+arrows. Note that the last defined value takes precedence, which is 
+useful for layered styles.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startjson
+&lt;style&gt;
+jsonDiagram {
+  node {
+    FontName Helvetica
+    FontColor Coral
+    FontSize 12
+    FontStyle bold
+    BackGroundColor Khaki
+    LineColor lightblue
+  }
+  arrow {
+    BackGroundColor lightblue
+    LineColor green
+  }
+}
+&lt;/style&gt;
+{
+    "quiz": {
+        "question": "2+2?",
+        "options": ["3", "4", "5"],
+        "answer": "4"
+    }
+}
+@endjson
+</textarea>
+<div id="out24e31efb29e026358796ba8883d7580c">
+<div class="mycell">
+<img loading="lazy" width="263" height="78" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-24e31efb29e026358796ba8883d7580c.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The node style sets the font to Helvetica, Coral text with bold style at size 12, a Khaki background, and a light blue border.<br></li>
+<li>Arrows are styled with a light blue background and green line.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 11: arrows – customizing with class selectors</h3>
+<p></p>
+This diagram shows how to customize arrow properties using class selectors. Different classes (<code class="cod">va</code> and <code class="cod">vb</code>) adjust the line and font colors of the arrows.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+arrow {
+  LineColor #Green
+  FontColor #Green
+  LineStyle 10-5
+  
+  .critical {
+      LineColor #Red
+      FontColor #Red
+  }
+  .supporting {
+      LineColor #Blue
+  }
+}
+&lt;/style&gt;
+
+[Order_Service]
+
+Order_Service --&gt; Payment_Processor &lt;&lt;critical&gt;&gt; : Handles payment validation
+Order_Service --&gt; Inventory_Service &lt;&lt;supporting&gt;&gt; : Checks stock levels
+@enduml
+
+</textarea>
+<div id="outc3509f924ee4c56a54ffff44e55ded85">
+<div class="mycell">
+<img loading="lazy" width="372" height="210" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-c3509f924ee4c56a54ffff44e55ded85.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The default arrow style is set to green.<br></li>
+<li>The <code class="cod">.critical</code> class changes arrows to red, while the <code class="cod">.supporting</code> class changes them to blue.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 12: timing – class-based color customization</h3>
+<p></p>
+This timing diagram uses a custom class (<code class="cod">bluecolor</code>) to apply a blue background to concise elements, demonstrating class-based customization.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+timingDiagram {
+  .bluecolor {
+    BackGroundColor LightSkyBlue
+  }
+}
+&lt;/style&gt;
+concise "LR" as LR &lt;&lt;bluecolor&gt;&gt; #FFB6C1
+concise "ST" as ST
+
+LR is AtPlace
+ST is AtLoad
+
+@LR
+0 is Lowering
+100 is Lowered
+350 is Releasing
+ 
+@ST
+200 is Moving
+@enduml
+</textarea>
+<div id="out8c343981f5a01027de80c31130199669">
+<div class="mycell">
+<img loading="lazy" width="518" height="169" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-8c343981f5a01027de80c31130199669.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The <code class="cod">.bluecolor</code> class gives the element a blue background, combined here with a red font color.</li>
+</ul>
+<p></p>
+<h3>Example 13: timing – timeline customization</h3>
+<p></p>
+This example customizes the appearance of a timing diagram’s timeline 
+using various properties such as font settings, line styles, and 
+background color.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startuml
+&lt;style&gt;
+timingDiagram {
+  timeline {
+    FontColor red
+    FontSize 10
+    FontStyle italic
+    LineColor red
+    LineThickness 2
+    LineStyle 4-4
+    BackgroundColor pink
+  }
+}
+&lt;/style&gt;
+
+clock   "Clock_0"   as C0 with period 50
+binary  "Binary"  as B
+concise "Concise" as C
+robust  "Robust"  as R
+@0
+C is Idle
+R is Idle
+@100
+B is high
+C is Waiting
+R is Processing
+@300
+R is Waiting
+@enduml
+</textarea>
+<div id="out1b64061e7b5cdb21d0bbc7905d6c271f">
+<div class="mycell">
+<img loading="lazy" width="459" height="294" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-1b64061e7b5cdb21d0bbc7905d6c271f.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>The timeline is styled with red italic text (size 10) and a pink 
+background, with red lines drawn in a specific style and thickness for 
+improved clarity.</li>
+</ul>
+<p></p>
+<p></p>
+<h3>Example 14: gantt – task status styling</h3>
+<p></p>
+This gantt diagram shows how to visually distinguish task statuses (such
+ as unstarted or undone) by applying different background and line 
+colors.
+<p></p>
+<div class="dyn">
+<textarea spellcheck="false" rows="20">@startgantt
+&lt;style&gt;
+ganttDiagram {
+  task {
+    BackGroundColor GreenYellow
+    LineColor Green 
+    unstarted {
+      BackGroundColor Fuchsia 
+    }
+  }
+  undone {
+    BackGroundColor red
+  }
+}
+&lt;/style&gt;
+
+[Prototype Design] lasts 7 days
+[Functional Testing] lasts 4 days
+[Performance Testing] lasts 4 days
+
+[Functional Testing] starts at [Prototype Design]'s end
+[Performance Testing] starts at [Prototype Design]'s end
+
+[Functional Testing] is 0% complete
+[Performance Testing] is 80% complete
+@endgantt
+</textarea>
+<div id="out211d55549c4682e7e73a1966a6ac0c9a">
+<div class="mycell">
+<img loading="lazy" width="300" height="85" class="scale" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/img-211d55549c4682e7e73a1966a6ac0c9a.png">
+</div>
+</div>
+</div>
+<p></p>
+<strong>Explanation:</strong><br>
+<ul>
+<li>Different background colors help quickly identify the status of each task in the timeline.</li>
+</ul>
+<a style="position:relative;top:-38px;" name="6f8b794f3246b0c1"></a>
+<!--heading--><h2 class="chap"><img onclick="window.scrollTo(0,0);" title="Back to top" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/backtop1.svg" width="20" height="20" class="backtop"><div class="dropdown"><button class="dropbtn"><img width="16" height="16" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/edit1.svg"></button><div class="dropdown-content"><a href="http://alphadoc.plantuml.com/doc/dokuwiki/en/style#4"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/dokuwiki.png">Edit in Dokuwiki</a><a href="http://alphadoc.plantuml.com/doc/asciidoc/en/style#4"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/asciidoc32.png">Edit in Asciidoc</a><a href="http://alphadoc.plantuml.com/doc/markdown/en/style#4"><img width="20" height="20" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/markdown.png">Edit in Markdown</a></div></div>Conclusion</h2>
+<p></p>
+CSS-like styling in PlantUML offers a powerful way to customize 
+diagrams, ensuring clarity and consistency. By adjusting properties such
+ as colors, fonts, and shapes, you can create visually distinct and 
+well-structured diagrams. Styles can be applied globally for uniformity 
+or selectively for more granular control, allowing you to tailor the 
+appearance to your needs.
+
+
+</main>
+
+    
+<aside id="C6">
+<!--toc-->
+<div id="toc">
+<ul>
+<li><a href="#bf647454e36069fd">Getting Started</a>
+</li><li><a href="#7d2de70c0d35d1e6">Detailed property reference</a>
+</li><li><a href="#42f176b242fb965f">Advanced Examples</a>
+</li><li><a href="#6f8b794f3246b0c1">Conclusion</a>
+</li></ul>
+</div>
+</aside>
+
+</div>
+
+
+
+
+<!-- Start of StatCounter Code --><script type="text/javascript">
+var sc_project=11133780; var sc_invisible=1; var sc_security="3da8bfdb";
+</script>
+<script async="" type="text/javascript" src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/counter.js"></script> <!-- End of StatCounter Code -->
+
+  <script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/viz-global.js"></script>
+  <script type="module">
+    import { render } from "https://plantuml.github.io/plantuml/js-plantuml/plantuml.js";
+    const renderOptions = {};
+    document.querySelectorAll('.dyn').forEach(dynDiv => {
+      const textarea = dynDiv.querySelector('textarea');
+      const outDiv = dynDiv.querySelector('div');
+      textarea.addEventListener('input', () => {
+        render(textarea.value.split(/\r\n|\r|\n/), outDiv.id, renderOptions);
+      });
+    });
+  </script>
+
+
+
+
+<!--[selectrongo:done]--><span id="ezoic-pub-ad-placeholder-0"></span><script>!function(){function t(t,r){var n="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];if(!n){if(Array.isArray(t)||(n=function(t,r){if(t){if("string"==typeof t)return e(t,r);var n=Object.prototype.toString.call(t).slice(8,-1);return"Object"===n&&t.constructor&&(n=t.constructor.name),"Map"===n||"Set"===n?Array.from(t):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?e(t,r):void 0}}(t))||r&&t&&"number"==typeof t.length){n&&(t=n);var a=0,o=function(){};return{s:o,n:function(){return a>=t.length?{done:!0}:{done:!1,value:t[a++]}},e:function(t){throw t},f:o}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var i,u=!0,s=!1;return{s:function(){n=n.call(t)},n:function(){var t=n.next();return u=t.done,t},e:function(t){s=!0,i=t},f:function(){try{u||null==n.return||n.return()}finally{if(s)throw i}}}}function e(t,e){(null==e||e>t.length)&&(e=t.length);for(var r=0,n=new Array(e);r<e;r++)n[r]=t[r];return n}!function(){var e=function(t){var e=getComputedStyle(t);if(-1===parseInt(e.bottom,10)){var r=t.offsetHeight||300;t.style.bottom=-r+"px"}};function r(){return document.querySelector('ins[data-anchor-shown="true"][data-anchor-status="displayed"]')}function n(t){var e=t.querySelector("iframe");e&&requestAnimationFrame((function(){var r=parseFloat(getComputedStyle(e).height);isNaN(r)||t.style.setProperty("height","".concat(r+5,"px"),"important")}))}function a(t){t.style.setProperty("width","100%","important"),t.style.maxWidth="none"}function o(t){var e=t.querySelector("iframe");e&&(e.style.setProperty("display","block","important"),e.style.setProperty("margin","0 auto","important"));var r=t.querySelector("[id$='__container__']");r&&r.style.setProperty("display","contents","important")}new MutationObserver((function(r){var n,a=t(r);try{for(a.s();!(n=a.n()).done;){var o=n.value;if("attributes"===o.type){var i=o.target;i.matches("[data-anchor-status]")&&("data-anchor-status"===o.attributeName&&"dismissed"===i.getAttribute("data-anchor-status")&&e(i),"style"===o.attributeName&&"dismissed"===i.getAttribute("data-anchor-status")&&e(i))}}}catch(t){a.e(t)}finally{a.f()}})).observe(document.documentElement,{subtree:!0,attributes:!0,attributeFilter:["style","data-anchor-status"]});var i=new WeakSet;function u(e){e&&(i.has(e)||(i.add(e),new MutationObserver((function(r){var i,u=t(r);try{for(u.s();!(i=u.n()).done;){var s=i.value;"style"===s.attributeName?(n(e),a(e),o(e)):"attributes"===s.type&&"data-google-query-id"===s.attributeName&&o(e)}}catch(t){u.e(t)}finally{u.f()}})).observe(e,{attributes:!0,attributeFilter:["style","data-google-query-id"]})))}!function(){var t=r();if(t)return n(t),a(t),o(t),void u(t);var e=new MutationObserver((function(){var t=r();t&&(n(t),a(t),o(t),u(t),e.disconnect())}));e.observe(document.body,{attributes:!0,subtree:!0,childList:!0})}()}()}();</script>
+<script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/leavenworth.js"></script>
+<script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/socialproviders.js"></script>
+<script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/ezonetap.js"></script><script data-cfasync="false">function _emitEzConsentEvent(){var customEvent=new CustomEvent("ezConsentEvent",{detail:{ezTcfConsent:window.ezTcfConsent},bubbles:true,cancelable:true,});document.dispatchEvent(customEvent);}
+(function(window,document){function _setAllEzConsentTrue(){window.ezTcfConsent.loaded=true;window.ezTcfConsent.store_info=true;window.ezTcfConsent.develop_and_improve_services=true;window.ezTcfConsent.measure_ad_performance=true;window.ezTcfConsent.measure_content_performance=true;window.ezTcfConsent.select_basic_ads=true;window.ezTcfConsent.create_ad_profile=true;window.ezTcfConsent.select_personalized_ads=true;window.ezTcfConsent.create_content_profile=true;window.ezTcfConsent.select_personalized_content=true;window.ezTcfConsent.understand_audiences=true;window.ezTcfConsent.use_limited_data_to_select_content=true;window.ezTcfConsent.select_personalized_content=true;}
+function _clearEzConsentCookie(){document.cookie="ezCMPCookieConsent=tcf2;Domain=.plantuml.com;Path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";}
+_clearEzConsentCookie();if(typeof window.__tcfapi!=="undefined"){window.ezgconsent=false;var amazonHasRun=false;function _ezAllowed(tcdata,purpose){return(tcdata.purpose.consents[purpose]||tcdata.purpose.legitimateInterests[purpose]);}
+function _handleConsentDecision(tcdata){window.ezTcfConsent.loaded=true;if(!tcdata.vendor.consents["347"]&&!tcdata.vendor.legitimateInterests["347"]){window._emitEzConsentEvent();return;}
+window.ezTcfConsent.store_info=_ezAllowed(tcdata,"1");window.ezTcfConsent.develop_and_improve_services=_ezAllowed(tcdata,"10");window.ezTcfConsent.measure_content_performance=_ezAllowed(tcdata,"8");window.ezTcfConsent.select_basic_ads=_ezAllowed(tcdata,"2");window.ezTcfConsent.create_ad_profile=_ezAllowed(tcdata,"3");window.ezTcfConsent.select_personalized_ads=_ezAllowed(tcdata,"4");window.ezTcfConsent.create_content_profile=_ezAllowed(tcdata,"5");window.ezTcfConsent.measure_ad_performance=_ezAllowed(tcdata,"7");window.ezTcfConsent.use_limited_data_to_select_content=_ezAllowed(tcdata,"11");window.ezTcfConsent.select_personalized_content=_ezAllowed(tcdata,"6");window.ezTcfConsent.understand_audiences=_ezAllowed(tcdata,"9");window._emitEzConsentEvent();}
+function _handleGoogleConsentV2(tcdata){if(!tcdata||!tcdata.purpose||!tcdata.purpose.consents){return;}
+var googConsentV2={};if(tcdata.purpose.consents[1]){googConsentV2.ad_storage='granted';googConsentV2.analytics_storage='granted';}
+if(tcdata.purpose.consents[3]&&tcdata.purpose.consents[4]){googConsentV2.ad_personalization='granted';}
+if(tcdata.purpose.consents[1]&&tcdata.purpose.consents[7]){googConsentV2.ad_user_data='granted';}
+if(googConsentV2.analytics_storage=='denied'){gtag('set','url_passthrough',true);}
+gtag('consent','update',googConsentV2);}
+__tcfapi("addEventListener",2,function(tcdata,success){if(!success||!tcdata){window._emitEzConsentEvent();return;}
+if(!tcdata.gdprApplies){_setAllEzConsentTrue();window._emitEzConsentEvent();return;}
+if(tcdata.eventStatus==="useractioncomplete"||tcdata.eventStatus==="tcloaded"){if(typeof gtag!='undefined'){_handleGoogleConsentV2(tcdata);}
+_handleConsentDecision(tcdata);if(tcdata.purpose.consents["1"]===true&&tcdata.vendor.consents["755"]!==false){window.ezgconsent=true;(adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0;}
+if(window.__ezconsent){__ezconsent.setEzoicConsentSettings(ezConsentCategories);}
+__tcfapi("removeEventListener",2,function(success){return null;},tcdata.listenerId);if(!(tcdata.purpose.consents["1"]===true&&_ezAllowed(tcdata,"2")&&_ezAllowed(tcdata,"3")&&_ezAllowed(tcdata,"4"))){if(typeof __ez=="object"&&typeof __ez.bit=="object"&&typeof window["_ezaq"]=="object"&&typeof window["_ezaq"]["page_view_id"]=="string"){__ez.bit.Add(window["_ezaq"]["page_view_id"],[new __ezDotData("non_personalized_ads",true),]);}}}});}else{_setAllEzConsentTrue();window._emitEzConsentEvent();}})(window,document);</script><script src="PlantUML_Styles_%20Modern%20CSS-like%20Styling_for_Diagrams_files/id5-api.js" async=""></script></body></html>

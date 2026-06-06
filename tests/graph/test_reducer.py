@@ -42,7 +42,8 @@ def test_reduce_graph_context_expansion() -> None:
     assert "C" not in spec.included_nodes
 
     # Check highlight
-    assert ("A", "yellow") in spec.highlight_rules
+    assert ("A", "modified") in spec.highlight_rules
+    assert ("B", "impacted") in spec.highlight_rules
 
     # Check edges
     assert len(spec.included_edges) == 1

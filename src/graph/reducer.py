@@ -7,7 +7,7 @@ from domain.models import UMLModel, UMLRelation
 from domain.render_models import RenderSpec
 
 
-def reduce_graph(base: UMLModel, pr: UMLModel, diff: DiffResult) -> RenderSpec:
+def reduce_graph(base: UMLModel, pr: UMLModel, diff: DiffResult, context_depth: int = 1) -> RenderSpec:
     # 1. Build merged graph
     graph = nx.Graph()  # Undirected graph for context expansion
 
@@ -31,15 +31,19 @@ def reduce_graph(base: UMLModel, pr: UMLModel, diff: DiffResult) -> RenderSpec:
         if item.entity_type == "class":
             seed_nodes.add(item.entity_name)
             if item.change_type == ChangeType.ADDED:
-                highlight_dict[item.entity_name] = "green"
+                highlight_dict[item.entity_name] = "added"
             elif item.change_type == ChangeType.REMOVED:
-                highlight_dict[item.entity_name] = "red"
+                highlight_dict[item.entity_name] = "removed"
+            elif item.change_type == ChangeType.MODIFIED:
+                if item.context == "moved":
+                    highlight_dict[item.entity_name] = "moved"
+                else:
+                    highlight_dict[item.entity_name] = "modified"
         elif item.entity_type in ("attribute", "method"):
             seed_nodes.add(item.context)
             if item.context not in highlight_dict:
-                highlight_dict[item.context] = "yellow"
+                highlight_dict[item.context] = "modified"
         elif item.entity_type == "relation":
-            # the entity_name for relation is "Source relation_type Target"
             parts = item.entity_name.split()
             if len(parts) >= 3:
                 source = parts[0]
@@ -47,16 +51,29 @@ def reduce_graph(base: UMLModel, pr: UMLModel, diff: DiffResult) -> RenderSpec:
                 seed_nodes.add(source)
                 seed_nodes.add(target)
                 if source not in highlight_dict:
-                    highlight_dict[source] = "yellow"
+                    highlight_dict[source] = "modified"
                 if target not in highlight_dict:
-                    highlight_dict[target] = "yellow"
+                    highlight_dict[target] = "modified"
 
-    # 3. Context Expansion (distance = 1)
+    # 3. Context Expansion (distance = context_depth)
     included_nodes: Set[str] = set(seed_nodes)
-    for seed in seed_nodes:
-        if seed in graph:
-            for neighbor in graph.neighbors(seed):
-                included_nodes.add(neighbor)
+    
+    if context_depth > 0:
+        current_level = set(seed_nodes)
+        for _ in range(context_depth):
+            next_level = set()
+            for seed in current_level:
+                if seed in graph:
+                    for neighbor in graph.neighbors(seed):
+                        if neighbor not in included_nodes:
+                            next_level.add(neighbor)
+            included_nodes.update(next_level)
+            current_level = next_level
+
+    # Apply 'impacted' stereotype to context nodes
+    for node in included_nodes:
+        if node not in highlight_dict:
+            highlight_dict[node] = "impacted"
 
     # 4. Edge Filtering
     included_edges: Set[UMLRelation] = set()

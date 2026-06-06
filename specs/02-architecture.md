@@ -75,9 +75,10 @@ Responsibilities:
 Compares the base model and the PR model.
 
 Responsibilities:
-- detect added, removed, modified, unchanged items,
+- dynamically detect the `root_package` using Longest Common Prefix (LCP) and ignore external classes.
+- detect added, removed, modified, unchanged items.
+- apply heuristics to classify renamed/moved classes by comparing attribute and method intersections.
 - compare classes, members, and relations,
-- optionally classify renames later,
 - produce structured diff output.
 
 ### 6. Graph Reduction Engine
@@ -86,14 +87,15 @@ Selects the minimal useful subgraph for display.
 Responsibilities:
 - build dependency graphs,
 - compute changed nodes,
-- expand context by one or two hops,
-- produce a reduced render specification.
+- expand context based on `context_depth` parameter (e.g. 1 or 2 hops),
+- produce a reduced render specification marking nodes as added, removed, modified, or impacted.
 
 ### 7. Diagram Renderer
 Produces the final visual output.
 
 Responsibilities:
-- convert reduced diff spec back to PlantUML or renderable graph,
+- inject dynamic CSS `<style>` blocks for theming.
+- convert reduced diff spec back to PlantUML using stereotypes (`<<added>>`, etc.),
 - render PNG or SVG using a local `plantuml.jar` execution via subprocess,
 - preserve deterministic ordering.
 

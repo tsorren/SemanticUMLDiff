@@ -44,15 +44,14 @@ def test_render_modified_class() -> None:
 
     spec = RenderSpec(
         included_nodes=("A",),
-        highlight_rules=(("A", "yellow"),)
+        highlight_rules=(("A", "modified"),)
     )
 
     puml = render_puml(base_model, pr_model, diff, spec)
 
     assert "@startuml" in puml
-    assert "class A #FFF3CD" in puml
-    assert "<color:red>id: int</color>" in puml
-    assert "<color:green>id: str</color>" in puml
+    assert "class \"A\" as A <<modified>>" in puml
+    assert "<color:orange>id: str</color>" in puml
     assert "<color:green>new: int</color>" in puml
     assert "@enduml" in puml
 
@@ -74,7 +73,7 @@ def test_renderer_custom_configs() -> None:
             DiffItem(entity_type="class", entity_name="com.example.A", change_type=ChangeType.ADDED),
         )
     )
-    spec = RenderSpec(included_nodes=("com.example.A",), highlight_rules=(("com.example.A", "green"),))
+    spec = RenderSpec(included_nodes=("com.example.A",), highlight_rules=(("com.example.A", "added"),))
 
     # Test types_only (should strip params) and ortho lines
     puml = render_puml(base_model, pr_model, diff, spec, layout_orthogonal_lines=True, method_parameter_style="types_only", group_by_package=True)

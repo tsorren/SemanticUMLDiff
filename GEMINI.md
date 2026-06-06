@@ -175,7 +175,6 @@ A change is acceptable when:
 ## Open Questions for Later Iterations
 
 - Support for more UML element types.
-- Renaming detection versus delete+add classification.
 - Historical snapshot storage.
 - Change metrics and impact analysis.
 - Architecture trend reports.

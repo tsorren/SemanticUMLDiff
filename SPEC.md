@@ -969,7 +969,66 @@ Implementar Integración con Mocks.
 Configurar GitHub Actions CI.
 
 ### Done cuando
-* Se dispara un workflow con pytest, 
-uff, y mypy ante cada commit o PR en main.
+* Se dispara un workflow con pytest, ruff, y mypy ante cada commit o PR en main.
 
 ---
+
+# PHASE 12 — Rendering Polish & Overload Fixes
+
+# Objetivo
+Pulir detalles de visualización UML y asegurar el correcto funcionamiento con métodos sobrecargados y enumerados.
+
+# Tareas Realizadas
+
+## T-1201
+Arreglar Identificación de Métodos Sobrecargados.
+
+### Done cuando
+* El diff utiliza la firma completa (nombre y parámetros) como clave de comparación, evitando que los métodos sobrecargados se pisen y muestren falsos "eliminados".
+
+## T-1202
+Limpieza Estética de UML.
+
+### Done cuando
+* Se ajusta la forma de inyectar colores para no romper la indentación y los íconos de visibilidad.
+* Los enums se renderizan sin el modificador de visibilidad (`+`, `-`) y sin `:` final.
+* Se reduce el `nodesep` y `ranksep` para compactar el diagrama.
+
+---
+
+# PHASE 13 — Advanced Heuristics & Styling
+
+# Objetivo
+
+Habilitar el renombrado/movimiento de paquetes y clases, soportar estilos CSS inyectados y dar soporte a diagramas dinámicos parametrizables con Github Actions.
+
+# Tareas Realizadas
+
+## T-1301
+Auto-detección del paquete raíz (LCP) y soporte a clases externas.
+
+### Done cuando
+* El diff determina dinámicamente el `root_package` a partir del _Longest Common Prefix_ de los nombres completamente calificados (FQN).
+* Las clases de bibliotecas de terceros no son evaluadas en el diff, y no generan ruido en el diagrama (simplemente se omiten si no pertenecen al root package detectado o especificado manualmente).
+
+## T-1302
+Detección heurística de clases Movidas.
+
+### Done cuando
+* Las clases que fueron eliminadas en un paquete y añadidas en otro (y cuyo nombre corto es el mismo) son evaluadas en función a sus miembros (métodos y atributos).
+* Si la similitud en la intersección de sus miembros es mayor o igual a 75%, el motor de Diff las marca como `MODIFIED` (con context "moved") en vez de generar un `REMOVED` y un `ADDED` separados, reduciendo significativamente la carga visual del diagrama.
+
+## T-1303
+Inyección de Motor de Estilos CSS-like.
+
+### Done cuando
+* Se implementa un generador de estilos (Theme Engine) que inserta un `<style>` block dentro del PUML.
+* Los elementos ahora utilizan <<stereotypes>> (`<<added>>`, `<<modified>>`, `<<impacted>>`) en vez de colores en duro.
+* Se soporta la renderización de clases puramente "impactadas" (que no cambiaron su código interno, pero que por dependencias, deben ser mostradas).
+
+## T-1304
+Profundidad Contextual (Context Depth).
+
+### Done cuando
+* El grafo de reducción soporta un `context_depth` (ej. 1, 2) configurable desde la Action que determina el radio de expansión desde los nodos modificados hacia el resto del grafo.
+* `diagram_spacing` también es expuesto vía Action para manipular el espacio entre entidades directamente desde Github.

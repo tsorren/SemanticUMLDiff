@@ -41,7 +41,11 @@ def main() -> None:
         discord_webhook_url=os.getenv("DISCORD_WEBHOOK_URL"),
         layout_orthogonal_lines=os.getenv("INPUT_LAYOUT_ORTHOGONAL_LINES", "false").lower() == "true",
         method_parameter_style=os.getenv("INPUT_METHOD_PARAMETER_STYLE", "types_only"),
-        group_by_package=os.getenv("INPUT_GROUP_BY_PACKAGE", "true").lower() == "true"
+        group_by_package=os.getenv("INPUT_GROUP_BY_PACKAGE", "true").lower() == "true",
+        theme=os.getenv("INPUT_THEME", "modern"),
+        diagram_spacing=int(os.getenv("INPUT_DIAGRAM_SPACING", "30")),
+        root_package=os.getenv("INPUT_ROOT_PACKAGE", ""),
+        context_depth=int(os.getenv("INPUT_CONTEXT_DEPTH", "1"))
     )
 
     # 3. Match modules

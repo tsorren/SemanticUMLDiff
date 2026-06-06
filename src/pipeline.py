@@ -24,13 +24,13 @@ def process_module(
     print(f"Processing module: {pr.module_name}")
 
     # 1. Compute Diff
-    diff = compute_diff(base, pr)
+    diff = compute_diff(base, pr, config.root_package)
     if not diff.changes:
         print("No changes detected. Skipping integration publishing.")
         return None
 
     # 2. Graph Reduction
-    spec = reduce_graph(base, pr, diff)
+    spec = reduce_graph(base, pr, diff, config.context_depth)
 
     # 3. Render PUML
     puml_text = render_puml(
@@ -40,7 +40,9 @@ def process_module(
         spec,
         layout_orthogonal_lines=config.layout_orthogonal_lines,
         method_parameter_style=config.method_parameter_style,
-        group_by_package=config.group_by_package
+        group_by_package=config.group_by_package,
+        theme=config.theme,
+        diagram_spacing=config.diagram_spacing
     )
 
     # 4. Generate PNG locally if needed
