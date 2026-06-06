@@ -254,6 +254,11 @@ The final `.puml` artifact communicates differences through explicit colors and 
 - **Removed Classes/Relations:** Highlighted in Red (`#F8D7DA`).
 - **Modified Classes:** Highlighted in Yellow (`#FFF3CD`).
 - **Modified Members (Attributes/Methods):** Instead of showing a simple red/green before/after representation, the system highlights only the specific segments of the member signature that changed (e.g., visibility, name, specific parameter types/names, or return type) in orange (`<color:orange>...</color>`). This significantly reduces visual noise. If `method_parameter_style` is configured as `types_only`, changes to parameter names will not be highlighted in orange because parameter names are hidden in this view.
+- **Visibility Outside Color Tags:** To prevent breaking PlantUML's native circle icons for visibility (`+`, `-`, `#`, `~`), these symbols must always remain outside any `<color>` tags (e.g. `+ <color:green>member</color>` or `- <color:orange>member</color>`). If a member's visibility changes, the new visibility symbol is placed outside, and the rest of the member name/types are wrapped in `<color:orange>`.
+- **Enum Members:** Enum values are rendered without any visibility prefix and without trailing colons.
+- **Package Omission:** Empty packages containing no visible class nodes in the reduced diagram are completely omitted to prevent empty blocks.
+- **Type Package Shortening:** Type names inside class attributes, method parameters, and return types are cleaned of fully-qualified package prefixes (e.g., `java.time.LocalDate` becomes `LocalDate`, and `grupo5.donaciones.models.entities.donaciones.Donacion` becomes `Donation`) to keep the diagram clean and readable.
+- **Compact Layouts:** Spacing between packages is minimized by applying `skinparam packagePadding 8` to reduce empty white space in the generated diagrams.
 
 ---
 
