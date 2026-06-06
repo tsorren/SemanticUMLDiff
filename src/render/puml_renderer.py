@@ -15,6 +15,10 @@ ARROW_COLOR_REMOVED = "[#red]"
 def render_puml(base: UMLModel, pr: UMLModel, diff: DiffResult, spec: RenderSpec) -> str:
     lines: List[str] = []
     lines.append("@startuml")
+    lines.append("left to right direction")
+    lines.append("skinparam linetype ortho")
+    lines.append("skinparam nodesep 60")
+    lines.append("skinparam ranksep 60")
     lines.append("skinparam classBackgroundColor transparent")
     lines.append("skinparam classHeaderBackgroundColor transparent")
     lines.append("skinparam shadowing false")
@@ -95,10 +99,14 @@ def _render_members(
         if d.context == class_name and d.entity_type in ("attribute", "method")
     ]
 
+    import re
+    def _clean_type(s: str) -> str:
+        return re.sub(r'(?:[a-zA-Z_][a-zA-Z0-9_]*\.)+([a-zA-Z_][a-zA-Z0-9_]*)', r'\1', s)
+
     # Attributes
     if pr_c:
         for a in pr_c.attributes:
-            sig = f"{a.visibility} {a.name}: {a.type}".strip()
+            sig = _clean_type(f"{a.visibility} {a.name}: {a.type}".strip())
             diff_item = next(
                 (d for d in member_diffs if d.entity_type == "attribute" and d.entity_name == a.name),
                 None
@@ -113,9 +121,9 @@ def _render_members(
                     lines.append(f"  <color:green>{sig}</color>")
                 elif diff_item.change_type == ChangeType.MODIFIED:
                     if diff_item.before:
-                        lines.append(f"  <color:red><s:red>{diff_item.before}</s></color>")
+                        lines.append(f"  <color:red>{_clean_type(diff_item.before)}</color>")
                     if diff_item.after:
-                        lines.append(f"  <color:green>{diff_item.after}</color>")
+                        lines.append(f"  <color:green>{_clean_type(diff_item.after)}</color>")
 
     if base_c:
         for a in base_c.attributes:
@@ -123,16 +131,16 @@ def _render_members(
                 (d for d in member_diffs if d.entity_type == "attribute" and d.entity_name == a.name),
                 None
             )
-            sig = f"{a.visibility} {a.name}: {a.type}".strip()
+            sig = _clean_type(f"{a.visibility} {a.name}: {a.type}".strip())
             if is_removed:
-                lines.append(f"  <color:red><s:red>{sig}</s></color>")
+                lines.append(f"  <color:red>{sig}</color>")
             elif diff_item and diff_item.change_type == ChangeType.REMOVED:
-                lines.append(f"  <color:red><s:red>{sig}</s></color>")
+                lines.append(f"  <color:red>{sig}</color>")
 
     # Methods
     if pr_c:
         for m in pr_c.methods:
-            sig = f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}".strip()
+            sig = _clean_type(f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}".strip())
             diff_item = next(
                 (d for d in member_diffs if d.entity_type == "method" and d.entity_name == m.name),
                 None
@@ -147,9 +155,9 @@ def _render_members(
                     lines.append(f"  <color:green>{sig}</color>")
                 elif diff_item.change_type == ChangeType.MODIFIED:
                     if diff_item.before:
-                        lines.append(f"  <color:red><s:red>{diff_item.before}</s></color>")
+                        lines.append(f"  <color:red>{_clean_type(diff_item.before)}</color>")
                     if diff_item.after:
-                        lines.append(f"  <color:green>{diff_item.after}</color>")
+                        lines.append(f"  <color:green>{_clean_type(diff_item.after)}</color>")
 
     if base_c:
         for m in base_c.methods:
@@ -157,11 +165,11 @@ def _render_members(
                 (d for d in member_diffs if d.entity_type == "method" and d.entity_name == m.name),
                 None
             )
-            sig = f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}".strip()
+            sig = _clean_type(f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}".strip())
             if is_removed:
-                lines.append(f"  <color:red><s:red>{sig}</s></color>")
+                lines.append(f"  <color:red>{sig}</color>")
             elif diff_item and diff_item.change_type == ChangeType.REMOVED:
-                lines.append(f"  <color:red><s:red>{sig}</s></color>")
+                lines.append(f"  <color:red>{sig}</color>")
 
     return lines
 

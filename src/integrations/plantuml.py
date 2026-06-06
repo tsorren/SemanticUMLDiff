@@ -7,7 +7,7 @@ def generate_png(puml_text: str, jar_path: str) -> Optional[bytes]:
     try:
         # Run plantuml.jar reading from stdin and outputting to stdout (-pipe)
         process = subprocess.run(
-            ["java", "-jar", jar_path, "-pipe", "-tpng"],
+            ["java", "-DPLANTUML_LIMIT_SIZE=8192", "-jar", jar_path, "-pipe", "-tpng"],
             input=puml_text.encode("utf-8"),
             capture_output=True,
             check=True
