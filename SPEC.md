@@ -672,7 +672,7 @@ Subir artifacts.
 
 ## T-7006
 
-Publicar comentario PR.
+Publicar un comentario único en el PR consolidando todos los módulos modificados, utilizando bloques colapsables (`<details>`) para las imágenes a fin de evitar saturar visualmente el PR.
 
 ---
 
@@ -696,7 +696,7 @@ PR semantic architecture review.
 
 # Objetivo
 
-Publicar visualizaciones ricas.
+Publicar notificaciones enriquecidas sobre los cambios arquitectónicos directamente a un canal de Discord de forma consolidada.
 
 ---
 
@@ -704,25 +704,25 @@ Publicar visualizaciones ricas.
 
 ## T-8001
 
-Configurar webhook.
+Aceptar un webhook URL por configuración y preparar los payloads enriquecidos.
 
 ---
 
 ## T-8002
 
-Publicar resumen semántico.
+Construir un único mensaje (Embed principal) consolidando los datos del PR, la rama base y un recuento total de adiciones, eliminaciones y modificaciones a nivel global.
 
 ---
 
 ## T-8003
 
-Adjuntar imágenes.
+Adjuntar una imagen renderizada por cada módulo modificado y adjuntarla como un sub-embed en el mensaje de Discord.
 
 ---
 
 ## T-8004
 
-Publicar tests fallidos.
+Implementar lógica de "chunking" (división de mensajes) en caso de superar el límite estricto de la API de Discord de un máximo de 10 adjuntos/embeds por mensaje.
 
 ---
 

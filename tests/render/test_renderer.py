@@ -1,5 +1,5 @@
 from domain.diff_models import ChangeType, DiffItem, DiffResult
-from domain.models import UMLAttribute, UMLClass, UMLModel
+from domain.models import UMLAttribute, UMLClass, UMLMethod, UMLModel
 from domain.render_models import RenderSpec
 from render.puml_renderer import render_puml
 
@@ -51,7 +51,40 @@ def test_render_modified_class() -> None:
 
     assert "@startuml" in puml
     assert "class A #FFF3CD" in puml
-    assert "<color:red><s:red>id: int</s></color>" in puml
+    assert "<color:red>id: int</color>" in puml
     assert "<color:green>id: str</color>" in puml
     assert "<color:green>new: int</color>" in puml
     assert "@enduml" in puml
+
+def test_renderer_custom_configs() -> None:
+    c_base = UMLClass(
+        name="com.example.A",
+        kind="class",
+        attributes=(),
+        methods=(
+            UMLMethod(name="doSomething", parameters=("param1 : String", "param2 : int"), return_type="void"),
+        )
+    )
+    base_model = UMLModel(module_name="test", classes=())
+    pr_model = UMLModel(module_name="test", classes=(c_base,))
+    
+    diff = DiffResult(
+        module_name="test",
+        changes=(
+            DiffItem(entity_type="class", entity_name="com.example.A", change_type=ChangeType.ADDED),
+        )
+    )
+    spec = RenderSpec(included_nodes=("com.example.A",), highlight_rules=(("com.example.A", "green"),))
+    
+    # Test types_only (should strip params) and ortho lines
+    puml = render_puml(base_model, pr_model, diff, spec, layout_orthogonal_lines=True, method_parameter_style="types_only", group_by_package=True)
+    assert "skinparam linetype ortho" in puml
+    assert "set namespaceSeparator none" not in puml
+    assert "doSomething(String, int)" in puml
+    assert "param1" not in puml
+    
+    # Test names_and_types (should keep params) and curved lines
+    puml2 = render_puml(base_model, pr_model, diff, spec, layout_orthogonal_lines=False, method_parameter_style="names_and_types", group_by_package=False)
+    assert "skinparam linetype poly" in puml2
+    assert "set namespaceSeparator none" in puml2
+    assert "doSomething(param1 : String, param2 : int)" in puml2

@@ -1,13 +1,18 @@
 # Semantic UML Diff GitHub Action
 
-This GitHub Action performs a deterministic, semantic structural comparison between two sets of PlantUML diagrams and generates reduced visual diffs. It is designed to be used in Pull Requests to help reviewers quickly understand architectural and structural changes without the noise of textual diffs.
+<div align="center">
+  <p><b>Cut the noise from your architectural Pull Requests.</b></p>
+  <p>This GitHub Action performs a deterministic, semantic structural comparison between two sets of PlantUML diagrams and generates <b>reduced visual diffs</b>.</p>
+</div>
 
-## Features
+## ✨ Features
 
-- **Semantic comparison**: Compares actual UML models, not raw text.
-- **Noise reduction**: Shows only what changed and the minimal required context.
-- **Deterministic**: Guarantees identical output for identical inputs.
-- **PR Feedback**: Automatically posts diagrams to the Pull Request.
+- **Semantic comparison**: Compares actual UML structural models (classes, methods, parameters), not raw text.
+- **Noise reduction**: Discards unmodified entities and visually highlights only what changed, showing the minimal required context.
+- **Deterministic output**: Guarantees identical graphic output for identical inputs, heavily mitigating CI flakiness.
+- **Unified PR Feedback**: Automatically aggregates all architectural modifications into a single, clean, collapsible comment in your Pull Request.
+- **Rich Discord Webhooks**: Pushes visually stunning summary reports to your team's Discord channel with intelligent API chunking for massive PRs.
+- **Highly Configurable**: Control diagram layouts, package grouping behavior, and parameter verbosity to suit your team's cognitive load.
 
 ## Usage
 
@@ -36,7 +41,11 @@ To configure the publishing behavior and image hosting, set the following enviro
 | `DISCORD_WEBHOOK_URL` | The Discord Webhook URL for notifications and/or CDN uploading. | N/A |
 | `PLANTUML_JAR_PATH` | Path to the local `plantuml.jar` executable. | `plantuml.jar` |
 
-> **Note on Image Hosting (`IMAGE_HOSTING_PROVIDER`)**: GitHub PR comments require a publicly accessible URL to embed images. This action cleverly uses Discord as a free CDN (`discord`) by uploading the locally generated diagram to the Discord webhook and extracting the public URL for the GitHub comment. Alternatively, you can use `plantuml_server` for a stateless encoding without uploading a file.
+> [!NOTE]
+> **Image Hosting Strategy (`IMAGE_HOSTING_PROVIDER`)**: GitHub PR comments require a publicly accessible URL to embed images. This action cleverly uses Discord as a free CDN (`discord`) by uploading the locally generated diagram to the Discord webhook and extracting the public URL for the GitHub comment. Alternatively, you can use `plantuml_server` for a stateless encoding without uploading a file.
+
+> [!IMPORTANT]
+> **Discord API Limits**: Discord limits webhooks to 10 embeds per message. If your PR modifies more than 9 architectural components simultaneously, the Action's Unified Reporting system will automatically chunk the embeds into multiple consecutive Discord messages to ensure no visual data is lost.
 
 ### Example Workflow
 
@@ -81,11 +90,15 @@ jobs:
           # ./generate_uml.sh ./pr_repo ./pr_uml_dir
 
       - name: Semantic UML Diff
-        uses: ./ # Or your-org/semantic-uml-diff@v1
+        uses: tsorren/SemanticUMLDiff@main
         with:
           base_uml_dir: ./base_uml_dir
           pr_uml_dir: ./pr_uml_dir
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          layout_orthogonal_lines: 'false'
+          method_parameter_style: 'types_only'
+          group_by_package: 'true'
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 ```
 
 ## Support and Issues
