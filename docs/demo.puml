@@ -1,0 +1,91 @@
+@startuml
+left to right direction
+skinparam linetype poly
+skinparam nodesep 30
+skinparam ranksep 30
+
+<style>
+  classDiagram {
+    class {
+      BackgroundColor transparent
+      HeaderBackgroundColor transparent
+      Shadowing 0
+      FontName Arial
+    }
+    .added {
+      BackgroundColor #D4EDDA
+      LineColor #28A745
+    }
+    .removed {
+      BackgroundColor #F8D7DA
+      LineColor #DC3545
+    }
+    .modified {
+      BackgroundColor #FFF3CD
+      LineColor #FFA500
+    }
+    .moved {
+      BackgroundColor #FFF3CD
+      LineColor #FFA500
+    }
+    .impacted {
+      BackgroundColor #F8F9FA
+      LineColor #6C757D
+      LineStyle 4
+      FontColor #6C757D
+    }
+    .package_added {
+      BackgroundColor #E8F5E9
+      LineColor #28A745
+    }
+    .package_removed {
+      BackgroundColor #FFEBEE
+      LineColor #DC3545
+    }
+    .package_modified {
+      BackgroundColor transparent
+      LineColor #FFA500
+    }
+  }
+</style>
+
+package "com.ecommerce.checkout" <<package_added>> {
+class "CheckoutService" as com.ecommerce.checkout.CheckoutService <<added>> {
+  - <color:green>db: Database</color>
+  - <color:green>stripeClient: Stripe</color>
+  + <color:green>createOrder(Cart c): Order</color>
+  + <color:green>createOrder(Cart c, boolean fastTrack): Order</color>
+}
+}
+
+package "com.ecommerce.order" <<package_modified>> {
+class "Order" as com.ecommerce.order.Order <<modified>> {
+  + id: String
+  + total: double
+}
+class "OrderService" as com.ecommerce.order.OrderService <<removed>> {
+  - <color:red>db: Database</color>
+  + <color:red>createOrder(Cart c): Order</color>
+  + <color:red>cancelOrder(String id): void</color>
+}
+}
+
+package "com.ecommerce.payment" {
+interface "PaymentGateway" as com.ecommerce.payment.PaymentGateway <<modified>> {
+  + charge(double amount): boolean
+}
+}
+
+package "org.external" {
+class "Logger" as org.external.Logger <<modified>> {
+  + log(String msg): void
+}
+}
+
+com.ecommerce.checkout.CheckoutService -[#green]-> com.ecommerce.order.Order
+com.ecommerce.checkout.CheckoutService -[#green]-> com.ecommerce.payment.PaymentGateway
+com.ecommerce.checkout.CheckoutService -[#green]-> org.external.Logger
+com.ecommerce.order.OrderService -[#red]-> com.ecommerce.order.Order
+com.ecommerce.order.OrderService -[#red]-> com.ecommerce.payment.PaymentGateway
+com.ecommerce.order.OrderService -[#red]-> org.external.Logger
+@enduml
