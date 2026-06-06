@@ -68,7 +68,12 @@ def run_integration_pipeline(
 
     # 7. Publish to Discord
     if config.publish_discord:
-        discord_publisher = DiscordPublisher(config.discord_webhook_url)
+        discord_publisher = DiscordPublisher(
+            config.discord_webhook_url,
+            config.github_repository,
+            config.github_pr_number,
+            config.github_head_ref
+        )
         discord_publisher.publish(diff, png_bytes)
 
     print("Integration pipeline completed.")

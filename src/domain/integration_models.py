@@ -13,6 +13,7 @@ class IntegrationConfig:
     github_token: Optional[str] = None
     github_repository: Optional[str] = None
     github_pr_number: Optional[int] = None
+    github_head_ref: Optional[str] = None
 
     # Discord Auth
     discord_webhook_url: Optional[str] = None
