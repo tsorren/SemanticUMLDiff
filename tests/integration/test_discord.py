@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from domain.diff_models import DiffResult
 from domain.integration_models import ModuleResult
@@ -6,7 +6,7 @@ from integrations.publishers.discord import DiscordPublisher
 
 
 @patch("integrations.publishers.discord.requests.post")
-def test_discord_chunking(mock_post) -> None:
+def test_discord_chunking(mock_post: MagicMock) -> None:
     publisher = DiscordPublisher("http://fake")
 
     # 12 modules = 12 embeds + 1 summary embed = 13 embeds.

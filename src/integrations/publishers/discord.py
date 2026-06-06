@@ -1,5 +1,5 @@
 import json
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 import requests
 
@@ -40,7 +40,7 @@ class DiscordPublisher:
         total_removed = sum(sum(1 for c in res.diff.changes if c.change_type == ChangeType.REMOVED) for res in results)
         total_modified = sum(sum(1 for c in res.diff.changes if c.change_type == ChangeType.MODIFIED) for res in results)
 
-        summary_embed = {
+        summary_embed: Dict[str, Any] = {
             "title": title,
             "description": "\n".join(description),
             "color": 3447003, # Blue
@@ -49,7 +49,7 @@ class DiscordPublisher:
             ]
         }
 
-        embeds = [summary_embed]
+        embeds: List[Dict[str, Any]] = [summary_embed]
         files = {}
 
         for i, res in enumerate(results):
@@ -58,7 +58,7 @@ class DiscordPublisher:
             modified = sum(1 for c in res.diff.changes if c.change_type == ChangeType.MODIFIED)
 
             filename = f"diff_{i}.png"
-            module_embed = {
+            module_embed: Dict[str, Any] = {
                 "title": f"Module: {res.module_name}",
                 "color": 3447003,
                 "fields": [

@@ -157,7 +157,7 @@ def _render_members(
                 lines.append(f"  <color:red>{sig}</color>")
 
     # Methods
-    def _format_params(params: List[str]) -> str:
+    def _format_params(params: tuple[str, ...]) -> str:
         formatted = []
         for p in params:
             if method_parameter_style != "names_and_types" and ":" in p:

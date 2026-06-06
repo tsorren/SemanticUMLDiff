@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from domain.diff_models import DiffResult
 from domain.integration_models import IntegrationConfig, ModuleResult
@@ -7,7 +7,7 @@ from pipeline import publish_results
 
 @patch("pipeline.GitHubPublisher")
 @patch("pipeline.DiscordPublisher")
-def test_publish_results_aggregation(mock_discord, mock_github) -> None:
+def test_publish_results_aggregation(mock_discord: MagicMock, mock_github: MagicMock) -> None:
     github_instance = mock_github.return_value
     discord_instance = mock_discord.return_value
 
