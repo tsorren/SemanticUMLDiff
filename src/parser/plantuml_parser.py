@@ -16,8 +16,8 @@ class PlantUMLParser:
 
         # Regex compiled
         self.re_entity = re.compile(r'^(abstract\s+class|class|interface|enum)\s+([\w\.]+)(?:\s*\{)?$')
-        self.re_method = re.compile(r'^(?:\{method\}\s*)?(?:\{static\}\s*)?(?:\{abstract\}\s*)?([+\-#~])?\s*(\w+)\s*\((.*?)\)(?:\s*:\s*(.+))?$')
-        self.re_attr = re.compile(r'^(?:\{field\}\s*)?(?:\{static\}\s*)?([+\-#~])?\s*(\w+)(?:\s*:\s*(.+))?$')
+        self.re_method = re.compile(r'^(\w+)\s*\((.*?)\)(?:\s*:\s*(.+))?$')
+        self.re_attr = re.compile(r'^(\w+)(?:\s*:\s*(.+))?$')
         # Simple relation regex matching words, namespaces and common UML arrows
         self.re_relation = re.compile(
             r'^([\w\.]+)\s*(?:"(.*?)")?\s*([o\*<\|\-]*[.\-]+[o\*>\|\-]*)\s*(?:"(.*?)")?\s*([\w\.]+)(?:\s*:\s*(.*))?$'
@@ -80,11 +80,19 @@ class PlantUMLParser:
                     self.classes[name]["kind"] = kind
                 continue
 
-            # 3. Check for methods
+            # 3. Check for methods and attributes
             if self.current_class:
-                method_match = self.re_method.match(line)
+                # Common modifier stripping
+                clean_line = line.replace("{method}", "").replace("{field}", "").strip()
+                vis = ""
+                if clean_line and clean_line[0] in "+-#~":
+                    vis = clean_line[0]
+                    clean_line = clean_line[1:].strip()
+                clean_line = clean_line.replace("{static}", "").replace("{abstract}", "").strip()
+
+                method_match = self.re_method.match(clean_line)
                 if method_match:
-                    vis, name, params_str, ret_type = method_match.groups()
+                    name, params_str, ret_type = method_match.groups()
                     params: tuple[str, ...] = ()
                     if params_str and params_str.strip():
                         params = tuple(p.strip() for p in params_str.split(","))
@@ -99,10 +107,9 @@ class PlantUMLParser:
                     )
                     continue
 
-                # 4. Check for attributes
-                attr_match = self.re_attr.match(line)
+                attr_match = self.re_attr.match(clean_line)
                 if attr_match:
-                    vis, name, attr_type = attr_match.groups()
+                    name, attr_type = attr_match.groups()
                     self.classes[self.current_class]["attributes"].append(
                         UMLAttribute(
                             name=name,
