@@ -24,12 +24,12 @@ def render_puml(
     lines: List[str] = []
     lines.append("@startuml")
     lines.append("left to right direction")
-    
+
     if layout_orthogonal_lines:
         lines.append("skinparam linetype ortho")
     else:
         lines.append("skinparam linetype poly")
-        
+
     if not group_by_package:
         lines.append("set namespaceSeparator none")
     lines.append("skinparam nodesep 60")

@@ -1,10 +1,8 @@
-from typing import Optional
+from typing import List, Optional
 
 import requests
 
-from domain.diff_models import DiffResult
 from domain.integration_models import ModuleResult
-from typing import List
 
 MARKER = "<!-- semantic-uml-diff-comment -->"
 

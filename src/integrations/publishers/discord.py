@@ -1,16 +1,15 @@
 import json
-from typing import Optional
+from typing import List, Optional
 
 import requests
 
-from domain.diff_models import ChangeType, DiffResult
+from domain.diff_models import ChangeType
 from domain.integration_models import ModuleResult
-from typing import List
 
 
 class DiscordPublisher:
     def __init__(
-        self, 
+        self,
         webhook_url: Optional[str],
         repository: Optional[str] = None,
         pr_number: Optional[int] = None,
@@ -52,12 +51,12 @@ class DiscordPublisher:
 
         embeds = [summary_embed]
         files = {}
-        
+
         for i, res in enumerate(results):
             added = sum(1 for c in res.diff.changes if c.change_type == ChangeType.ADDED)
             removed = sum(1 for c in res.diff.changes if c.change_type == ChangeType.REMOVED)
             modified = sum(1 for c in res.diff.changes if c.change_type == ChangeType.MODIFIED)
-            
+
             filename = f"diff_{i}.png"
             module_embed = {
                 "title": f"Module: {res.module_name}",
@@ -69,14 +68,14 @@ class DiscordPublisher:
             if res.png_bytes:
                 module_embed["image"] = {"url": f"attachment://{filename}"}
                 files[f"file{i}"] = (filename, res.png_bytes, "image/png")
-            
+
             embeds.append(module_embed)
 
         # Chunk into messages if > 10 embeds (Discord limit is 10 embeds per message)
         chunk_size = 10
         for i in range(0, len(embeds), chunk_size):
             chunk_embeds = embeds[i:i+chunk_size]
-            
+
             # Filter files to only include those referenced in the chunk
             chunk_files = {}
             for emb in chunk_embeds:
@@ -85,9 +84,9 @@ class DiscordPublisher:
                     for k, v in files.items():
                         if v[0] == img_filename:
                             chunk_files[k] = v
-            
+
             payload = {"embeds": chunk_embeds}
-            
+
             try:
                 if chunk_files:
                     data = {"payload_json": json.dumps(payload)}

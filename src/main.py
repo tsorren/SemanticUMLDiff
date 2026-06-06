@@ -11,14 +11,14 @@ def main() -> None:
     # 1. Read Inputs
     base_dir_str = os.getenv("INPUT_BASE_UML_DIR")
     pr_dir_str = os.getenv("INPUT_PR_UML_DIR")
-    
+
     if not base_dir_str or not pr_dir_str:
         print("Error: base_uml_dir and pr_uml_dir inputs are required.")
         sys.exit(1)
-        
+
     base_dir = Path(base_dir_str)
     pr_dir = Path(pr_dir_str)
-    
+
     # Extract PR number from GITHUB_REF (e.g., refs/pull/123/merge)
     gh_ref = os.getenv("GITHUB_REF", "")
     pr_num = None
@@ -27,7 +27,7 @@ def main() -> None:
             pr_num = int(gh_ref.split("/")[2])
         except Exception:
             print("Warning: Could not parse PR number from GITHUB_REF")
-    
+
     # 2. Config
     config = IntegrationConfig(
         publish_github=os.getenv("PUBLISH_GITHUB", "true").lower() == "true",
@@ -43,35 +43,35 @@ def main() -> None:
         method_parameter_style=os.getenv("INPUT_METHOD_PARAMETER_STYLE", "types_only"),
         group_by_package=os.getenv("INPUT_GROUP_BY_PACKAGE", "true").lower() == "true"
     )
-    
+
     # 3. Match modules
     pr_files = {f.name for f in pr_dir.glob("*.puml")} if pr_dir.exists() else set()
     base_files = {f.name for f in base_dir.glob("*.puml")} if base_dir.exists() else set()
-    
+
     all_modules = pr_files.union(base_files)
-    
+
     if not all_modules:
         print("No PlantUML files found in the specified directories.")
         sys.exit(0)
-        
+
     # 4. Run pipeline
     results = []
     for module_file in all_modules:
         module_name = module_file.replace(".puml", "")
-        
+
         pr_file_path = pr_dir / module_file
         base_file_path = base_dir / module_file
-        
+
         pr_text = pr_file_path.read_text(encoding="utf-8") if pr_file_path.exists() else ""
         base_text = base_file_path.read_text(encoding="utf-8") if base_file_path.exists() else ""
-        
+
         try:
             pr_parser = PlantUMLParser(module_name)
             base_parser = PlantUMLParser(module_name)
-            
+
             pr_model = pr_parser.parse(pr_text)
             base_model = base_parser.parse(base_text)
-            
+
             result = process_module(base_model, pr_model, config)
             if result:
                 results.append(result)

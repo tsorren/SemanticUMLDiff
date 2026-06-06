@@ -1,7 +1,9 @@
 from unittest.mock import patch
-from domain.integration_models import IntegrationConfig, ModuleResult
+
 from domain.diff_models import DiffResult
+from domain.integration_models import IntegrationConfig, ModuleResult
 from pipeline import publish_results
+
 
 @patch("pipeline.GitHubPublisher")
 @patch("pipeline.DiscordPublisher")

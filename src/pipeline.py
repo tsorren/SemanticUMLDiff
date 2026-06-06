@@ -1,5 +1,7 @@
+from typing import List, Optional
+
 from diff.compute import compute_diff
-from domain.integration_models import IntegrationConfig
+from domain.integration_models import IntegrationConfig, ModuleResult
 from domain.models import UMLModel
 from graph.reducer import reduce_graph
 from integrations.hosting import (
@@ -12,8 +14,6 @@ from integrations.plantuml import generate_png
 from integrations.publishers.discord import DiscordPublisher
 from integrations.publishers.github import GitHubPublisher
 from render.puml_renderer import render_puml
-from domain.integration_models import ModuleResult
-from typing import List, Optional
 
 
 def process_module(
@@ -34,9 +34,9 @@ def process_module(
 
     # 3. Render PUML
     puml_text = render_puml(
-        base, 
-        pr, 
-        diff, 
+        base,
+        pr,
+        diff,
         spec,
         layout_orthogonal_lines=config.layout_orthogonal_lines,
         method_parameter_style=config.method_parameter_style,

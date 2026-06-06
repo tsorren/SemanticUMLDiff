@@ -67,7 +67,7 @@ def test_renderer_custom_configs() -> None:
     )
     base_model = UMLModel(module_name="test", classes=())
     pr_model = UMLModel(module_name="test", classes=(c_base,))
-    
+
     diff = DiffResult(
         module_name="test",
         changes=(
@@ -75,14 +75,14 @@ def test_renderer_custom_configs() -> None:
         )
     )
     spec = RenderSpec(included_nodes=("com.example.A",), highlight_rules=(("com.example.A", "green"),))
-    
+
     # Test types_only (should strip params) and ortho lines
     puml = render_puml(base_model, pr_model, diff, spec, layout_orthogonal_lines=True, method_parameter_style="types_only", group_by_package=True)
     assert "skinparam linetype ortho" in puml
     assert "set namespaceSeparator none" not in puml
     assert "doSomething(String, int)" in puml
     assert "param1" not in puml
-    
+
     # Test names_and_types (should keep params) and curved lines
     puml2 = render_puml(base_model, pr_model, diff, spec, layout_orthogonal_lines=False, method_parameter_style="names_and_types", group_by_package=False)
     assert "skinparam linetype poly" in puml2
