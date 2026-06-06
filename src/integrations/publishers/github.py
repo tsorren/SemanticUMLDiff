@@ -3,6 +3,8 @@ from typing import Optional
 import requests
 
 from domain.diff_models import DiffResult
+from domain.integration_models import ModuleResult
+from typing import List
 
 MARKER = "<!-- semantic-uml-diff-comment -->"
 
@@ -17,12 +19,12 @@ class GitHubPublisher:
             "Accept": "application/vnd.github.v3+json"
         }
 
-    def publish(self, diff: DiffResult, image_url: Optional[str]) -> None:
+    def publish(self, results: List[ModuleResult]) -> None:
         if not self.token or not self.repo or not self.pr_number:
             print("GitHub configuration missing. Skipping PR comment.")
             return
 
-        body = self._build_markdown(diff, image_url)
+        body = self._build_markdown(results)
 
         # 1. Search for existing comment
         api_url = f"https://api.github.com/repos/{self.repo}/issues/{self.pr_number}/comments"
@@ -53,16 +55,30 @@ class GitHubPublisher:
         except Exception as e:
             print(f"Error publishing to GitHub: {e}")
 
-    def _build_markdown(self, diff: DiffResult, image_url: Optional[str]) -> str:
+    def _build_markdown(self, results: List[ModuleResult]) -> str:
+        total_changes = sum(len(res.diff.changes) for res in results)
         lines = [
             MARKER,
             "## 🔍 Semantic UML Diff",
-            f"**Module:** `{diff.module_name}`",
-            f"**Total Changes:** {len(diff.changes)}",
+            f"**Total Modules Modified:** {len(results)}",
+            f"**Total Changes:** {total_changes}",
             ""
         ]
 
-        if image_url:
-            lines.append(f"![Semantic Diff]({image_url})")
+        for res in results:
+            lines.extend([
+                f"### `{res.module_name}`",
+                f"<details><summary>View Diagram ({len(res.diff.changes)} changes)</summary>",
+                "",
+            ])
+            if res.image_url:
+                lines.append(f"![Semantic Diff]({res.image_url})")
+            else:
+                lines.append("_No diagram image available._")
+            lines.extend([
+                "",
+                "</details>",
+                ""
+            ])
 
         return "\n".join(lines)

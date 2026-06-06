@@ -1,6 +1,17 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from domain.diff_models import DiffResult
+
+
+@dataclass
+class ModuleResult:
+    module_name: str
+    diff: DiffResult
+    puml_text: str
+    png_bytes: Optional[bytes]
+    image_url: Optional[str]
+
 
 @dataclass(frozen=True)
 class IntegrationConfig:

@@ -12,20 +12,22 @@ from integrations.plantuml import generate_png
 from integrations.publishers.discord import DiscordPublisher
 from integrations.publishers.github import GitHubPublisher
 from render.puml_renderer import render_puml
+from domain.integration_models import ModuleResult
+from typing import List, Optional
 
 
-def run_integration_pipeline(
+def process_module(
     base: UMLModel,
     pr: UMLModel,
     config: IntegrationConfig
-) -> None:
+) -> Optional[ModuleResult]:
     print(f"Processing module: {pr.module_name}")
 
     # 1. Compute Diff
     diff = compute_diff(base, pr)
     if not diff.changes:
         print("No changes detected. Skipping integration publishing.")
-        return
+        return None
 
     # 2. Graph Reduction
     spec = reduce_graph(base, pr, diff)
@@ -57,6 +59,19 @@ def run_integration_pipeline(
 
     image_url = uploader.upload(puml_text, png_bytes)
 
+    return ModuleResult(
+        module_name=pr.module_name,
+        diff=diff,
+        puml_text=puml_text,
+        png_bytes=png_bytes,
+        image_url=image_url
+    )
+
+def publish_results(results: List[ModuleResult], config: IntegrationConfig) -> None:
+    if not results:
+        print("No modules with changes to publish.")
+        return
+
     # 6. Publish to GitHub
     if config.publish_github:
         gh_publisher = GitHubPublisher(
@@ -64,7 +79,7 @@ def run_integration_pipeline(
             config.github_repository,
             config.github_pr_number
         )
-        gh_publisher.publish(diff, image_url)
+        gh_publisher.publish(results)
 
     # 7. Publish to Discord
     if config.publish_discord:
@@ -74,6 +89,6 @@ def run_integration_pipeline(
             config.github_pr_number,
             config.github_head_ref
         )
-        discord_publisher.publish(diff, png_bytes)
+        discord_publisher.publish(results)
 
     print("Integration pipeline completed.")

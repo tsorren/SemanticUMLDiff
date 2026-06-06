@@ -4,7 +4,7 @@ from pathlib import Path
 
 from domain.integration_models import IntegrationConfig
 from parser.plantuml_parser import PlantUMLParser
-from pipeline import run_integration_pipeline
+from pipeline import process_module, publish_results
 
 
 def main() -> None:
@@ -55,6 +55,7 @@ def main() -> None:
         sys.exit(0)
         
     # 4. Run pipeline
+    results = []
     for module_file in all_modules:
         module_name = module_file.replace(".puml", "")
         
@@ -71,9 +72,14 @@ def main() -> None:
             pr_model = pr_parser.parse(pr_text)
             base_model = base_parser.parse(base_text)
             
-            run_integration_pipeline(base_model, pr_model, config)
+            result = process_module(base_model, pr_model, config)
+            if result:
+                results.append(result)
         except Exception as e:
             print(f"Error processing module {module_name}: {e}")
+
+    # 5. Publish aggregated results
+    publish_results(results, config)
 
 if __name__ == "__main__":
     main()
