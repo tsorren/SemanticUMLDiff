@@ -31,7 +31,15 @@ def run_integration_pipeline(
     spec = reduce_graph(base, pr, diff)
 
     # 3. Render PUML
-    puml_text = render_puml(base, pr, diff, spec)
+    puml_text = render_puml(
+        base, 
+        pr, 
+        diff, 
+        spec,
+        layout_orthogonal_lines=config.layout_orthogonal_lines,
+        method_parameter_style=config.method_parameter_style,
+        group_by_package=config.group_by_package
+    )
 
     # 4. Generate PNG locally if needed
     png_bytes = None

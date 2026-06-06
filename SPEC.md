@@ -592,6 +592,42 @@ Reduced diff diagram.
 
 ---
 
+# PHASE 6.1 — Rendering Customization
+
+# Objetivo
+
+Permitir configuraciones visuales del renderizado PlantUML.
+
+---
+
+# Tareas
+
+## T-6101
+
+Permitir alternar entre líneas ortogonales y curvas.
+
+---
+
+## T-6102
+
+Permitir configurar la visibilidad de los parámetros de métodos (nombres + tipos, o solo tipos).
+
+---
+
+## T-6103
+
+Agrupar semánticamente las clases en base a su namespace utilizando el comportamiento automático de PlantUML.
+
+---
+
+# Deliverable
+
+```text
+Configuración visual personalizable.
+```
+
+---
+
 # PHASE 7 — GitHub Integration
 
 # Objetivo

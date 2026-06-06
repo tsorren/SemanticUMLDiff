@@ -20,6 +20,9 @@ This action assumes that you have already generated `.puml` files for both your 
 | `base_uml_dir` | Path to the directory containing PlantUML diagrams for the base branch. | Yes | N/A |
 | `pr_uml_dir` | Path to the directory containing PlantUML diagrams for the PR branch (with new changes). | Yes | N/A |
 | `github_token` | GitHub token for posting PR comments. | No | `${{ github.token }}` |
+| `layout_orthogonal_lines` | Use orthogonal lines instead of curved lines for relationships. | No | `false` |
+| `method_parameter_style` | How to display method parameters: `types_only` or `names_and_types`. | No | `types_only` |
+| `group_by_package` | Group classes by their namespace/package using PlantUML `package` blocks. | No | `true` |
 
 ### Environment Variables
 

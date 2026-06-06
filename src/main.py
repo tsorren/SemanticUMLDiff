@@ -37,7 +37,10 @@ def main() -> None:
         github_token=os.getenv("INPUT_GITHUB_TOKEN"),
         github_repository=os.getenv("GITHUB_REPOSITORY"),
         github_pr_number=pr_num,
-        discord_webhook_url=os.getenv("DISCORD_WEBHOOK_URL")
+        discord_webhook_url=os.getenv("DISCORD_WEBHOOK_URL"),
+        layout_orthogonal_lines=os.getenv("INPUT_LAYOUT_ORTHOGONAL_LINES", "false").lower() == "true",
+        method_parameter_style=os.getenv("INPUT_METHOD_PARAMETER_STYLE", "types_only"),
+        group_by_package=os.getenv("INPUT_GROUP_BY_PACKAGE", "true").lower() == "true"
     )
     
     # 3. Match modules

@@ -12,11 +12,26 @@ ARROW_COLOR_ADDED = "[#green]"
 ARROW_COLOR_REMOVED = "[#red]"
 
 
-def render_puml(base: UMLModel, pr: UMLModel, diff: DiffResult, spec: RenderSpec) -> str:
+def render_puml(
+    base: UMLModel,
+    pr: UMLModel,
+    diff: DiffResult,
+    spec: RenderSpec,
+    layout_orthogonal_lines: bool = False,
+    method_parameter_style: str = "types_only",
+    group_by_package: bool = True
+) -> str:
     lines: List[str] = []
     lines.append("@startuml")
     lines.append("left to right direction")
-    lines.append("skinparam linetype ortho")
+    
+    if layout_orthogonal_lines:
+        lines.append("skinparam linetype ortho")
+    else:
+        lines.append("skinparam linetype poly")
+        
+    if not group_by_package:
+        lines.append("set namespaceSeparator none")
     lines.append("skinparam nodesep 60")
     lines.append("skinparam ranksep 60")
     lines.append("skinparam classBackgroundColor transparent")
@@ -52,7 +67,8 @@ def render_puml(base: UMLModel, pr: UMLModel, diff: DiffResult, spec: RenderSpec
         members_lines = _render_members(
             base_c, pr_c, class_name, diff,
             is_removed=(color == "red"),
-            is_added=(color == "green")
+            is_added=(color == "green"),
+            method_parameter_style=method_parameter_style
         )
         lines.extend(members_lines)
         lines.append("}")
@@ -91,7 +107,8 @@ def _render_members(
     class_name: str,
     diff: DiffResult,
     is_removed: bool,
-    is_added: bool
+    is_added: bool,
+    method_parameter_style: str
 ) -> List[str]:
     lines: List[str] = []
     member_diffs = [
@@ -138,9 +155,18 @@ def _render_members(
                 lines.append(f"  <color:red>{sig}</color>")
 
     # Methods
+    def _format_params(params: List[str]) -> str:
+        formatted = []
+        for p in params:
+            if method_parameter_style == "types_only" and ":" in p:
+                formatted.append(p.split(":", 1)[1].strip())
+            else:
+                formatted.append(p.strip())
+        return ", ".join(formatted)
+
     if pr_c:
         for m in pr_c.methods:
-            sig = _clean_type(f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}".strip())
+            sig = _clean_type(f"{m.visibility} {m.name}({_format_params(m.parameters)}): {m.return_type}".strip())
             diff_item = next(
                 (d for d in member_diffs if d.entity_type == "method" and d.entity_name == m.name),
                 None
@@ -165,7 +191,7 @@ def _render_members(
                 (d for d in member_diffs if d.entity_type == "method" and d.entity_name == m.name),
                 None
             )
-            sig = _clean_type(f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}".strip())
+            sig = _clean_type(f"{m.visibility} {m.name}({_format_params(m.parameters)}): {m.return_type}".strip())
             if is_removed:
                 lines.append(f"  <color:red>{sig}</color>")
             elif diff_item and diff_item.change_type == ChangeType.REMOVED:

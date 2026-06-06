@@ -16,3 +16,8 @@ class IntegrationConfig:
 
     # Discord Auth
     discord_webhook_url: Optional[str] = None
+
+    # Rendering Config
+    layout_orthogonal_lines: bool = False
+    method_parameter_style: str = "types_only"
+    group_by_package: bool = True

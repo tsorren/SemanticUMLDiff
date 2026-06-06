@@ -14,6 +14,18 @@ inputs:
     description: 'GitHub token for PR commenting'
     required: false
     default: ${{ github.token }}
+  layout_orthogonal_lines:
+    description: 'Use orthogonal lines instead of curved lines for relationships'
+    required: false
+    default: 'false'
+  method_parameter_style:
+    description: 'How to display method parameters: types_only or names_and_types'
+    required: false
+    default: 'types_only'
+  group_by_package:
+    description: 'Group classes by their namespace/package using PlantUML package blocks'
+    required: false
+    default: 'true'
 runs:
   using: 'docker'
   image: 'Dockerfile'
