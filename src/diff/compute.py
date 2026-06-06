@@ -225,7 +225,13 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
 
     # Compare methods with FULL signature as key
     def method_key(m: UMLMethod) -> str:
-        return f"{m.name}({','.join(m.parameters)})"
+        types = []
+        for p in m.parameters:
+            if ":" in p:
+                types.append(p.split(":", 1)[1].strip())
+            else:
+                types.append(p.strip())
+        return f"{m.name}({','.join(types)})"
 
     base_methods = {method_key(m): m for m in base_c.methods}
     pr_methods = {method_key(m): m for m in pr_c.methods}
@@ -240,7 +246,7 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
             ))
         else:
             base_m = base_methods[key]
-            if base_m != m:
+            if base_m.visibility != m.visibility or base_m.return_type != m.return_type:
                 b_sig = f"{base_m.visibility} {base_m.name}({','.join(base_m.parameters)}): {base_m.return_type}"
                 a_sig = f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}"
                 changes.append(DiffItem(

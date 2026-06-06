@@ -233,7 +233,13 @@ def _render_members(
         return ", ".join(formatted)
 
     def method_key(m: UMLMethod) -> str:
-        return f"{m.name}({','.join(m.parameters)})"
+        types = []
+        for p in m.parameters:
+            if ":" in p:
+                types.append(p.split(":", 1)[1].strip())
+            else:
+                types.append(p.strip())
+        return f"{m.name}({','.join(types)})"
 
     if pr_c:
         for m in pr_c.methods:
