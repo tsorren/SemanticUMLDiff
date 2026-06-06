@@ -49,98 +49,98 @@ skinparam ranksep 30
   }
 </style>
 
-package "grupo5.donaciones.models.entities.bienes" <<package_modified>> {
-class "Bien" as grupo5.donaciones.models.entities.bienes.Bien <<modified>> {
-  <color:orange>-</color> descripcion: String
-  + <color:green>imagenUrl: String</color>
-  + <color:red>fotoUrl: String</color>
-  + estaVencido(<color:orange>java.time.LocalDate</color>): boolean
+package "group5.donations.models.entities.donations" <<package_modified>> {
+class "CollectiveDonation" as group5.donations.models.entities.donations.CollectiveDonation <<added>> {
+  + <color:green>goal: Double</color>
+  + <color:green>accumulatedAmount: Double</color>
 }
-enum "Estado" as grupo5.donaciones.models.entities.bienes.Estado <<modified>> {
-  NUEVO
-  <color:green>RUSTICO</color>
-  USADO
-  <color:red>DESGASTADO</color>
+class "Donation" as group5.donations.models.entities.donations.Donation <<modified>> {
+  + date: java.time.LocalDate
+}
+class "DonationItem" as group5.donations.models.entities.donations.DonationItem <<impacted>> {
+  + quantity: Integer
+}
+class "Donor" as group5.donations.models.entities.donations.Donor <<modified>> {
+  + score: Double
+  + <color:green>registerDonation(group5.donations.models.entities.donations.Donation): void</color>
+  <color:orange>-</color> anonymize(): void
+  + <color:green>clearHistory(): void</color>
+  + <color:red>addDonation(group5.donations.models.entities.donations.Donation): void</color>
+  + <color:red>removeDonation(group5.donations.models.entities.donations.Donation): void</color>
+}
+}
+
+package "group5.donations.models.entities.goods" <<package_modified>> {
+class "Good" as group5.donations.models.entities.goods.Good <<modified>> {
+  <color:orange>-</color> description: String
+  + <color:green>imageUrl: String</color>
+  + <color:red>photoUrl: String</color>
+  + isExpired(<color:orange>java.time.LocalDate</color>): boolean
+}
+enum "Status" as group5.donations.models.entities.goods.Status <<modified>> {
+  NEW
+  <color:green>RUSTIC</color>
+  USED
+  <color:red>WORN</color>
   ==
 }
 }
 
-package "grupo5.donaciones.models.entities.donaciones" <<package_modified>> {
-class "Donacion" as grupo5.donaciones.models.entities.donaciones.Donacion <<modified>> {
-  + fecha: java.time.LocalDate
-}
-class "DonacionColectiva" as grupo5.donaciones.models.entities.donaciones.DonacionColectiva <<added>> {
-  + <color:green>meta: Double</color>
-  + <color:green>montoAcumulado: Double</color>
-}
-class "Donante" as grupo5.donaciones.models.entities.donaciones.Donante <<modified>> {
-  + puntaje: Double
-  + <color:green>registrarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</color>
-  <color:orange>-</color> anonimizar(): void
-  + <color:green>vaciarHistorial(): void</color>
-  + <color:red>agregarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</color>
-  + <color:red>quitarDonacion(grupo5.donaciones.models.entities.donaciones.Donacion): void</color>
-}
-class "ItemDonacion" as grupo5.donaciones.models.entities.donaciones.ItemDonacion <<impacted>> {
-  + cantidad: Integer
-}
-}
-
-package "grupo5.donaciones.models.entities.personas" <<package_modified>> {
-enum "Genero" as grupo5.donaciones.models.entities.personas.Genero <<removed>> {
-  <color:red>HOMBRE</color>
-  <color:red>MUJER</color>
-  <color:red>NO_BINARIO</color>
-  <color:red>PREFIERO_NO_DECIR</color>
+package "group5.donations.models.entities.people" <<package_modified>> {
+enum "Gender" as group5.donations.models.entities.people.Gender <<removed>> {
+  <color:red>MALE</color>
+  <color:red>FEMALE</color>
+  <color:red>NON_BINARY</color>
+  <color:red>PREFER_NOT_TO_SAY</color>
   ==
 }
-class "Humana" as grupo5.donaciones.models.entities.personas.Humana <<modified>> {
-  + apellido: String
-  + fechaNacimiento: java.time.LocalDate
-  + nombre: String
-  + <color:green>genero: String</color>
-  + anonimizar(): void
+class "Individual" as group5.donations.models.entities.people.Individual <<modified>> {
+  + lastName: String
+  + birthDate: java.time.LocalDate
+  + firstName: String
+  + <color:green>gender: String</color>
+  + anonymize(): void
 }
-class "Juridica" as grupo5.donaciones.models.entities.personas.Juridica <<modified>> {
-  + razonSocial: String
-  + rubro: String
-  + <color:orange>registrarRepresentante</color>(grupo5.donaciones.models.entities.personas.Humana): void
-  + anonimizar(): void
-  + quitarRepresentante(grupo5.donaciones.models.entities.personas.Humana): void
+class "Organization" as group5.donations.models.entities.people.Organization <<modified>> {
+  + legalName: String
+  + industry: String
+  + <color:orange>registerRepresentative</color>(group5.donations.models.entities.people.Individual): void
+  + anonymize(): void
+  + removeRepresentative(group5.donations.models.entities.people.Individual): void
 }
-abstract class "Persona" as grupo5.donaciones.models.entities.personas.Persona <<impacted>> {
-  + documento: String
+abstract class "Person" as group5.donations.models.entities.people.Person <<impacted>> {
+  + document: String
   + id: Long
 }
 }
 
-package "grupo5.donaciones.models.ports" <<package_modified>> {
-interface "CargadorDonantes" as grupo5.donaciones.models.ports.CargadorDonantes <<modified>> {
-  + cargarDonantes(String): java.util.List
+package "group5.donations.models.ports" <<package_modified>> {
+class "CSVReader" as group5.donations.models.ports.CSVReader <<moved>> {
+  .. (moved from: group5.donations.infrastructure.CSVReader) ..
+  + loadDonors(String): java.util.List
 }
-class "LectorCSV" as grupo5.donaciones.models.ports.LectorCSV <<moved>> {
-  .. (moved from: grupo5.donaciones.infraestructure.LectorCSV) ..
-  + cargarDonantes(String): java.util.List
-}
-}
-
-package "grupo5.donaciones.models.privacidad" {
-interface "Anonimizable" as grupo5.donaciones.models.privacidad.Anonimizable <<impacted>> {
-  + anonimizar(): void
+interface "DonorLoader" as group5.donations.models.ports.DonorLoader <<modified>> {
+  + loadDonors(String): java.util.List
 }
 }
 
-grupo5.donaciones.infraestructure.LectorCSV -[#red]-|> grupo5.donaciones.models.ports.CargadorDonantes
-grupo5.donaciones.models.entities.bienes.Bien --> grupo5.donaciones.models.entities.bienes.Estado
-grupo5.donaciones.models.entities.donaciones.DonacionColectiva -[#green]-|> grupo5.donaciones.models.entities.donaciones.Donacion
-grupo5.donaciones.models.entities.donaciones.Donante o-- grupo5.donaciones.models.entities.donaciones.Donacion
-grupo5.donaciones.models.entities.donaciones.Donante --> grupo5.donaciones.models.entities.personas.Persona
-grupo5.donaciones.models.entities.donaciones.Donante --|> grupo5.donaciones.models.privacidad.Anonimizable
-grupo5.donaciones.models.entities.donaciones.ItemDonacion --> grupo5.donaciones.models.entities.bienes.Bien
-grupo5.donaciones.models.entities.personas.Humana -[#red]-> grupo5.donaciones.models.entities.personas.Genero
-grupo5.donaciones.models.entities.personas.Humana --|> grupo5.donaciones.models.entities.personas.Persona
-grupo5.donaciones.models.entities.personas.Juridica o-- grupo5.donaciones.models.entities.personas.Humana
-grupo5.donaciones.models.entities.personas.Juridica --|> grupo5.donaciones.models.entities.personas.Persona
-grupo5.donaciones.models.entities.personas.Persona --|> grupo5.donaciones.models.privacidad.Anonimizable
-grupo5.donaciones.models.ports.LectorCSV -[#green]-|> grupo5.donaciones.models.ports.CargadorDonantes
+package "group5.donations.models.privacy" {
+interface "Anonymizable" as group5.donations.models.privacy.Anonymizable <<impacted>> {
+  + anonymize(): void
+}
+}
+
+group5.donations.infrastructure.CSVReader -[#red]-|> group5.donations.models.ports.DonorLoader
+group5.donations.models.entities.donations.CollectiveDonation -[#green]-|> group5.donations.models.entities.donations.Donation
+group5.donations.models.entities.donations.DonationItem --> group5.donations.models.entities.goods.Good
+group5.donations.models.entities.donations.Donor o-- group5.donations.models.entities.donations.Donation
+group5.donations.models.entities.donations.Donor --> group5.donations.models.entities.people.Person
+group5.donations.models.entities.donations.Donor --|> group5.donations.models.privacy.Anonymizable
+group5.donations.models.entities.goods.Good --> group5.donations.models.entities.goods.Status
+group5.donations.models.entities.people.Individual -[#red]-> group5.donations.models.entities.people.Gender
+group5.donations.models.entities.people.Individual --|> group5.donations.models.entities.people.Person
+group5.donations.models.entities.people.Organization o-- group5.donations.models.entities.people.Individual
+group5.donations.models.entities.people.Organization --|> group5.donations.models.entities.people.Person
+group5.donations.models.entities.people.Person --|> group5.donations.models.privacy.Anonymizable
+group5.donations.models.ports.CSVReader -[#green]-|> group5.donations.models.ports.DonorLoader
 @enduml

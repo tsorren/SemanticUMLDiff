@@ -1,90 +1,90 @@
 @startuml
 
-interface grupo5.donaciones.models.privacidad.Anonimizable {
-	{method} {abstract} +anonimizar () : void
+interface group5.donations.models.privacy.Anonymizable {
+	{method} {abstract} +anonymize () : void
 }
 
-abstract class grupo5.donaciones.models.entities.personas.Persona {
-	{field} +documento : String
+abstract class group5.donations.models.entities.people.Person {
+	{field} +document : String
 	{field} +id : Long
 }
 
-class grupo5.donaciones.models.entities.personas.Humana {
-	{field} +apellido : String
-	{field} +fechaNacimiento : java.time.LocalDate
-	{field} +nombre : String
-	{method} +anonimizar () : void
+class group5.donations.models.entities.people.Individual {
+	{field} +lastName : String
+	{field} +birthDate : java.time.LocalDate
+	{field} +firstName : String
+	{method} +anonymize () : void
 }
 
-class grupo5.donaciones.models.entities.personas.Juridica {
-	{field} +razonSocial : String
-	{field} +rubro : String
-	{method} +agregarRepresentante ( paramHumana1 : grupo5.donaciones.models.entities.personas.Humana ) : void
-	{method} +anonimizar () : void
-	{method} +quitarRepresentante ( paramHumana1 : grupo5.donaciones.models.entities.personas.Humana ) : void
+class group5.donations.models.entities.people.Organization {
+	{field} +legalName : String
+	{field} +industry : String
+	{method} +addRepresentative ( paramHuman1 : group5.donations.models.entities.people.Individual ) : void
+	{method} +anonymize () : void
+	{method} +removeRepresentative ( paramHuman1 : group5.donations.models.entities.people.Individual ) : void
 }
 
-enum grupo5.donaciones.models.entities.personas.Genero {
-	{field} +HOMBRE
-	{field} +MUJER
-	{field} +NO_BINARIO
-	{field} +PREFIERO_NO_DECIR
+enum group5.donations.models.entities.people.Gender {
+	{field} +MALE
+	{field} +FEMALE
+	{field} +NON_BINARY
+	{field} +PREFER_NOT_TO_SAY
 }
 
-class grupo5.donaciones.models.entities.personas.direccion.Direccion {
-	{field} +altura : Integer
-	{field} +calle : String
-	{field} +localidad : String
-	{method} +anonimizar () : void
+class group5.donations.models.entities.people.address.Address {
+	{field} +number : Integer
+	{field} +street : String
+	{field} +city : String
+	{method} +anonymize () : void
 }
 
-class grupo5.donaciones.models.entities.donaciones.Donante {
-	{field} +puntaje : Double
-	{method} +agregarDonacion ( paramDonacion1 : grupo5.donaciones.models.entities.donaciones.Donacion ) : void
-	{method} +anonimizar () : void
-	{method} +quitarDonacion ( paramDonacion1 : grupo5.donaciones.models.entities.donaciones.Donacion ) : void
+class group5.donations.models.entities.donations.Donor {
+	{field} +score : Double
+	{method} +addDonation ( paramDonation1 : group5.donations.models.entities.donations.Donation ) : void
+	{method} +anonymize () : void
+	{method} +removeDonation ( paramDonation1 : group5.donations.models.entities.donations.Donation ) : void
 }
 
-class grupo5.donaciones.models.entities.donaciones.Donacion {
-	{field} +fecha : java.time.LocalDate
+class group5.donations.models.entities.donations.Donation {
+	{field} +date : java.time.LocalDate
 }
 
-class grupo5.donaciones.models.entities.donaciones.ItemDonacion {
-	{field} +cantidad : Integer
+class group5.donations.models.entities.donations.DonationItem {
+	{field} +quantity : Integer
 }
 
-class grupo5.donaciones.models.entities.bienes.Bien {
-	{field} +descripcion : String
-	{field} +fotoUrl : String
-	{method} +estaVencido () : boolean
+class group5.donations.models.entities.goods.Good {
+	{field} +description : String
+	{field} +photoUrl : String
+	{method} +isExpired () : boolean
 }
 
-enum grupo5.donaciones.models.entities.bienes.Estado {
-	{field} +DESGASTADO
-	{field} +NUEVO
-	{field} +USADO
+enum group5.donations.models.entities.goods.Status {
+	{field} +WORN
+	{field} +NEW
+	{field} +USED
 }
 
-interface grupo5.donaciones.models.ports.CargadorDonantes {
-	{method} {abstract} +cargarDonantes ( paramString1 : String ) : java.util.List
+interface group5.donations.models.ports.DonorLoader {
+	{method} {abstract} +loadDonors ( paramString1 : String ) : java.util.List
 }
 
-class grupo5.donaciones.infraestructure.LectorCSV {
-	{method} +cargarDonantes ( paramString1 : String ) : java.util.List
+class group5.donations.infrastructure.CSVReader {
+	{method} +loadDonors ( paramString1 : String ) : java.util.List
 }
 
-grupo5.donaciones.infraestructure.LectorCSV ..|> grupo5.donaciones.models.ports.CargadorDonantes
-grupo5.donaciones.models.entities.personas.Humana --|> grupo5.donaciones.models.entities.personas.Persona
-grupo5.donaciones.models.entities.personas.Humana --> grupo5.donaciones.models.entities.personas.Genero : genero
-grupo5.donaciones.models.entities.personas.Juridica --|> grupo5.donaciones.models.entities.personas.Persona
-grupo5.donaciones.models.entities.personas.Juridica "1" o-- "0..*" grupo5.donaciones.models.entities.personas.Humana : representantes
-grupo5.donaciones.models.entities.personas.Persona --> grupo5.donaciones.models.entities.personas.direccion.Direccion : direccion
-grupo5.donaciones.models.entities.personas.Persona ..|> grupo5.donaciones.models.privacidad.Anonimizable
-grupo5.donaciones.models.entities.personas.direccion.Direccion ..|> grupo5.donaciones.models.privacidad.Anonimizable
-grupo5.donaciones.models.entities.donaciones.Donante --> grupo5.donaciones.models.entities.personas.Persona : persona
-grupo5.donaciones.models.entities.donaciones.Donante ..|> grupo5.donaciones.models.privacidad.Anonimizable
-grupo5.donaciones.models.entities.donaciones.Donante "1" o-- "0..*" grupo5.donaciones.models.entities.donaciones.Donacion : historialDonaciones
-grupo5.donaciones.models.entities.donaciones.ItemDonacion --> grupo5.donaciones.models.entities.bienes.Bien : bien
-grupo5.donaciones.models.entities.bienes.Bien --> grupo5.donaciones.models.entities.bienes.Estado : estado
+group5.donations.infrastructure.CSVReader ..|> group5.donations.models.ports.DonorLoader
+group5.donations.models.entities.people.Individual --|> group5.donations.models.entities.people.Person
+group5.donations.models.entities.people.Individual --> group5.donations.models.entities.people.Gender : gender
+group5.donations.models.entities.people.Organization --|> group5.donations.models.entities.people.Person
+group5.donations.models.entities.people.Organization "1" o-- "0..*" group5.donations.models.entities.people.Individual : representatives
+group5.donations.models.entities.people.Person --> group5.donations.models.entities.people.address.Address : address
+group5.donations.models.entities.people.Person ..|> group5.donations.models.privacy.Anonymizable
+group5.donations.models.entities.people.address.Address ..|> group5.donations.models.privacy.Anonymizable
+group5.donations.models.entities.donations.Donor --> group5.donations.models.entities.people.Person : person
+group5.donations.models.entities.donations.Donor ..|> group5.donations.models.privacy.Anonymizable
+group5.donations.models.entities.donations.Donor "1" o-- "0..*" group5.donations.models.entities.donations.Donation : donationHistory
+group5.donations.models.entities.donations.DonationItem --> group5.donations.models.entities.goods.Good : good
+group5.donations.models.entities.goods.Good --> group5.donations.models.entities.goods.Status : status
 
 @enduml
