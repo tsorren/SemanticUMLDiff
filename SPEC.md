@@ -1032,3 +1032,36 @@ Profundidad Contextual (Context Depth).
 ### Done cuando
 * El grafo de reducción soporta un `context_depth` (ej. 1, 2) configurable desde la Action que determina el radio de expansión desde los nodos modificados hacia el resto del grafo.
 * `diagram_spacing` también es expuesto vía Action para manipular el espacio entre entidades directamente desde Github.
+
+---
+
+# PHASE 14 — Granular Member Diff Formatting
+
+# Objetivo
+
+Habilitar el resaltado granular en naranja de los segmentos modificados de atributos y métodos en el diagrama PlantUML, respetando la configuración de estilo de parámetros de métodos (`method_parameter_style`), y detectando retransmisiones/renombres de firmas de métodos de forma determinista y limpia utilizando principios SOLID.
+
+# Tareas Realizadas
+
+## T-1401
+Detección de renombres de métodos y cambios de firma.
+
+### Done cuando
+* Se comparan firmas de métodos de forma heurística para detectar cuando un método cambió su nombre pero conservó el tipo de retorno y los tipos de sus parámetros.
+* Se manejan colisiones de renombre múltiple cayendo en un fallback determinista de `ADDED`/`REMOVED` independientes.
+* Se propagan los objetos de modelo `UMLMethod` y `UMLAttribute` originales a través de nuevos atributos `before_element` y `after_element` en `DiffItem`.
+
+## T-1402
+Refactorización SOLID de Renderizado de Miembros.
+
+### Done cuando
+* Se extrae la lógica compleja de formato y coloreado de miembros en la clase `MemberFormatter` (`src/render/member_renderer.py`).
+* Se desacopla completamente el procesamiento visual de la lógica del grafo y la estructura de generación de PlantUML.
+
+## T-1403
+Coloreado granular en naranja.
+
+### Done cuando
+* Se colorean en naranja (`<color:orange>...</color>`) únicamente las secciones modificadas de los miembros (visibilidad, nombre, parámetros específicos, o tipo de retorno).
+* Se respeta la configuración `method_parameter_style`. Si el estilo es `types_only`, el renombrado de un parámetro no genera cambios visuales (ni se pinta de naranja). Si es `names_and_types`, el cambio se pinta de naranja de forma detallada.
+

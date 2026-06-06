@@ -20,7 +20,7 @@ The overarching integration pipeline (`run_integration_pipeline`) orchestrates t
 ### 3. Visual Rendering
 - The `render_puml` component constructs a new PlantUML string representing the reduced context.
 - It applies semantic coloring (Green = Added, Red = Removed, Yellow = Modified).
-- Modified attributes and methods are serialized showing their crossed-out prior state alongside their new state.
+- Modified attributes and methods are serialized with granular orange highlights (`<color:orange>...</color>`) only for the specific parts that changed (visibility, name, parameter types, or return type).
 
 ### 4. Local Image Generation
 - If the configuration requires binary images (e.g., for Discord attachments or Discord CDN hosting), the system executes `java -jar plantuml.jar -pipe` locally via `subprocess`.

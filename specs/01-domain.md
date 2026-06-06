@@ -158,6 +158,8 @@ Attributes:
 - before
 - after
 - context
+- before_element
+- after_element
 
 ### DiffResult
 Attributes:
@@ -244,7 +246,7 @@ A relation is identified by:
 Two elements are equivalent when their normalized representation is identical.
 
 ### Rename handling
-Rename detection is optional and can be implemented later. In the MVP, a rename may be treated as remove + add unless a stable rename heuristic is introduced.
+Rename detection is supported for methods. If a class has a method that was removed and a new method added, and they have the same parameter types and return type but different names, the system identifies this as a rename (`MODIFIED` state). This is resolved unless there's a collision (e.g. multiple identical signature updates), where it falls back to independent `ADDED`/`REMOVED`.
 
 ---
 

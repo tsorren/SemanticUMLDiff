@@ -211,7 +211,9 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
                     change_type=ChangeType.MODIFIED,
                     context=context_name,
                     before=f"{base_a.visibility} {base_a.name}: {base_a.type}".strip(),
-                    after=f"{a.visibility} {a.name}: {a.type}".strip()
+                    after=f"{a.visibility} {a.name}: {a.type}".strip(),
+                    before_element=base_a,
+                    after_element=a
                 ))
 
     for name, a in base_attrs.items():
@@ -220,7 +222,8 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
                 entity_type="attribute",
                 entity_name=name,
                 change_type=ChangeType.REMOVED,
-                context=context_name
+                context=context_name,
+                before_element=a
             ))
 
     # Compare methods with FULL signature as key
@@ -230,39 +233,125 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
             if ":" in p:
                 types.append(p.split(":", 1)[1].strip())
             else:
-                types.append(p.strip())
+                parts = p.strip().split()
+                if len(parts) > 1:
+                    types.append(" ".join(parts[:-1]))
+                else:
+                    types.append(p.strip())
         return f"{m.name}({','.join(types)})"
+
+    def method_sig(m: UMLMethod) -> str:
+        types = []
+        for p in m.parameters:
+            if ":" in p:
+                types.append(p.split(":", 1)[1].strip())
+            else:
+                parts = p.strip().split()
+                if len(parts) > 1:
+                    types.append(" ".join(parts[:-1]))
+                else:
+                    types.append(p.strip())
+        return f"({','.join(types)}):{m.return_type}"
 
     base_methods = {method_key(m): m for m in base_c.methods}
     pr_methods = {method_key(m): m for m in pr_c.methods}
 
-    for key, m in pr_methods.items():
-        if key not in base_methods:
-            changes.append(DiffItem(
-                entity_type="method",
-                entity_name=key,
-                change_type=ChangeType.ADDED,
-                context=context_name
-            ))
-        else:
-            base_m = base_methods[key]
-            if base_m.visibility != m.visibility or base_m.return_type != m.return_type:
-                b_sig = f"{base_m.visibility} {base_m.name}({','.join(base_m.parameters)}): {base_m.return_type}"
-                a_sig = f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}"
+    added_keys = set(pr_methods.keys()) - set(base_methods.keys())
+    removed_keys = set(base_methods.keys()) - set(pr_methods.keys())
+    common_keys = set(pr_methods.keys()) & set(base_methods.keys())
+
+    # Detect Renames
+    from collections import defaultdict
+    added_by_sig = defaultdict(list)
+    removed_by_sig = defaultdict(list)
+
+    for k in added_keys:
+        m = pr_methods[k]
+        added_by_sig[method_sig(m)].append(m)
+    for k in removed_keys:
+        m = base_methods[k]
+        removed_by_sig[method_sig(m)].append(m)
+
+    for sig in list(added_by_sig.keys()):
+        if sig in removed_by_sig:
+            if len(added_by_sig[sig]) == 1 and len(removed_by_sig[sig]) == 1:
+                # 1:1 match -> Rename
+                add_m = added_by_sig[sig][0]
+                rm_m = removed_by_sig[sig][0]
+
                 changes.append(DiffItem(
                     entity_type="method",
-                    entity_name=key,
+                    entity_name=method_key(add_m),
                     change_type=ChangeType.MODIFIED,
                     context=context_name,
-                    before=b_sig.strip(),
-                    after=a_sig.strip()
+                    before_element=rm_m,
+                    after_element=add_m
                 ))
 
-    for key, m in base_methods.items():
-        if key not in pr_methods:
+                added_keys.remove(method_key(add_m))
+                removed_keys.remove(method_key(rm_m))
+
+    # Detect Parameter/Return Type Changes (Same Name)
+    added_by_name = defaultdict(list)
+    removed_by_name = defaultdict(list)
+
+    for k in added_keys:
+        m = pr_methods[k]
+        added_by_name[m.name].append(m)
+    for k in removed_keys:
+        m = base_methods[k]
+        removed_by_name[m.name].append(m)
+
+    for name in list(added_by_name.keys()):
+        if name in removed_by_name:
+            if len(added_by_name[name]) == 1 and len(removed_by_name[name]) == 1:
+                # 1:1 match -> Signature changed (MODIFIED)
+                add_m = added_by_name[name][0]
+                rm_m = removed_by_name[name][0]
+
+                changes.append(DiffItem(
+                    entity_type="method",
+                    entity_name=method_key(add_m),
+                    change_type=ChangeType.MODIFIED,
+                    context=context_name,
+                    before_element=rm_m,
+                    after_element=add_m
+                ))
+
+                added_keys.remove(method_key(add_m))
+                removed_keys.remove(method_key(rm_m))
+
+    for key in added_keys:
+        changes.append(DiffItem(
+            entity_type="method",
+            entity_name=key,
+            change_type=ChangeType.ADDED,
+            context=context_name,
+            after_element=pr_methods[key]
+        ))
+
+    for key in common_keys:
+        base_m = base_methods[key]
+        m = pr_methods[key]
+        if base_m.visibility != m.visibility or base_m.return_type != m.return_type or base_m.parameters != m.parameters:
+            b_sig = f"{base_m.visibility} {base_m.name}({','.join(base_m.parameters)}): {base_m.return_type}"
+            a_sig = f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}"
             changes.append(DiffItem(
                 entity_type="method",
                 entity_name=key,
-                change_type=ChangeType.REMOVED,
-                context=context_name
+                change_type=ChangeType.MODIFIED,
+                context=context_name,
+                before=b_sig.strip(),
+                after=a_sig.strip(),
+                before_element=base_m,
+                after_element=m
             ))
+
+    for key in removed_keys:
+        changes.append(DiffItem(
+            entity_type="method",
+            entity_name=key,
+            change_type=ChangeType.REMOVED,
+            context=context_name,
+            before_element=base_methods[key]
+        ))

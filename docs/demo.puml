@@ -51,10 +51,10 @@ skinparam ranksep 30
 
 package "com.ecommerce.checkout" <<package_added>> {
 class "CheckoutService" as com.ecommerce.checkout.CheckoutService <<added>> {
-  - <color:green>db: Database</color>
-  - <color:green>stripeClient: Stripe</color>
-  + <color:green>createOrder(Cart c): Order</color>
-  + <color:green>createOrder(Cart c, boolean fastTrack): Order</color>
+  <color:green>- db: Database</color>
+  <color:green>- stripeClient: Stripe</color>
+  <color:green>+ createOrder(Cart): Order</color>
+  <color:green>+ createOrder(Cart, boolean): Order</color>
 }
 }
 
@@ -64,21 +64,21 @@ class "Order" as com.ecommerce.order.Order <<modified>> {
   + total: double
 }
 class "OrderService" as com.ecommerce.order.OrderService <<removed>> {
-  - <color:red>db: Database</color>
-  + <color:red>createOrder(Cart c): Order</color>
-  + <color:red>cancelOrder(String id): void</color>
+  <color:red><strike>- db: Database</strike></color>
+  <color:red><strike>+ createOrder(Cart): Order</strike></color>
+  <color:red><strike>+ cancelOrder(String): void</strike></color>
 }
 }
 
 package "com.ecommerce.payment" {
 interface "PaymentGateway" as com.ecommerce.payment.PaymentGateway <<modified>> {
-  + charge(double amount): boolean
+  + charge(double): boolean
 }
 }
 
 package "org.external" {
 class "Logger" as org.external.Logger <<modified>> {
-  + log(String msg): void
+  + log(String): void
 }
 }
 

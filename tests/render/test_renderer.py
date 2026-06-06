@@ -31,7 +31,9 @@ def test_render_modified_class() -> None:
                 change_type=ChangeType.MODIFIED,
                 context="A",
                 before="id: int",
-                after="id: str"
+                after="id: str",
+                before_element=UMLAttribute(name="id", type="int"),
+                after_element=UMLAttribute(name="id", type="str")
             ),
             DiffItem(
                 entity_type="attribute",
@@ -51,7 +53,7 @@ def test_render_modified_class() -> None:
 
     assert "@startuml" in puml
     assert "class \"A\" as A <<modified>>" in puml
-    assert "<color:orange>id: str</color>" in puml
+    assert "id: <color:orange>str</color>" in puml
     assert "<color:green>new: int</color>" in puml
     assert "@enduml" in puml
 

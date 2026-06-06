@@ -253,7 +253,7 @@ The final `.puml` artifact communicates differences through explicit colors and 
 - **Added Classes/Relations:** Highlighted in Green (`#D4EDDA`).
 - **Removed Classes/Relations:** Highlighted in Red (`#F8D7DA`).
 - **Modified Classes:** Highlighted in Yellow (`#FFF3CD`).
-- **Modified Members (Attributes/Methods):** When a member's signature or type changes, both states are shown inside the class. The old state is crossed out in red (`<color:red><s:red>...</s></color>`), followed immediately by the new state in green (`<color:green>...</color>`). This explicit before/after representation is critical for code review clarity.
+- **Modified Members (Attributes/Methods):** Instead of showing a simple red/green before/after representation, the system highlights only the specific segments of the member signature that changed (e.g., visibility, name, specific parameter types/names, or return type) in orange (`<color:orange>...</color>`). This significantly reduces visual noise. If `method_parameter_style` is configured as `types_only`, changes to parameter names will not be highlighted in orange because parameter names are hidden in this view.
 
 ---
 

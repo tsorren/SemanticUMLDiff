@@ -75,7 +75,7 @@ def test_method_overloading() -> None:
     diff = compute_diff(base_model, pr_model)
     method_adds = [c for c in diff.changes if c.entity_type == "method" and c.change_type == ChangeType.ADDED]
     assert len(method_adds) == 1
-    assert method_adds[0].entity_name == "doWork(int x)"
+    assert method_adds[0].entity_name == "doWork(int)"
 
 def test_class_moved() -> None:
     base_model = UMLModel(

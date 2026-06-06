@@ -2,8 +2,9 @@ import re
 from typing import Dict, List, Optional
 
 from domain.diff_models import ChangeType, DiffResult
-from domain.models import UMLClass, UMLMethod, UMLModel, UMLRelation
+from domain.models import UMLClass, UMLModel, UMLRelation
 from domain.render_models import RenderSpec
+from render.member_renderer import MemberFormatter
 from render.themes import get_theme
 
 
@@ -168,109 +169,21 @@ def _render_members(
     pr_c: Optional[UMLClass],
     class_name: str,
     diff: DiffResult,
-    is_removed: bool,
-    is_added: bool,
-    method_parameter_style: str,
-    is_enum: bool
+    is_removed: bool = False,
+    is_added: bool = False,
+    method_parameter_style: str = "types_only",
+    is_enum: bool = False
 ) -> List[str]:
-    lines: List[str] = []
-    member_diffs = [
-        d for d in diff.changes
-        if d.context == class_name and d.entity_type in ("attribute", "method")
-    ]
+    # Use the separated MemberFormatter class to respect SOLID principles
+    lines = MemberFormatter.render_class_members(
+        base_c=base_c,
+        pr_c=pr_c,
+        diff=diff,
+        is_removed=is_removed,
+        is_added=is_added,
+        method_parameter_style=method_parameter_style,
+        is_enum=is_enum
+    )
 
-    def _format_member(vis: str, text: str, color: str = "") -> str:
-        if is_enum:
-            vis = ""
-            text = text.split(":")[0].strip()
-
-        vis_part = f"{vis} " if vis else ""
-        if color:
-            return f"  {vis_part}<color:{color}>{text}</color>"
-        return f"  {vis_part}{text}"
-
-    # Attributes
-    if pr_c:
-        for a in pr_c.attributes:
-            text = _clean_type(f"{a.name}: {a.type}".strip())
-            diff_item = next(
-                (d for d in member_diffs if d.entity_type == "attribute" and d.entity_name == a.name),
-                None
-            )
-
-            if is_added:
-                lines.append(_format_member(a.visibility, text, "green"))
-            else:
-                if not diff_item:
-                    lines.append(_format_member(a.visibility, text))
-                elif diff_item.change_type == ChangeType.ADDED:
-                    lines.append(_format_member(a.visibility, text, "green"))
-                elif diff_item.change_type == ChangeType.MODIFIED:
-                    lines.append(_format_member(a.visibility, text, "orange"))
-
-    if base_c:
-        for a in base_c.attributes:
-            diff_item = next(
-                (d for d in member_diffs if d.entity_type == "attribute" and d.entity_name == a.name),
-                None
-            )
-            text = _clean_type(f"{a.name}: {a.type}".strip())
-            if is_removed:
-                lines.append(_format_member(a.visibility, text, "red"))
-            elif diff_item and diff_item.change_type == ChangeType.REMOVED:
-                lines.append(_format_member(a.visibility, text, "red"))
-            elif diff_item and diff_item.change_type == ChangeType.MODIFIED:
-                pass
-
-    # Methods
-    def _format_params(params: tuple[str, ...]) -> str:
-        formatted = []
-        for p in params:
-            if method_parameter_style != "names_and_types" and ":" in p:
-                formatted.append(p.split(":", 1)[1].strip())
-            else:
-                formatted.append(p.strip())
-        return ", ".join(formatted)
-
-    def method_key(m: UMLMethod) -> str:
-        types = []
-        for p in m.parameters:
-            if ":" in p:
-                types.append(p.split(":", 1)[1].strip())
-            else:
-                types.append(p.strip())
-        return f"{m.name}({','.join(types)})"
-
-    if pr_c:
-        for m in pr_c.methods:
-            text = _clean_type(f"{m.name}({_format_params(m.parameters)}): {m.return_type}".strip())
-            diff_item = next(
-                (d for d in member_diffs if d.entity_type == "method" and d.entity_name == method_key(m)),
-                None
-            )
-
-            if is_added:
-                lines.append(_format_member(m.visibility, text, "green"))
-            else:
-                if not diff_item:
-                    lines.append(_format_member(m.visibility, text))
-                elif diff_item.change_type == ChangeType.ADDED:
-                    lines.append(_format_member(m.visibility, text, "green"))
-                elif diff_item.change_type == ChangeType.MODIFIED:
-                    lines.append(_format_member(m.visibility, text, "orange"))
-
-    if base_c:
-        for m in base_c.methods:
-            diff_item = next(
-                (d for d in member_diffs if d.entity_type == "method" and d.entity_name == method_key(m)),
-                None
-            )
-            text = _clean_type(f"{m.name}({_format_params(m.parameters)}): {m.return_type}".strip())
-            if is_removed:
-                lines.append(_format_member(m.visibility, text, "red"))
-            elif diff_item and diff_item.change_type == ChangeType.REMOVED:
-                lines.append(_format_member(m.visibility, text, "red"))
-            elif diff_item and diff_item.change_type == ChangeType.MODIFIED:
-                pass
-
-    return lines
+    # Prepend indentation as expected by puml_renderer
+    return [f"  {line}" for line in lines]

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 
 class ChangeType(Enum):
@@ -17,6 +17,8 @@ class DiffItem:
     context: str = ""  # Parent class name if applicable
     before: Optional[str] = None
     after: Optional[str] = None
+    before_element: Any = field(default=None, compare=False, hash=False)
+    after_element: Any = field(default=None, compare=False, hash=False)
 
 
 @dataclass(frozen=True)

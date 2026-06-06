@@ -151,3 +151,9 @@ scratch/
 # Documentation
 # =========================
 !docs/demo.png
+
+# =========================
+# Local Test Clones / Scratch
+# =========================
+repo/
+test_diff.py
