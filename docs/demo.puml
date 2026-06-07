@@ -60,7 +60,7 @@ class "CheckoutService" as com.ecommerce.checkout.CheckoutService <<added>> {
 }
 
 package "com.ecommerce.order" <<package_modified>> {
-class "Order" as com.ecommerce.order.Order <<modified>> {
+class "Order" as com.ecommerce.order.Order <<impacted>> {
   + id: String
   + total: double
 }
@@ -72,13 +72,13 @@ class "OrderService" as com.ecommerce.order.OrderService <<removed>> {
 }
 
 package "com.ecommerce.payment" {
-interface "PaymentGateway" as com.ecommerce.payment.PaymentGateway <<modified>> {
+interface "PaymentGateway" as com.ecommerce.payment.PaymentGateway <<impacted>> {
   + charge(double): boolean
 }
 }
 
 package "org.external" {
-class "Logger" as org.external.Logger <<modified>> {
+class "Logger" as org.external.Logger <<impacted>> {
   + log(String): void
 }
 }

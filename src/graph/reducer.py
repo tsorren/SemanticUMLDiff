@@ -41,7 +41,7 @@ def reduce_graph(base: UMLModel, pr: UMLModel, diff: DiffResult, context_depth: 
                     highlight_dict[item.entity_name] = "modified"
         elif item.entity_type in ("attribute", "method"):
             seed_nodes.add(item.context)
-            if item.context not in highlight_dict:
+            if item.context not in highlight_dict or highlight_dict[item.context] == "impacted":
                 highlight_dict[item.context] = "modified"
         elif item.entity_type == "relation":
             parts = item.entity_name.split()
@@ -51,9 +51,9 @@ def reduce_graph(base: UMLModel, pr: UMLModel, diff: DiffResult, context_depth: 
                 seed_nodes.add(source)
                 seed_nodes.add(target)
                 if source not in highlight_dict:
-                    highlight_dict[source] = "modified"
+                    highlight_dict[source] = "impacted"
                 if target not in highlight_dict:
-                    highlight_dict[target] = "modified"
+                    highlight_dict[target] = "impacted"
 
     # 3. Context Expansion (distance = context_depth)
     included_nodes: Set[str] = set(seed_nodes)

@@ -5,7 +5,7 @@ from domain.diff_models import ChangeType, DiffItem, DiffResult
 from domain.models import UMLClass, UMLMethod, UMLModel, UMLRelation
 
 
-def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffResult:
+def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_parameter_style: str = "types_only") -> DiffResult:
     changes: List[DiffItem] = []
 
     def get_package(fqn: str) -> str:
@@ -91,7 +91,7 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
                 moved_classes_source.add(rm_name)
 
                 # Also compare members so we catch minor changes inside the moved class!
-                _compare_members(rm_c, add_c, add_name, changes)
+                _compare_members(rm_c, add_c, add_name, changes, method_parameter_style)
 
                 # Remove from added/removed
                 del added_classes[add_name]
@@ -124,7 +124,7 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
                     before=base_c.kind,
                     after=c.kind
                 ))
-            _compare_members(base_c, c, name, changes)
+            _compare_members(base_c, c, name, changes, method_parameter_style)
 
     # 2. Track Packages
     base_pkgs = set(get_package(name) for name in base_classes if get_package(name))
@@ -201,7 +201,19 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
         changes=tuple(changes)
     )
 
-def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, changes: List[DiffItem]) -> None:
+def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, changes: List[DiffItem], method_parameter_style: str = "types_only") -> None:
+    def _get_parameter_types(parameters: Tuple[str, ...] | List[str]) -> List[str]:
+        types = []
+        for p in parameters:
+            if ":" in p:
+                types.append(p.split(":", 1)[1].strip())
+            else:
+                parts = p.strip().split()
+                if len(parts) > 1:
+                    types.append(" ".join(parts[:-1]))
+                else:
+                    types.append(p.strip())
+        return types
     # Compare attributes
     base_attrs = {a.name: a for a in base_c.attributes}
     pr_attrs = {a.name: a for a in pr_c.attributes}
@@ -357,7 +369,13 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
     for key in common_keys:
         base_m = base_methods[key]
         m = pr_methods[key]
-        if base_m.visibility != m.visibility or base_m.return_type != m.return_type or base_m.parameters != m.parameters:
+        
+        if method_parameter_style == "types_only":
+            params_changed = _get_parameter_types(base_m.parameters) != _get_parameter_types(m.parameters)
+        else:
+            params_changed = base_m.parameters != m.parameters
+
+        if base_m.visibility != m.visibility or base_m.return_type != m.return_type or params_changed:
             b_sig = f"{base_m.visibility} {base_m.name}({','.join(base_m.parameters)}): {base_m.return_type}"
             a_sig = f"{m.visibility} {m.name}({','.join(m.parameters)}): {m.return_type}"
             changes.append(DiffItem(

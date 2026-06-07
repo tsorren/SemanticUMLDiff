@@ -55,7 +55,7 @@ class "CollectiveDonation" as group5.donations.models.entities.donations.Collect
   + <color:green>goal: Double</color>
   + <color:green>accumulatedAmount: Double</color>
 }
-class "Donation" as group5.donations.models.entities.donations.Donation <<modified>> {
+class "Donation" as group5.donations.models.entities.donations.Donation <<impacted>> {
   + date: LocalDate
 }
 class "DonationItem" as group5.donations.models.entities.donations.DonationItem <<impacted>> {
@@ -120,7 +120,7 @@ class "CSVReader" as group5.donations.models.ports.CSVReader <<moved>> {
   .. (moved from: group5.donations.infrastructure.CSVReader) ..
   + loadDonors(String): List
 }
-interface "DonorLoader" as group5.donations.models.ports.DonorLoader <<modified>> {
+interface "DonorLoader" as group5.donations.models.ports.DonorLoader <<impacted>> {
   + loadDonors(String): List
 }
 }

@@ -24,7 +24,7 @@ def process_module(
     print(f"Processing module: {pr.module_name}")
 
     # 1. Compute Diff
-    diff = compute_diff(base, pr, config.root_package)
+    diff = compute_diff(base, pr, config.root_package, config.method_parameter_style)
     if not diff.changes:
         print("No changes detected. Skipping integration publishing.")
         return None
