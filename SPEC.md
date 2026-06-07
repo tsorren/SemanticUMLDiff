@@ -1065,3 +1065,44 @@ Coloreado granular en naranja.
 * Se colorean en naranja (`<color:orange>...</color>`) únicamente las secciones modificadas de los miembros (visibilidad, nombre, parámetros específicos, o tipo de retorno).
 * Se respeta la configuración `method_parameter_style`. Si el estilo es `types_only`, el renombrado de un parámetro no genera cambios visuales (ni se pinta de naranja). Si es `names_and_types`, el cambio se pinta de naranja de forma detallada.
 
+---
+
+# PHASE 15 — End-to-End Integration Testing & Robustness Heuristics
+
+# Objetivo
+
+Habilitar pruebas de integración de punta a punta automáticas y robustecer las heurísticas de detección de clases movidas y prevención de falsos positivos en renombres de métodos.
+
+# Tareas Realizadas
+
+## T-1501
+Especificación en Lenguaje Natural del Diff de Donaciones.
+
+### Done cuando
+* Se crea el archivo `tests/integration/donaciones_diff_spec.md` detallando de forma clara y precisa cada cambio semántico y visual esperado del servicio de donaciones de prueba.
+
+## T-1502
+Prueba de Integración Completa Automatizada.
+
+### Done cuando
+* Se implementa la prueba `test_donaciones_integration.py` que parsea los modelos base y PR, calcula el diff semántico, reduce el grafo y renderiza a PlantUML, validando el resultado final completo.
+
+## T-1503
+Heurística Mejorada para Detección de Clases Movidas Refactorizadas.
+
+### Done cuando
+* Si una clase removida y otra agregada tienen el mismo nombre corto y son únicas en su contexto, el motor de diff detecta el movimiento (`<<moved>>`) si comparten al menos el 50% de los nombres de sus miembros (ignorando firmas/tipos).
+
+## T-1504
+Coloreado de Relaciones de Agregación y Composición.
+
+### Done cuando
+* El renderizador inyecta el color de cambio en relaciones con prefijo `o--` y `*--` (ej. `o-[#green]--` y `*-[#green]--`), previniendo que se pierda el color de las flechas agregadas/removidas de este tipo.
+
+## T-1505
+Heurística de Confianza para Renombre de Métodos 1:1.
+
+### Done cuando
+* Solo se emparejan métodos 1:1 con firmas genéricas como renames si la similitud de su nombre es >= 70% o si se trata del único método modificado de la clase.
+
+

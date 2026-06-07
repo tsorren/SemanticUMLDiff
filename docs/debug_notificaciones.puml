@@ -1,0 +1,177 @@
+@startuml
+left to right direction
+skinparam linetype poly
+skinparam nodesep 30
+skinparam ranksep 30
+skinparam packagePadding 8
+
+<style>
+  classDiagram {
+    class {
+      BackgroundColor transparent
+      HeaderBackgroundColor transparent
+      Shadowing 0
+      FontName Arial
+    }
+    .added {
+      BackgroundColor #D4EDDA
+      LineColor #28A745
+    }
+    .removed {
+      BackgroundColor #F8D7DA
+      LineColor #DC3545
+    }
+    .modified {
+      BackgroundColor #FFF3CD
+      LineColor #FFA500
+    }
+    .moved {
+      BackgroundColor #FFF3CD
+      LineColor #FFA500
+    }
+    .impacted {
+      BackgroundColor #F8F9FA
+      LineColor #6C757D
+      LineStyle 4
+      FontColor #6C757D
+    }
+    .package_added {
+      BackgroundColor #E8F5E9
+      LineColor #28A745
+    }
+    .package_removed {
+      BackgroundColor #FFEBEE
+      LineColor #DC3545
+    }
+    .package_modified {
+      BackgroundColor transparent
+      LineColor #FFA500
+    }
+  }
+</style>
+
+package "grupo5.notificaciones" <<package_modified>> {
+class "NotificacionesServiceApplication" as grupo5.notificaciones.NotificacionesServiceApplication <<modified>> {
+  + main([String;): void
+}
+}
+
+package "grupo5.notificaciones.infrastructure" <<package_modified>> {
+interface "CorreoAdapter" as grupo5.notificaciones.infrastructure.CorreoAdapter <<modified>> {
+  + enviarMail(String, String): boolean
+}
+class "NotificacionRouter" as grupo5.notificaciones.infrastructure.NotificacionRouter <<modified>> {
+  + enviarA(Correo, String): boolean
+  + enviarA(Telefono, String): boolean
+  + enviarA(WhatsApp, String): boolean
+}
+interface "TelefonoAdapter" as grupo5.notificaciones.infrastructure.TelefonoAdapter <<modified>> {
+  + enviarSms(String, String): boolean
+}
+interface "WhatsAppAdapter" as grupo5.notificaciones.infrastructure.WhatsAppAdapter <<modified>> {
+  + enviarWhatsApp(String, String): boolean
+}
+}
+
+package "grupo5.notificaciones.models.entities.medioDeContacto" <<package_modified>> {
+class "Correo" as grupo5.notificaciones.models.entities.medioDeContacto.Correo <<modified>> {
+  + direccionCorreo: String
+  + <color:green>anonimizar(): void</color>
+  + enviarMensaje(String, NotificacionSender): boolean
+}
+abstract class "MedioDeContacto" as grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto <<modified>> {
+  + esPredeterminado: Boolean
+  + enviarMensaje(String, NotificacionSender): boolean
+}
+interface "NotificacionSender" as grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender <<modified>> {
+  + enviarA(Correo, String): boolean
+  + enviarA(Telefono, String): boolean
+  + enviarA(WhatsApp, String): boolean
+}
+class "Telefono" as grupo5.notificaciones.models.entities.medioDeContacto.Telefono <<modified>> {
+  + caracteristica: String
+  + codigoArea: String
+  + numero: String
+  + <color:green>anonimizar(): void</color>
+  + enviarMensaje(String, NotificacionSender): boolean
+  + obtenerNumeroCompleto(): String
+}
+class "WhatsApp" as grupo5.notificaciones.models.entities.medioDeContacto.WhatsApp <<modified>> {
+  + enviarMensaje(String, NotificacionSender): boolean
+}
+}
+
+package "grupo5.notificaciones.models.entities.notificaciones" <<package_modified>> {
+enum "EstadoNotificacion" as grupo5.notificaciones.models.entities.notificaciones.EstadoNotificacion <<impacted>> {
+  ENVIADA
+  FALLIDA
+  PENDIENTE
+  ==
+}
+class "Notificacion" as grupo5.notificaciones.models.entities.notificaciones.Notificacion <<modified>> {
+  + fechaCreacion: LocalDateTime
+  + mensaje: String
+  + <color:green>anonimizar(): void</color>
+  + notificar(NotificacionSender): void
+  - ordenarMedios(): List
+}
+}
+
+package "grupo5.notificaciones.models.entities.notificaciones.eventos" {
+abstract class "EventoDeDonacion" as grupo5.notificaciones.models.entities.notificaciones.eventos.EventoDeDonacion <<impacted>> {
+  + detalleDonacion: String
+  # armarMensajeBeneficiario(): String
+  # armarMensajeDonante(): String
+  + generarNotificaciones(): List
+}
+abstract class "EventoNotificable" as grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable <<impacted>> {
+  + fecha: LocalDateTime
+  + generarNotificaciones(): List
+}
+}
+
+package "grupo5.notificaciones.models.entities.persona" <<package_modified>> {
+interface "Anonimizable" as grupo5.notificaciones.models.entities.persona.Anonimizable <<removed>> {
+  + <color:red>anonimizar(): void</color>
+}
+class "Persona" as grupo5.notificaciones.models.entities.persona.Persona <<modified>> {
+  + denominacion: String
+  + agregarMedioDeContacto(MedioDeContacto): void
+  + anonimizar(): void
+  + definirMedioDeContactoPredeterminado(MedioDeContacto): void
+  + quitarMedioDeContacto(MedioDeContacto): void
+}
+enum "TipoPersona" as grupo5.notificaciones.models.entities.persona.TipoPersona <<impacted>> {
+  HUMANA
+  JURIDICA
+  ==
+}
+}
+
+package "grupo5.notificaciones.models.entities.privacidad" <<package_added>> {
+interface "Anonimizable" as grupo5.notificaciones.models.entities.privacidad.Anonimizable <<added>> {
+  + <color:green>VALOR_NUMERICO: Integer</color>
+  + <color:green>VALOR_STRING: String</color>
+  + <color:green>anonimizar(): void</color>
+}
+}
+
+grupo5.notificaciones.infrastructure.NotificacionRouter --> grupo5.notificaciones.infrastructure.CorreoAdapter
+grupo5.notificaciones.infrastructure.NotificacionRouter --> grupo5.notificaciones.infrastructure.TelefonoAdapter
+grupo5.notificaciones.infrastructure.NotificacionRouter --> grupo5.notificaciones.infrastructure.WhatsAppAdapter
+grupo5.notificaciones.infrastructure.NotificacionRouter --|> grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender
+grupo5.notificaciones.models.entities.medioDeContacto.Correo --|> grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto
+grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto -[#green]-|> grupo5.notificaciones.models.entities.privacidad.Anonimizable
+grupo5.notificaciones.models.entities.medioDeContacto.Telefono --|> grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto
+grupo5.notificaciones.models.entities.medioDeContacto.WhatsApp --|> grupo5.notificaciones.models.entities.medioDeContacto.Telefono
+grupo5.notificaciones.models.entities.notificaciones.Notificacion --> grupo5.notificaciones.models.entities.notificaciones.EstadoNotificacion
+grupo5.notificaciones.models.entities.notificaciones.Notificacion --> grupo5.notificaciones.models.entities.persona.Persona
+grupo5.notificaciones.models.entities.notificaciones.Notificacion -[#green]-|> grupo5.notificaciones.models.entities.privacidad.Anonimizable
+grupo5.notificaciones.models.entities.notificaciones.eventos.EventoDeDonacion --|> grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable
+grupo5.notificaciones.models.entities.notificaciones.eventos.EventoDeDonacion --> grupo5.notificaciones.models.entities.persona.Persona
+grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable --> grupo5.notificaciones.models.entities.persona.Persona
+grupo5.notificaciones.models.entities.persona.Persona o-- grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto
+grupo5.notificaciones.models.entities.persona.Persona -[#red]-|> grupo5.notificaciones.models.entities.persona.Anonimizable
+grupo5.notificaciones.models.entities.persona.Persona --> grupo5.notificaciones.models.entities.persona.TipoPersona
+grupo5.notificaciones.models.entities.persona.Persona -[#green]-|> grupo5.notificaciones.models.entities.privacidad.Anonimizable
+@enduml

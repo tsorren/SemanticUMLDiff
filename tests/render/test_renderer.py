@@ -53,9 +53,10 @@ def test_render_modified_class() -> None:
 
     assert "@startuml" in puml
     assert "class \"A\" as A <<modified>>" in puml
-    assert "id: <color:orange>str</color>" in puml
+    assert "<color:orange>id: str</color>" in puml
     assert "<color:green>new: int</color>" in puml
     assert "@enduml" in puml
+
 
 def test_renderer_custom_configs() -> None:
     c_base = UMLClass(

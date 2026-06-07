@@ -1,0 +1,170 @@
+@startuml
+
+class grupo5.notificaciones.NotificacionesServiceApplication {
+	{method}  {static} +main ( paramString;1 : [Ljava.lang.String; ) : void
+}
+
+
+interface grupo5.notificaciones.infrastructure.CorreoAdapter {
+	{method}  {abstract} +enviarMail ( paramString1 : String , paramString2 : String ) : boolean
+}
+
+
+class grupo5.notificaciones.infrastructure.NotificacionRouter {
+	{method} +enviarA ( paramCorreo1 : grupo5.notificaciones.models.entities.medioDeContacto.Correo , paramString2 : String ) : boolean
+	{method} +enviarA ( paramTelefono1 : grupo5.notificaciones.models.entities.medioDeContacto.Telefono , paramString2 : String ) : boolean
+	{method} +enviarA ( paramWhatsApp1 : grupo5.notificaciones.models.entities.medioDeContacto.WhatsApp , paramString2 : String ) : boolean
+}
+
+
+interface grupo5.notificaciones.infrastructure.TelefonoAdapter {
+	{method}  {abstract} +enviarSms ( paramString1 : String , paramString2 : String ) : boolean
+}
+
+
+interface grupo5.notificaciones.infrastructure.WhatsAppAdapter {
+	{method}  {abstract} +enviarWhatsApp ( paramString1 : String , paramString2 : String ) : boolean
+}
+
+
+class grupo5.notificaciones.models.entities.medioDeContacto.Correo {
+	{field} +direccionCorreo : String
+	{method} +enviarMensaje ( paramString1 : String , paramNotificacionSender2 : grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender ) : boolean
+}
+
+
+abstract class grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto {
+	{field} +esPredeterminado : Boolean
+	{method}  {abstract} +enviarMensaje ( paramString1 : String , paramNotificacionSender2 : grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender ) : boolean
+}
+
+
+interface grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender {
+	{method}  {abstract} +enviarA ( paramCorreo1 : grupo5.notificaciones.models.entities.medioDeContacto.Correo , paramString2 : String ) : boolean
+	{method}  {abstract} +enviarA ( paramTelefono1 : grupo5.notificaciones.models.entities.medioDeContacto.Telefono , paramString2 : String ) : boolean
+	{method}  {abstract} +enviarA ( paramWhatsApp1 : grupo5.notificaciones.models.entities.medioDeContacto.WhatsApp , paramString2 : String ) : boolean
+}
+
+
+class grupo5.notificaciones.models.entities.medioDeContacto.Telefono {
+	{field} +caracteristica : String
+	{field} +codigoArea : String
+	{field} +numero : String
+	{method} +enviarMensaje ( paramString1 : String , paramNotificacionSender2 : grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender ) : boolean
+	{method} +obtenerNumeroCompleto () : String
+}
+
+
+class grupo5.notificaciones.models.entities.medioDeContacto.WhatsApp {
+	{method} +enviarMensaje ( paramString1 : String , paramNotificacionSender2 : grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender ) : boolean
+}
+
+
+enum grupo5.notificaciones.models.entities.notificaciones.EstadoNotificacion {
+	{field} +ENVIADA
+	{field} +FALLIDA
+	{field} +PENDIENTE
+}
+
+
+class grupo5.notificaciones.models.entities.notificaciones.Notificacion {
+	{field} +fechaCreacion : java.time.LocalDateTime
+	{field} +mensaje : String
+	{method}  {static} -lambda$ordenarMedios$0 ( paramMedioDeContacto1 : grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto , paramMedioDeContacto2 : grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto ) : int
+	{method} +notificar ( paramNotificacionSender1 : grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender ) : void
+	{method} -ordenarMedios () : java.util.List
+}
+
+
+class grupo5.notificaciones.models.entities.notificaciones.eventos.DonacionAsignada {
+	{method} #armarMensajeBeneficiario () : String
+	{method} #armarMensajeDonante () : String
+}
+
+
+class grupo5.notificaciones.models.entities.notificaciones.eventos.DonacionRecibida {
+	{method} #armarMensajeBeneficiario () : String
+	{method} #armarMensajeDonante () : String
+}
+
+
+class grupo5.notificaciones.models.entities.notificaciones.eventos.DonanteRegistrado {
+	{field} +bienvenida : String
+	{field} +credencialesDeAcceso : String
+	{method} +generarNotificaciones () : java.util.List
+}
+
+
+abstract class grupo5.notificaciones.models.entities.notificaciones.eventos.EventoDeDonacion {
+	{field} +detalleDonacion : String
+	{method}  {abstract} #armarMensajeBeneficiario () : String
+	{method}  {abstract} #armarMensajeDonante () : String
+	{method} +generarNotificaciones () : java.util.List
+}
+
+
+abstract class grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable {
+	{field} +fecha : java.time.LocalDateTime
+	{method}  {abstract} +generarNotificaciones () : java.util.List
+}
+
+
+class grupo5.notificaciones.models.entities.notificaciones.eventos.MisionCumplida {
+	{field} +nombreMision : String
+	{field} +recompensa : String
+	{method} +generarNotificaciones () : java.util.List
+}
+
+
+class grupo5.notificaciones.models.entities.notificaciones.eventos.SubioCategoria {
+	{field} +categoria : String
+	{method} +generarNotificaciones () : java.util.List
+}
+
+
+interface grupo5.notificaciones.models.entities.persona.Anonimizable {
+	{method}  {abstract} +anonimizar () : void
+}
+
+
+class grupo5.notificaciones.models.entities.persona.Persona {
+	{field} +denominacion : String
+	{method} +agregarMedioDeContacto ( paramMedioDeContacto1 : grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto ) : void
+	{method} +anonimizar () : void
+	{method} +definirMedioDeContactoPredeterminado ( paramMedioDeContacto1 : grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto ) : void
+	{method}  {static} -lambda$definirMedioDeContactoPredeterminado$0 ( paramMedioDeContacto1 : grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto ) : void
+	{method} +quitarMedioDeContacto ( paramMedioDeContacto1 : grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto ) : void
+}
+
+
+enum grupo5.notificaciones.models.entities.persona.TipoPersona {
+	{field} +HUMANA
+	{field} +JURIDICA
+}
+
+
+
+
+grupo5.notificaciones.infrastructure.NotificacionRouter -->  grupo5.notificaciones.infrastructure.CorreoAdapter : correoApi
+grupo5.notificaciones.infrastructure.NotificacionRouter -->  grupo5.notificaciones.infrastructure.TelefonoAdapter : telefonoApi
+grupo5.notificaciones.infrastructure.NotificacionRouter -->  grupo5.notificaciones.infrastructure.WhatsAppAdapter : whatsappApi
+grupo5.notificaciones.infrastructure.NotificacionRouter ..|>  grupo5.notificaciones.models.entities.medioDeContacto.NotificacionSender
+grupo5.notificaciones.models.entities.medioDeContacto.Correo --|>  grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto
+grupo5.notificaciones.models.entities.medioDeContacto.Telefono --|>  grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto
+grupo5.notificaciones.models.entities.medioDeContacto.WhatsApp --|>  grupo5.notificaciones.models.entities.medioDeContacto.Telefono
+grupo5.notificaciones.models.entities.notificaciones.Notificacion -->  grupo5.notificaciones.models.entities.notificaciones.EstadoNotificacion : estadoNotificacion
+grupo5.notificaciones.models.entities.notificaciones.Notificacion -->  grupo5.notificaciones.models.entities.persona.Persona : persona
+grupo5.notificaciones.models.entities.notificaciones.eventos.DonacionAsignada --|>  grupo5.notificaciones.models.entities.notificaciones.eventos.EventoDeDonacion
+grupo5.notificaciones.models.entities.notificaciones.eventos.DonacionRecibida --|>  grupo5.notificaciones.models.entities.notificaciones.eventos.EventoDeDonacion
+grupo5.notificaciones.models.entities.notificaciones.eventos.DonanteRegistrado --|>  grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable
+grupo5.notificaciones.models.entities.notificaciones.eventos.EventoDeDonacion -->  grupo5.notificaciones.models.entities.persona.Persona : entidadBeneficiaria
+grupo5.notificaciones.models.entities.notificaciones.eventos.EventoDeDonacion --|>  grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable
+grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable -->  grupo5.notificaciones.models.entities.persona.Persona : persona
+grupo5.notificaciones.models.entities.notificaciones.eventos.MisionCumplida --|>  grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable
+grupo5.notificaciones.models.entities.notificaciones.eventos.SubioCategoria --|>  grupo5.notificaciones.models.entities.notificaciones.eventos.EventoNotificable
+grupo5.notificaciones.models.entities.persona.Persona "1" o-- "0..*"  grupo5.notificaciones.models.entities.medioDeContacto.MedioDeContacto : contactos
+grupo5.notificaciones.models.entities.persona.Persona -->  grupo5.notificaciones.models.entities.persona.TipoPersona : tipoPersona
+grupo5.notificaciones.models.entities.persona.Persona ..|>  grupo5.notificaciones.models.entities.persona.Anonimizable
+
+
+@enduml

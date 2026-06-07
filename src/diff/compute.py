@@ -65,7 +65,19 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "") -> DiffRe
             else:
                 sim = len(add_members & rm_members) / total
 
+            # Name-only similarity for refactored classes
+            add_member_names = set(m.name for m in add_c.methods) | set(a.name for a in add_c.attributes)
+            rm_member_names = set(m.name for m in rm_c.methods) | set(a.name for a in rm_c.attributes)
+            total_names = len(add_member_names | rm_member_names)
+            sim_names = len(add_member_names & rm_member_names) / total_names if total_names > 0 else 1.0
+
+            is_moved = False
             if sim >= 0.75:
+                is_moved = True
+            elif len(candidates) == 1 and sim_names >= 0.50:
+                is_moved = True
+
+            if is_moved:
                 # Mark as moved!
                 changes.append(DiffItem(
                     entity_type="class",
@@ -260,38 +272,8 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
     removed_keys = set(base_methods.keys()) - set(pr_methods.keys())
     common_keys = set(pr_methods.keys()) & set(base_methods.keys())
 
-    # Detect Renames
+    # Detect Parameter/Return Type Changes (Same Name, different signature)
     from collections import defaultdict
-    added_by_sig = defaultdict(list)
-    removed_by_sig = defaultdict(list)
-
-    for k in added_keys:
-        m = pr_methods[k]
-        added_by_sig[method_sig(m)].append(m)
-    for k in removed_keys:
-        m = base_methods[k]
-        removed_by_sig[method_sig(m)].append(m)
-
-    for sig in list(added_by_sig.keys()):
-        if sig in removed_by_sig:
-            if len(added_by_sig[sig]) == 1 and len(removed_by_sig[sig]) == 1:
-                # 1:1 match -> Rename
-                add_m = added_by_sig[sig][0]
-                rm_m = removed_by_sig[sig][0]
-
-                changes.append(DiffItem(
-                    entity_type="method",
-                    entity_name=method_key(add_m),
-                    change_type=ChangeType.MODIFIED,
-                    context=context_name,
-                    before_element=rm_m,
-                    after_element=add_m
-                ))
-
-                added_keys.remove(method_key(add_m))
-                removed_keys.remove(method_key(rm_m))
-
-    # Detect Parameter/Return Type Changes (Same Name)
     added_by_name = defaultdict(list)
     removed_by_name = defaultdict(list)
 
@@ -320,6 +302,48 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
 
                 added_keys.remove(method_key(add_m))
                 removed_keys.remove(method_key(rm_m))
+
+    # Detect Renames (Same Signature, different name)
+    added_by_sig = defaultdict(list)
+    removed_by_sig = defaultdict(list)
+
+    for k in added_keys:
+        m = pr_methods[k]
+        added_by_sig[method_sig(m)].append(m)
+    for k in removed_keys:
+        m = base_methods[k]
+        removed_by_sig[method_sig(m)].append(m)
+
+    import difflib
+    for sig in list(added_by_sig.keys()):
+        if sig in removed_by_sig:
+            if len(added_by_sig[sig]) == 1 and len(removed_by_sig[sig]) == 1:
+                # 1:1 match -> Rename (if similar or high confidence)
+                add_m = added_by_sig[sig][0]
+                rm_m = removed_by_sig[sig][0]
+
+                name_sim = difflib.SequenceMatcher(None, add_m.name, rm_m.name).ratio()
+                is_rename = False
+                if name_sim >= 0.70:
+                    is_rename = True
+                elif len(base_methods) == 1 and len(pr_methods) == 1:
+                    is_rename = True
+                elif len(added_keys) == 1 and len(removed_keys) == 1:
+                    is_rename = True
+
+                if is_rename:
+                    changes.append(DiffItem(
+                        entity_type="method",
+                        entity_name=method_key(add_m),
+                        change_type=ChangeType.MODIFIED,
+                        context=context_name,
+                        before_element=rm_m,
+                        after_element=add_m
+                    ))
+
+                    added_keys.remove(method_key(add_m))
+                    removed_keys.remove(method_key(rm_m))
+
 
     for key in added_keys:
         changes.append(DiffItem(

@@ -57,3 +57,23 @@ See our specifications and architectural design documents inside the `specs/` di
 - [Domain Concepts](specs/01-domain.md)
 - [Architecture](specs/02-architecture.md)
 - [Workflow](specs/03-workflow.md)
+
+## Local Development & Testing
+
+This project uses `uv` for Python dependency management.
+
+To run the entire test suite (including unit tests and the end-to-end integration test):
+```bash
+uv run pytest
+```
+
+To run quality control checks (linting, formatting and typing):
+```bash
+uv run ruff check src tests
+uv run mypy src tests
+```
+
+To regenerate the visual demo diagrams:
+```bash
+uv run python generate_demo.py
+```

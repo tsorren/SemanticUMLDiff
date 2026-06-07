@@ -62,21 +62,25 @@ class MemberFormatter:
         If there are no visual changes, returns the normal text.
         """
         if is_enum:
-            name = pr_attr.name if pr_attr.name == base_attr.name else f"<color:orange>{pr_attr.name}</color>"
-            return name.strip()
+            has_change = base_attr.name != pr_attr.name
+            text = pr_attr.name
+            if has_change:
+                return f"<color:orange>{text}</color>".strip()
+            return text.strip()
 
-        name = pr_attr.name if pr_attr.name == base_attr.name else f"<color:orange>{pr_attr.name}</color>"
-        cleaned_type = _clean_type(pr_attr.type)
-        typ = cleaned_type if pr_attr.type == base_attr.type else f"<color:orange>{cleaned_type}</color>"
-
-        if pr_attr.visibility != base_attr.visibility:
-            if not name.startswith("<color:"):
-                name = f"<color:orange>{name}</color>"
-            if not typ.startswith("<color:"):
-                typ = f"<color:orange>{typ}</color>"
+        has_change = (
+            base_attr.visibility != pr_attr.visibility or
+            base_attr.name != pr_attr.name or
+            base_attr.type != pr_attr.type
+        )
 
         vis_part = f"{pr_attr.visibility} " if pr_attr.visibility else ""
-        return f"{vis_part}{name}: {typ}".strip()
+        cleaned_type = _clean_type(pr_attr.type)
+        text = f"{pr_attr.name}: {cleaned_type}"
+
+        if has_change:
+            return f"{vis_part}<color:orange>{text}</color>".strip()
+        return f"{vis_part}{text}".strip()
 
     @staticmethod
     def format_method(method: UMLMethod, method_parameter_style: str, is_removed: bool = False, is_added: bool = False) -> str:
@@ -94,50 +98,30 @@ class MemberFormatter:
     def format_modified_method(base_m: UMLMethod, pr_m: UMLMethod, method_parameter_style: str) -> Optional[str]:
         """
         Returns the granularly highlighted string for a modified method.
-        Highlights only the specific parts (visibility, name, specific parameters, return type) that changed.
+        Highlights the entire signature after visibility in orange if it changed under the active style.
         If method_parameter_style is types_only, parameter name changes won't trigger an orange highlight.
         """
-        name = pr_m.name if pr_m.name == base_m.name else f"<color:orange>{pr_m.name}</color>"
-        cleaned_ret = _clean_type(pr_m.return_type)
-        ret = cleaned_ret if pr_m.return_type == base_m.return_type else f"<color:orange>{cleaned_ret}</color>"
+        base_params = MemberFormatter._format_params(base_m.parameters, method_parameter_style)
+        pr_params = MemberFormatter._format_params(pr_m.parameters, method_parameter_style)
 
-        # Handle parameters
-        base_params_full = base_m.parameters
-        pr_params_full = pr_m.parameters
+        has_change = (
+            base_m.visibility != pr_m.visibility or
+            base_m.name != pr_m.name or
+            base_m.return_type != pr_m.return_type or
+            base_params != pr_params
+        )
 
-        base_params_display = MemberFormatter._format_params(base_params_full, method_parameter_style)
-        pr_params_display = MemberFormatter._format_params(pr_params_full, method_parameter_style)
-
-        formatted_params = []
-        max_len = max(len(base_params_display), len(pr_params_display))
-        for i in range(max_len):
-            if i >= len(base_params_display):
-                formatted_params.append(f"<color:orange>{pr_params_display[i]}</color>")
-            elif i >= len(pr_params_display):
-                pass
-            else:
-                if base_params_display[i] != pr_params_display[i]:
-                    formatted_params.append(f"<color:orange>{pr_params_display[i]}</color>")
-                else:
-                    formatted_params.append(pr_params_display[i])
-
-        # If visibility changed, highlight name, parameters, and return type
-        if pr_m.visibility != base_m.visibility:
-            if not name.startswith("<color:"):
-                name = f"<color:orange>{name}</color>"
-            if not ret.startswith("<color:"):
-                ret = f"<color:orange>{ret}</color>"
-            new_params = []
-            for p in formatted_params:
-                if not p.startswith("<color:"):
-                    new_params.append(f"<color:orange>{p}</color>")
-                else:
-                    new_params.append(p)
-            formatted_params = new_params
-
-        params_str = ", ".join(formatted_params)
         vis_part = f"{pr_m.visibility} " if pr_m.visibility else ""
-        return f"{vis_part}{name}({params_str}): {ret}".strip()
+        cleaned_name = pr_m.name
+        cleaned_ret = _clean_type(pr_m.return_type)
+        params_str = ", ".join(pr_params)
+
+        text = f"{cleaned_name}({params_str}): {cleaned_ret}"
+
+        if has_change:
+            return f"{vis_part}<color:orange>{text}</color>".strip()
+        return f"{vis_part}{text}".strip()
+
 
     @staticmethod
     def render_class_members(

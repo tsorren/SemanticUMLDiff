@@ -167,7 +167,11 @@ def render_puml(
                 break
 
         if arrow_color:
-            if arrow.startswith("--"):
+            if arrow.startswith("o--"):
+                arrow = f"o-{arrow_color}--"
+            elif arrow.startswith("*--"):
+                arrow = f"*-{arrow_color}--"
+            elif arrow.startswith("--"):
                 arrow = f"-{arrow_color}-{arrow[2:]}"
             elif arrow.startswith("-"):
                 arrow = f"-{arrow_color}{arrow[1:]}"

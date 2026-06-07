@@ -64,7 +64,7 @@ class "DonationItem" as group5.donations.models.entities.donations.DonationItem 
 class "Donor" as group5.donations.models.entities.donations.Donor <<modified>> {
   + score: Double
   + <color:green>registerDonation(Donation): void</color>
-  - <color:orange>anonymize</color>(): <color:orange>void</color>
+  - <color:orange>anonymize(): void</color>
   + <color:green>clearHistory(): void</color>
   + <color:red>addDonation(Donation): void</color>
   + <color:red>removeDonation(Donation): void</color>
@@ -73,10 +73,10 @@ class "Donor" as group5.donations.models.entities.donations.Donor <<modified>> {
 
 package "group5.donations.models.entities.goods" <<package_modified>> {
 class "Good" as group5.donations.models.entities.goods.Good <<modified>> {
-  - <color:orange>description</color>: <color:orange>String</color>
+  - <color:orange>description: String</color>
   + <color:green>imageUrl: String</color>
   + <color:red>photoUrl: String</color>
-  + isExpired(<color:orange>LocalDate</color>): boolean
+  + <color:orange>isExpired(LocalDate): boolean</color>
 }
 enum "Status" as group5.donations.models.entities.goods.Status <<modified>> {
   NEW
@@ -105,7 +105,7 @@ class "Individual" as group5.donations.models.entities.people.Individual <<modif
 class "Organization" as group5.donations.models.entities.people.Organization <<modified>> {
   + legalName: String
   + industry: String
-  + <color:orange>registerRepresentative</color>(Individual): void
+  + <color:orange>registerRepresentative(Individual): void</color>
   + anonymize(): void
   + removeRepresentative(Individual): void
 }
