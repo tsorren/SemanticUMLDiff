@@ -10,7 +10,7 @@ from render.puml_renderer import render_puml
 def test_donaciones_service_end_to_end_diff() -> None:
     # 1. Paths to files
     base_path = "information/modelo_tecnico.puml"
-    pr_path = "repo/donaciones-service/target/modelo_tecnico.puml"
+    pr_path = "fixtures/donaciones_pr_modelo_tecnico.puml"
 
     assert os.path.exists(base_path), f"Base file {base_path} not found"
     assert os.path.exists(pr_path), f"PR file {pr_path} not found"
