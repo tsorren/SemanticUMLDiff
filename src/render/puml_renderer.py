@@ -1,5 +1,5 @@
 import re
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from domain.diff_models import ChangeType, DiffResult
 from domain.models import UMLClass, UMLModel, UMLRelation
@@ -23,18 +23,13 @@ def _clean_type(s: str) -> str:
     return re.sub(r'(?:[a-zA-Z_][a-zA-Z0-9_]*\.)+([a-zA-Z_][a-zA-Z0-9_]*)', r'\1', s)
 
 
-def render_puml(
-    base: UMLModel,
-    pr: UMLModel,
-    diff: DiffResult,
-    spec: RenderSpec,
-    layout_orthogonal_lines: bool = False,
-    method_parameter_style: str = "types_only",
-    group_by_package: bool = True,
-    theme: str = "modern",
-    diagram_spacing: int = 30
-) -> str:
-    lines: List[str] = []
+def _render_header_and_theme(
+    lines: List[str],
+    layout_orthogonal_lines: bool,
+    diagram_spacing: int,
+    group_by_package: bool,
+    theme: str
+) -> None:
     lines.append("@startuml")
     lines.append("left to right direction")
 
@@ -57,26 +52,25 @@ def render_puml(
         lines.append(theme_css)
         lines.append("")
 
-    base_classes = {c.name: c for c in base.classes}
-    pr_classes = {c.name: c for c in pr.classes}
-    highlight_dict = dict(spec.highlight_rules)
 
-    # Helper to determine if a class is an enum
-    def is_enum(c: Optional[UMLClass]) -> bool:
-        return bool(c and c.kind == "enum")
-
-    # Group by package if needed
+def _group_nodes_by_package(nodes: Tuple[str, ...], group_by_package: bool) -> Dict[str, List[str]]:
     packages: Dict[str, List[str]] = {}
     if group_by_package:
-        for node in spec.included_nodes:
+        for node in nodes:
             parts = node.rsplit(".", 1)
             pkg = parts[0] if len(parts) > 1 else ""
             packages.setdefault(pkg, []).append(node)
     else:
-        packages[""] = list(spec.included_nodes)
+        packages[""] = list(nodes)
+    return packages
 
-    # Filter nodes within each package to only those that actually exist in the model
-    # (either in base_classes if status is removed, or in pr_classes otherwise)
+
+def _filter_valid_package_nodes(
+    packages: Dict[str, List[str]],
+    highlight_dict: Dict[str, str],
+    base_classes: Dict[str, UMLClass],
+    pr_classes: Dict[str, UMLClass]
+) -> Dict[str, List[str]]:
     filtered_packages: Dict[str, List[str]] = {}
     for pkg, nodes in packages.items():
         valid_nodes = []
@@ -90,6 +84,21 @@ def render_puml(
                 valid_nodes.append(class_name)
         if valid_nodes:
             filtered_packages[pkg] = valid_nodes
+    return filtered_packages
+
+
+def _render_packages_and_classes(
+    lines: List[str],
+    filtered_packages: Dict[str, List[str]],
+    highlight_dict: Dict[str, str],
+    base_classes: Dict[str, UMLClass],
+    pr_classes: Dict[str, UMLClass],
+    diff: DiffResult,
+    method_parameter_style: str
+) -> None:
+    # Helper to determine if a class is an enum
+    def is_enum(c: Optional[UMLClass]) -> bool:
+        return bool(c and c.kind == "enum")
 
     # Detect package status
     package_status: Dict[str, str] = {}
@@ -120,8 +129,6 @@ def render_puml(
                 continue
 
             stereo_str = f" <<{status}>>" if status else ""
-
-            # Short name for class block if grouping by package
             display_name = class_name.rsplit(".", 1)[-1] if pkg else class_name
 
             lines.append(f'{c.kind} "{display_name}" as {class_name}{stereo_str} {{')
@@ -129,7 +136,6 @@ def render_puml(
             base_c = base_classes.get(class_name)
             pr_c = pr_classes.get(class_name)
 
-            # Check if this class was moved
             if status == "moved":
                 diff_item = next((d for d in diff.changes if d.entity_type == "class" and d.entity_name == class_name and d.context == "moved"), None)
                 if diff_item and diff_item.before:
@@ -150,12 +156,17 @@ def render_puml(
             lines.append("}")
             lines.append("")
 
-    for r in spec.included_edges:
+
+def _render_relationships(
+    lines: List[str],
+    included_edges: Tuple[UMLRelation, ...],
+    diff: DiffResult
+) -> None:
+    for r in included_edges:
         arrow = _get_relation_arrow(r)
         rel_sig = f"{r.source} {r.relation_type} {r.target}"
 
         arrow_color = ""
-        status = "neutral"
         for change in diff.changes:
             if change.entity_type == "relation" and change.entity_name == rel_sig:
                 if change.change_type == ChangeType.ADDED:
@@ -178,8 +189,40 @@ def render_puml(
             elif arrow.startswith(".."):
                 arrow = f".{arrow_color}.{arrow[2:]}"
 
-        # Render relationship
         lines.append(f"{r.source} {arrow} {r.target}")
+
+
+def render_puml(
+    base: UMLModel,
+    pr: UMLModel,
+    diff: DiffResult,
+    spec: RenderSpec,
+    layout_orthogonal_lines: bool = False,
+    method_parameter_style: str = "types_only",
+    group_by_package: bool = True,
+    theme: str = "modern",
+    diagram_spacing: int = 30
+) -> str:
+    lines: List[str] = []
+
+    # 1. Render Header and Theme
+    _render_header_and_theme(lines, layout_orthogonal_lines, diagram_spacing, group_by_package, theme)
+
+    base_classes = {c.name: c for c in base.classes}
+    pr_classes = {c.name: c for c in pr.classes}
+    highlight_dict = dict(spec.highlight_rules)
+
+    # 2. Group by package
+    packages = _group_nodes_by_package(spec.included_nodes, group_by_package)
+
+    # 3. Filter valid package nodes
+    filtered_packages = _filter_valid_package_nodes(packages, highlight_dict, base_classes, pr_classes)
+
+    # 4. Render packages and classes
+    _render_packages_and_classes(lines, filtered_packages, highlight_dict, base_classes, pr_classes, diff, method_parameter_style)
+
+    # 5. Render relationships
+    _render_relationships(lines, spec.included_edges, diff)
 
     lines.append("@enduml")
     return "\n".join(lines)
@@ -195,7 +238,6 @@ def _render_members(
     method_parameter_style: str = "types_only",
     is_enum: bool = False
 ) -> List[str]:
-    # Use the separated MemberFormatter class to respect SOLID principles
     lines = MemberFormatter.render_class_members(
         base_c=base_c,
         pr_c=pr_c,
@@ -205,6 +247,4 @@ def _render_members(
         method_parameter_style=method_parameter_style,
         is_enum=is_enum
     )
-
-    # Prepend indentation as expected by puml_renderer
     return [f"  {line}" for line in lines]
