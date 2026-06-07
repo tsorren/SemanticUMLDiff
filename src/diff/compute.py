@@ -5,30 +5,27 @@ from domain.diff_models import ChangeType, DiffItem, DiffResult
 from domain.models import UMLClass, UMLMethod, UMLModel, UMLRelation
 
 
-def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_parameter_style: str = "types_only") -> DiffResult:
-    changes: List[DiffItem] = []
-
+def _detect_root_package(base: UMLModel, pr: UMLModel, root_package: str = "") -> str:
     def get_package(fqn: str) -> str:
         parts = fqn.rsplit(".", 1)
         return parts[0] if len(parts) > 1 else ""
 
-    def get_short_name(fqn: str) -> str:
-        return fqn.rsplit(".", 1)[-1]
-
-    # Auto-detect Root Package
     all_fqns = set(c.name for c in base.classes) | set(c.name for c in pr.classes)
     if not root_package and all_fqns:
         packages = [get_package(fqn) for fqn in all_fqns if get_package(fqn)]
         if packages:
             lcp = os.path.commonprefix(packages)
-            # Make sure we don't cut off in the middle of a package name if possible
             if lcp and not lcp.endswith('.') and '.' in lcp:
-                # E.g. lcp is "com.app.cor", cut to "com.app"
-                # Wait, if all packages are "pkg1" and "pkg2", lcp="pkg", rsplit will break it.
-                # If there's a dot, we trim to the last dot unless the LCP exactly matches one of the packages.
                 if lcp not in packages:
                     lcp = lcp.rsplit('.', 1)[0]
             root_package = lcp.rstrip('.')
+    return root_package
+
+
+def _filter_internal_classes(classes: Tuple[UMLClass, ...] | List[UMLClass], root_package: str) -> dict[str, UMLClass]:
+    def get_package(fqn: str) -> str:
+        parts = fqn.rsplit(".", 1)
+        return parts[0] if len(parts) > 1 else ""
 
     def is_external(fqn: str) -> bool:
         if not root_package:
@@ -36,36 +33,37 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
         pkg = get_package(fqn)
         return bool(pkg and not pkg.startswith(root_package))
 
-    base_classes = {c.name: c for c in base.classes if not is_external(c.name)}
-    pr_classes = {c.name: c for c in pr.classes if not is_external(c.name)}
+    return {c.name: c for c in classes if not is_external(c.name)}
 
-    # 1. Compare Classes
-    added_classes = {name: c for name, c in pr_classes.items() if name not in base_classes}
-    removed_classes = {name: c for name, c in base_classes.items() if name not in pr_classes}
 
-    # Similarity detection for MOVED classes
+def _detect_moved_classes(
+    added_classes: dict[str, UMLClass],
+    removed_classes: dict[str, UMLClass],
+    changes: List[DiffItem],
+    method_parameter_style: str
+) -> Tuple[set[str], set[str]]:
+    def get_short_name(fqn: str) -> str:
+        return fqn.rsplit(".", 1)[-1]
+
     moved_classes_target = set()
     moved_classes_source = set()
 
     for add_name, add_c in list(added_classes.items()):
         short_name = get_short_name(add_name)
-        # Find candidates in removed classes
         candidates = [rm_name for rm_name, rm_c in removed_classes.items() if get_short_name(rm_name) == short_name]
 
         for rm_name in candidates:
             rm_c = removed_classes[rm_name]
 
-            # Simple similarity: matched methods + attrs / total methods + attrs
             add_members = set(f"{m.name}({','.join(m.parameters)})" for m in add_c.methods) | set(a.name for a in add_c.attributes)
             rm_members = set(f"{m.name}({','.join(m.parameters)})" for m in rm_c.methods) | set(a.name for a in rm_c.attributes)
 
             total = len(add_members | rm_members)
             if total == 0:
-                sim = 1.0 # Empty classes with same name
+                sim = 1.0
             else:
                 sim = len(add_members & rm_members) / total
 
-            # Name-only similarity for refactored classes
             add_member_names = set(m.name for m in add_c.methods) | set(a.name for a in add_c.attributes)
             rm_member_names = set(m.name for m in rm_c.methods) | set(a.name for a in rm_c.attributes)
             total_names = len(add_member_names | rm_member_names)
@@ -78,7 +76,6 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
                 is_moved = True
 
             if is_moved:
-                # Mark as moved!
                 changes.append(DiffItem(
                     entity_type="class",
                     entity_name=add_name,
@@ -90,29 +87,41 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
                 moved_classes_target.add(add_name)
                 moved_classes_source.add(rm_name)
 
-                # Also compare members so we catch minor changes inside the moved class!
                 _compare_members(rm_c, add_c, add_name, changes, method_parameter_style)
 
-                # Remove from added/removed
                 del added_classes[add_name]
                 del removed_classes[rm_name]
                 break
 
-    for name, c in added_classes.items():
+    return moved_classes_target, moved_classes_source
+
+
+def _compare_class_additions_removals(
+    added_classes: dict[str, UMLClass],
+    removed_classes: dict[str, UMLClass],
+    changes: List[DiffItem]
+) -> None:
+    for name in added_classes:
         changes.append(DiffItem(
             entity_type="class",
             entity_name=name,
             change_type=ChangeType.ADDED
         ))
 
-    for name, c in removed_classes.items():
+    for name in removed_classes:
         changes.append(DiffItem(
             entity_type="class",
             entity_name=name,
             change_type=ChangeType.REMOVED
         ))
 
-    # Existing classes comparison
+
+def _compare_existing_classes_members(
+    base_classes: dict[str, UMLClass],
+    pr_classes: dict[str, UMLClass],
+    changes: List[DiffItem],
+    method_parameter_style: str
+) -> None:
     for name, c in pr_classes.items():
         if name in base_classes:
             base_c = base_classes[name]
@@ -126,7 +135,16 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
                 ))
             _compare_members(base_c, c, name, changes, method_parameter_style)
 
-    # 2. Track Packages
+
+def _compare_packages(
+    base_classes: dict[str, UMLClass],
+    pr_classes: dict[str, UMLClass],
+    changes: List[DiffItem]
+) -> None:
+    def get_package(fqn: str) -> str:
+        parts = fqn.rsplit(".", 1)
+        return parts[0] if len(parts) > 1 else ""
+
     base_pkgs = set(get_package(name) for name in base_classes if get_package(name))
     pr_pkgs = set(get_package(name) for name in pr_classes if get_package(name))
 
@@ -141,7 +159,6 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
     for pkg in pr_pkgs & base_pkgs:
         if not pkg:
             continue
-        # A package is modified if any class inside it was added, removed, or modified
         pkg_changed = False
         for ch in changes:
             if ch.entity_type == "class" and get_package(ch.entity_name) == pkg:
@@ -156,15 +173,29 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
         if pkg_changed:
             changes.append(DiffItem(entity_type="package", entity_name=pkg, change_type=ChangeType.MODIFIED))
 
-    # 3. Compare Relations
+
+def _compare_relations(
+    base: UMLModel,
+    pr: UMLModel,
+    root_package: str,
+    changes: List[DiffItem]
+) -> None:
+    def get_package(fqn: str) -> str:
+        parts = fqn.rsplit(".", 1)
+        return parts[0] if len(parts) > 1 else ""
+
+    def is_external(fqn: str) -> bool:
+        if not root_package:
+            return False
+        pkg = get_package(fqn)
+        return bool(pkg and not pkg.startswith(root_package))
+
     def rel_key(r: UMLRelation) -> Tuple[str, str]:
         return (r.source, r.target)
 
-    # Filter relations if external
     base_relations = [r for r in base.relations if not is_external(r.source) and not is_external(r.target)]
     pr_relations = [r for r in pr.relations if not is_external(r.source) and not is_external(r.target)]
 
-    # Relations between identical source/target but different types will be collapsed or treated as MODIFIED
     base_rels = {rel_key(r): r for r in base_relations}
     pr_rels = {rel_key(r): r for r in pr_relations}
 
@@ -178,8 +209,8 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
         else:
             base_r = base_rels[key]
             if base_r.relation_type != r.relation_type or \
-           base_r.multiplicity_source != r.multiplicity_source or \
-           base_r.multiplicity_target != r.multiplicity_target:
+               base_r.multiplicity_source != r.multiplicity_source or \
+               base_r.multiplicity_target != r.multiplicity_target:
                 changes.append(DiffItem(
                     entity_type="relation",
                     entity_name=f"{r.source} {r.relation_type} {r.target}",
@@ -196,10 +227,38 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
                 change_type=ChangeType.REMOVED
             ))
 
+
+def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_parameter_style: str = "types_only") -> DiffResult:
+    changes: List[DiffItem] = []
+
+    # 1. Detect Root Package and Filter Classes
+    root_package = _detect_root_package(base, pr, root_package)
+    base_classes = _filter_internal_classes(base.classes, root_package)
+    pr_classes = _filter_internal_classes(pr.classes, root_package)
+
+    added_classes = {name: c for name, c in pr_classes.items() if name not in base_classes}
+    removed_classes = {name: c for name, c in base_classes.items() if name not in pr_classes}
+
+    # 2. Detect Moved Classes
+    _detect_moved_classes(added_classes, removed_classes, changes, method_parameter_style)
+
+    # 3. Compare Class Additions/Removals
+    _compare_class_additions_removals(added_classes, removed_classes, changes)
+
+    # 4. Compare Existing Classes and Members
+    _compare_existing_classes_members(base_classes, pr_classes, changes, method_parameter_style)
+
+    # 5. Compare Packages
+    _compare_packages(base_classes, pr_classes, changes)
+
+    # 6. Compare Relations
+    _compare_relations(base, pr, root_package, changes)
+
     return DiffResult(
         module_name=pr.module_name,
         changes=tuple(changes)
     )
+
 
 def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, changes: List[DiffItem], method_parameter_style: str = "types_only") -> None:
     def _get_parameter_types(parameters: Tuple[str, ...] | List[str]) -> List[str]:
@@ -214,6 +273,7 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
                 else:
                     types.append(p.strip())
         return types
+
     # Compare attributes
     base_attrs = {a.name: a for a in base_c.attributes}
     pr_attrs = {a.name: a for a in pr_c.attributes}
@@ -299,7 +359,6 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
     for name in list(added_by_name.keys()):
         if name in removed_by_name:
             if len(added_by_name[name]) == 1 and len(removed_by_name[name]) == 1:
-                # 1:1 match -> Signature changed (MODIFIED)
                 add_m = added_by_name[name][0]
                 rm_m = removed_by_name[name][0]
 
@@ -330,7 +389,6 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
     for sig in list(added_by_sig.keys()):
         if sig in removed_by_sig:
             if len(added_by_sig[sig]) == 1 and len(removed_by_sig[sig]) == 1:
-                # 1:1 match -> Rename (if similar or high confidence)
                 add_m = added_by_sig[sig][0]
                 rm_m = removed_by_sig[sig][0]
 
@@ -356,7 +414,6 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
                     added_keys.remove(method_key(add_m))
                     removed_keys.remove(method_key(rm_m))
 
-
     for key in added_keys:
         changes.append(DiffItem(
             entity_type="method",
@@ -369,7 +426,7 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
     for key in common_keys:
         base_m = base_methods[key]
         m = pr_methods[key]
-        
+
         if method_parameter_style == "types_only":
             params_changed = _get_parameter_types(base_m.parameters) != _get_parameter_types(m.parameters)
         else:
