@@ -97,6 +97,9 @@ Every detected change must be classified as one of:
 ### DR-07 Module isolation
 A change in one module must not alter the analysis of unrelated modules.
 
+### DR-08 Complexity estimation
+The system must compute a numerical complexity score based on semantic UML changes (classes, relationships, methods, attributes) and classify it into Low, Medium, High levels using configurable baseline and tolerance parameters.
+
 ---
 
 ## Domain Entities
@@ -164,11 +167,9 @@ Attributes:
 ### DiffResult
 Attributes:
 - module_name
-- added
-- removed
-- modified
-- unchanged
-- warnings
+- changes
+- complexity_score
+- complexity_level
 
 ### RenderSpec
 Attributes:

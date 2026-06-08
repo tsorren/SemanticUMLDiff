@@ -40,10 +40,20 @@ class DiscordPublisher:
         total_removed = sum(sum(1 for c in res.diff.changes if c.change_type == ChangeType.REMOVED) for res in results)
         total_modified = sum(sum(1 for c in res.diff.changes if c.change_type == ChangeType.MODIFIED) for res in results)
 
+        # Determine overall complexity color
+        overall_color = 3447003  # Default blue
+        levels = [res.diff.complexity_level for res in results if res.diff.complexity_level]
+        if any("Alta" in lvl for lvl in levels):
+            overall_color = 14431557  # Red
+        elif any("Media" in lvl for lvl in levels):
+            overall_color = 16753920  # Yellow
+        elif any("Baja" in lvl for lvl in levels):
+            overall_color = 2664261  # Green
+
         summary_embed: Dict[str, Any] = {
             "title": title,
             "description": "\n".join(description),
-            "color": 3447003, # Blue
+            "color": overall_color,
             "fields": [
                 {"name": "Total Changes", "value": f"🟢 {total_added} Added\n🔴 {total_removed} Removed\n🟡 {total_modified} Modified", "inline": True}
             ]
@@ -57,13 +67,27 @@ class DiscordPublisher:
             removed = sum(1 for c in res.diff.changes if c.change_type == ChangeType.REMOVED)
             modified = sum(1 for c in res.diff.changes if c.change_type == ChangeType.MODIFIED)
 
+            # Get color from complexity level
+            color = 3447003  # Default blue
+            if res.diff.complexity_level:
+                if "Baja" in res.diff.complexity_level:
+                    color = 2664261
+                elif "Media" in res.diff.complexity_level:
+                    color = 16753920
+                elif "Alta" in res.diff.complexity_level:
+                    color = 14431557
+
+            fields = [
+                {"name": "Changes", "value": f"🟢 {added} Added\n🔴 {removed} Removed\n🟡 {modified} Modified", "inline": True}
+            ]
+            if res.diff.complexity_level is not None and res.diff.complexity_score is not None:
+                fields.append({"name": "Complejidad", "value": f"{res.diff.complexity_level} ({res.diff.complexity_score} pts)", "inline": True})
+
             filename = f"diff_{i}.png"
             module_embed: Dict[str, Any] = {
                 "title": f"Module: {res.module_name}",
-                "color": 3447003,
-                "fields": [
-                    {"name": "Changes", "value": f"🟢 {added} Added\n🔴 {removed} Removed\n🟡 {modified} Modified", "inline": True}
-                ]
+                "color": color,
+                "fields": fields
             }
             if res.png_bytes:
                 module_embed["image"] = {"url": f"attachment://{filename}"}

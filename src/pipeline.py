@@ -1,6 +1,8 @@
 from typing import List, Optional
 
+from diff.complexity import calculate_complexity
 from diff.compute import compute_diff
+from domain.diff_models import DiffResult
 from domain.integration_models import IntegrationConfig, ModuleResult
 from domain.models import UMLModel
 from graph.reducer import reduce_graph
@@ -28,6 +30,15 @@ def process_module(
     if not diff.changes:
         print("No changes detected. Skipping integration publishing.")
         return None
+
+    # Calculate complexity score and level
+    score, level = calculate_complexity(diff)
+    diff = DiffResult(
+        module_name=diff.module_name,
+        changes=diff.changes,
+        complexity_score=score,
+        complexity_level=level
+    )
 
     # 2. Graph Reduction
     spec = reduce_graph(base, pr, diff, config.context_depth)

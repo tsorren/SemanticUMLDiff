@@ -66,6 +66,10 @@ class GitHubPublisher:
         for res in results:
             lines.extend([
                 f"### `{res.module_name}`",
+            ])
+            if res.diff.complexity_level is not None and res.diff.complexity_score is not None:
+                lines.append(f"* **Complejidad Arquitectónica:** {res.diff.complexity_level} ({res.diff.complexity_score} puntos)")
+            lines.extend([
                 f"<details><summary>View Diagram ({len(res.diff.changes)} changes)</summary>",
                 "",
             ])

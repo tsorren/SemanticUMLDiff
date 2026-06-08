@@ -115,6 +115,14 @@ Responsibilities:
 - attach rendered images,
 - include PR metadata and changelog summary.
 
+### 10. Complexity Estimator
+Computes the architectural complexity score and level of the diff.
+
+Responsibilities:
+- read environmental configurations (baseline, tolerance, weights),
+- calculate structural change score based on weights,
+- classify the score into Low, Medium, or High levels.
+
 ---
 
 ## Recommended Internal Package Structure
@@ -428,3 +436,21 @@ To solve this without demanding custom infrastructure:
 - **`discord` (DiscordUploader):** By default, it uploads the physical `.png` file (generated locally via `plantuml.jar`) to a Discord webhook. It parses the response to extract the public `attachment.url` and passes this URL to the `GitHubPublisher`. This effectively uses Discord as a free CDN.
 - **`plantuml_server` (PlantUMLServerUploader):** A fallback that completely skips file uploads by mathematically encoding the PlantUML string into a stateless Kroki/PlantUML URL.
 - **Extensibility:** New uploaders (like Google Drive or AWS S3) can be trivially added by implementing the `upload(puml_text, png_bytes) -> str` method.
+
+### Architectural Complexity Estimation
+The pipeline includes a Complexity Estimator component to measure PR architectural impact dynamically.
+- **Calculations & Weights:**
+  - Class additions/removals/moves: **10 points**
+  - Class modifications (not moved): **5 points**
+  - Relationships (added/removed/modified): **5 points**
+  - Methods (added/removed/modified): **3 points**
+  - Attributes (added/removed/modified): **1 point**
+- **Dynamic Thresholding Configuration:**
+  - `COMPLEXITY_MEDIUM_BASELINE` (Default: `275` points)
+  - `COMPLEXITY_TOLERANCE` (Default: `27.27`%)
+- **Publishing Formatting:**
+  - GitHub PR comments display complexity level with matching color/icon (e.g. `Media 🟡 (318 puntos)`).
+  - Discord embeds display complexity level and adapt card colors dynamically based on the level:
+    - Low: Green (`2664261` or `#28A745`)
+    - Medium: Yellow (`16753920` or `#FFA500`)
+    - High: Red (`14431557` or `#DC3545`)

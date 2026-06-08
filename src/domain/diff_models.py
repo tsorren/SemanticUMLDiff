@@ -25,3 +25,5 @@ class DiffItem:
 class DiffResult:
     module_name: str
     changes: Tuple[DiffItem, ...] = field(default_factory=tuple)
+    complexity_score: Optional[int] = None
+    complexity_level: Optional[str] = None

@@ -12,6 +12,11 @@ The overarching integration pipeline (`run_integration_pipeline`) orchestrates t
 - The `compute_diff` engine runs a structural comparison to produce a `DiffResult`.
 - *Short-circuit:* If `DiffResult` has no changes, the pipeline terminates early to save compute and avoid spamming unchanged PRs.
 
+### 1.5. Complexity Estimation
+- The system evaluates the computed `DiffResult` changes to calculate the architectural complexity score and level (Baja, Media, Alta).
+- Environmental configurations (`COMPLEXITY_MEDIUM_BASELINE`, `COMPLEXITY_TOLERANCE`) are loaded to define dynamic threshold bounds.
+- The computed score and level are integrated back into the `DiffResult`.
+
 ### 2. Context Reduction
 - The `reduce_graph` engine converts the entire `base` and `pr` models into a `networkx` graph.
 - It identifies nodes containing changes and performs a 1-hop expansion to grab their immediate relationships.

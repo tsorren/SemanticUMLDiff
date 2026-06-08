@@ -1105,4 +1105,34 @@ Heurística de Confianza para Renombre de Métodos 1:1.
 ### Done cuando
 * Solo se emparejan métodos 1:1 con firmas genéricas como renames si la similitud de su nombre es >= 70% o si se trata del único método modificado de la clase.
 
+---
+
+# PHASE 16 — Complexity Estimator
+
+# Objetivo
+Calcular e integrar la métrica de complejidad arquitectónica en base a las diferencias semánticas detectadas, reportando los niveles de complejidad en los publicadores de GitHub y Discord de manera dinámica.
+
+# Tareas Realizadas
+
+## T-1601
+Creación del módulo de cálculo de complejidad.
+
+### Done cuando
+* Se implementa `calculate_complexity` en `src/diff/complexity.py` con el peso de los cambios de UML definidos y la clasificación dinámica por baseline/tolerancia.
+
+## T-1602
+Actualización del modelo `DiffResult` e integración en el Pipeline.
+
+### Done cuando
+* `DiffResult` incluye campos `complexity_score` y `complexity_level`.
+* El pipeline calcula e integra la complejidad en `process_module` antes de propagar el resultado.
+
+## T-1603
+Integración con publicadores (GitHub y Discord).
+
+### Done cuando
+* El comentario del PR en GitHub muestra la complejidad del módulo.
+* La notificación en Discord muestra la complejidad y adapta el color del embed (Verde para Baja, Amarillo para Media, Rojo para Alta).
+
+
 

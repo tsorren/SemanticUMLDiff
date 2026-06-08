@@ -1,6 +1,7 @@
 import os
 import re
 
+from diff.complexity import calculate_complexity
 from diff.compute import compute_diff
 from graph.reducer import reduce_graph
 from parser.plantuml_parser import PlantUMLParser
@@ -30,6 +31,11 @@ def test_donaciones_service_end_to_end_diff() -> None:
 
     # 4. Compute semantic diff
     diff = compute_diff(base_model, pr_model)
+
+    # Assert complexity estimation
+    score, level = calculate_complexity(diff)
+    assert score == 318
+    assert level == "Media 🟡"
 
     # 5. Graph reduction (context_depth = 1)
     spec = reduce_graph(base_model, pr_model, diff, context_depth=1)
