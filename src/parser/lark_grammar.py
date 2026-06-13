@@ -43,7 +43,7 @@ enum_member: enum_value
            | SEPARATOR
            | NEWLINE
 
-enum_value.3: name
+enum_value.3: member_modifier* name
 
 method: member_modifier* name "(" [parameters] ")" [":" type]  -> method_decl
 
