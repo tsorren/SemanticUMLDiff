@@ -1,7 +1,7 @@
 import pytest
 from domain.models import UMLModel, UMLClass, UMLAttribute, UMLMethod, UMLRelation
 from domain.diff_models import ChangeType
-from diff.deepdiff_engine import compute_diff_deepdiff
+from diff.compute import compute_diff_deepdiff
 
 def test_deepdiff_no_changes():
     base = UMLModel("test", classes=(UMLClass("User", "class"),), relations=())

@@ -13,7 +13,7 @@ setting: "skinparam" IDENTIFIER IDENTIFIER           -> skinparam_setting
        | "set" IDENTIFIER IDENTIFIER                  -> set_setting
 
 // --- Packages ---
-package: "package" QUOTED_NAME [stereo] "{" (element | relationship | NEWLINE)* "}"  -> package_decl
+package: "package" (QUOTED_NAME | DOTTED_NAME) [stereo] "{" (element | relationship | NEWLINE)* "}"  -> package_decl
 
 // --- Elements (Classes, Interfaces, Enums) ---
 kind: [ABSTRACT] CLASS  -> class_kind
@@ -45,14 +45,14 @@ enum_member: enum_value
 
 enum_value.3: member_modifier* name
 
-method: member_modifier* name "(" [parameters] ")" [":" type]  -> method_decl
+method: member_modifier* [type] name "(" [parameters] ")" [":" type]  -> method_decl
 
 attribute: member_modifier* name ":" type ["=" value]          -> attribute_colon
          | member_modifier* type name ["=" value]              -> attribute_type_first
 
 member_modifier: visibility | modifier
 
-name: IDENTIFIER | DOTTED_NAME
+name: IDENTIFIER | DOTTED_NAME | PARAM_TOKEN
 
 visibility: "+"  -> vis_public
           | "-"  -> vis_private
@@ -88,9 +88,10 @@ ARROW: /[\-\.]+[o\*<\|]*[\-\.]+[o\*>\|]*/
 
 SEPARATOR: /--+/ | /==+/ | /\.\..+/
 
-DOTTED_NAME: /[a-zA-Z_][a-zA-Z0-9_]*(\.[a-zA-Z_][a-zA-Z0-9_]*)*/
+DOTTED_NAME: /[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)*/
 QUOTED_NAME: /"[^"]*"/
-IDENTIFIER: /[a-zA-Z_][a-zA-Z0-9_]*/
+IDENTIFIER: /[a-zA-Z_$][a-zA-Z0-9_$]*/
+PARAM_TOKEN.2: /[a-zA-Z0-9_\.\$\[\];]+/
 RAW_VALUE: /[a-zA-Z0-9_\-\.:\\\/()", ]+/
 REL_LABEL: /[^\n]+/
 

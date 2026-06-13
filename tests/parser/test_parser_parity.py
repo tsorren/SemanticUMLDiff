@@ -1,7 +1,7 @@
 import os
 import pytest
 from parser.plantuml_parser import PlantUMLParser as LegacyParser
-from parser.lark_parser import LarkPlantUMLParser as NewParser
+from parser.plantuml_parser import LarkPlantUMLParser as NewParser
 
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "fixtures")
 

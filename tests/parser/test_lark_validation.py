@@ -1,6 +1,6 @@
 import pytest
 import logging
-from parser.lark_parser import LarkPlantUMLParser
+from parser.plantuml_parser import LarkPlantUMLParser
 from domain.models import UMLModel
 
 def test_package_propagation_simple():

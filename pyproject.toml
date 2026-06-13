@@ -10,6 +10,8 @@ requires-python = ">=3.12"
 dependencies = [
     "networkx>=3.0",
     "requests>=2.31.0",
+    "lark>=1.1.9",
+    "deepdiff>=6.7.1",
 ]
 
 [tool.hatch.build.targets.wheel]
