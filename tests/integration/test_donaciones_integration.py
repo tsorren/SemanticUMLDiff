@@ -34,7 +34,7 @@ def test_donaciones_service_end_to_end_diff() -> None:
 
     # Assert complexity estimation
     score, level = calculate_complexity(diff)
-    assert score == 318
+    assert score == 321
     assert level == "Media 🟡"
 
     # 5. Graph reduction (context_depth = 1)

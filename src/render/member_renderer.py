@@ -15,6 +15,20 @@ def _clean_type(s: str) -> str:
     return re.sub(r'(?:[a-zA-Z_][a-zA-Z0-9_]*\.)+([a-zA-Z_][a-zA-Z0-9_]*)', r'\1', s)
 
 
+def _get_type(p: str) -> str:
+    p = p.strip()
+    if ":" in p:
+        return p.split(":", 1)[1].strip()
+    parts = p.split()
+    if len(parts) > 1:
+        last_part = parts[-1]
+        if any(c in last_part for c in "<>,*&|"):
+            return p
+        else:
+            return " ".join(parts[:-1])
+    return p
+
+
 class MemberFormatter:
     """
     Handles the granular rendering and coloring of UML class members (attributes and methods)
@@ -27,16 +41,7 @@ class MemberFormatter:
         if method_parameter_style == "names_and_types":
             return [_clean_type(p) for p in params]
         # Default: types_only
-        types = []
-        for p in params:
-            if ":" in p:
-                types.append(p.split(":", 1)[1].strip())
-            else:
-                parts = p.strip().split()
-                if len(parts) > 1:
-                    types.append(" ".join(parts[:-1]))
-                else:
-                    types.append(p.strip())
+        types = [_get_type(p) for p in params]
         return [_clean_type(t) for t in types]
 
     @staticmethod
@@ -172,16 +177,7 @@ class MemberFormatter:
 
         # Methods
         def method_key(m: UMLMethod) -> str:
-            types = []
-            for p in m.parameters:
-                if ":" in p:
-                    types.append(p.split(":", 1)[1].strip())
-                else:
-                    parts = p.strip().split()
-                    if len(parts) > 1:
-                        types.append(" ".join(parts[:-1]))
-                    else:
-                        types.append(p.strip())
+            types = [_get_type(p) for p in m.parameters]
             return f"{m.name}({','.join(types)})"
 
         renamed_old_keys = set()

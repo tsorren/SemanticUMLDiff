@@ -65,3 +65,56 @@ class User {
     model = parser.parse(text)
     assert len(model.classes) == 1
     assert model.classes[0].name == "User"
+
+
+def test_parse_improved_members() -> None:
+    text = """@startuml
+class TestClass {
+  - donacionIndependiente: DonacionIndependiente
+  + estado: EstadoDonacion
+  - DonacionIndependiente donacionIndependienteTypeFirst
+  + List<DonacionIndependiente> items
+  + Map<String, Integer> mapping
+  + void doSomething(param1: Map<String, Integer>, param2: String)
+  + List<String> getItems()
+}
+@enduml
+"""
+    parser = PlantUMLParser(module_name="test_improved")
+    model = parser.parse(text)
+
+    assert len(model.classes) == 1
+    cls = model.classes[0]
+
+    # Check attributes
+    attrs = {a.name: a for a in cls.attributes}
+    assert "donacionIndependiente" in attrs
+    assert attrs["donacionIndependiente"].type == "DonacionIndependiente"
+    assert attrs["donacionIndependiente"].visibility == "-"
+
+    assert "estado" in attrs
+    assert attrs["estado"].type == "EstadoDonacion"
+    assert attrs["estado"].visibility == "+"
+
+    assert "donacionIndependienteTypeFirst" in attrs
+    assert attrs["donacionIndependienteTypeFirst"].type == "DonacionIndependiente"
+    assert attrs["donacionIndependienteTypeFirst"].visibility == "-"
+
+    assert "items" in attrs
+    assert attrs["items"].type == "List<DonacionIndependiente>"
+    assert attrs["items"].visibility == "+"
+
+    assert "mapping" in attrs
+    assert attrs["mapping"].type == "Map<String, Integer>"
+    assert attrs["mapping"].visibility == "+"
+
+    # Check methods
+    methods = {m.name: m for m in cls.methods}
+    assert "doSomething" in methods
+    assert methods["doSomething"].return_type == "void"
+    assert methods["doSomething"].visibility == "+"
+    assert methods["doSomething"].parameters == ("param1: Map<String, Integer>", "param2: String")
+
+    assert "getItems" in methods
+    assert methods["getItems"].return_type == "List<String>"
+    assert methods["getItems"].visibility == "+"

@@ -6,6 +6,27 @@ from domain.models import UMLAttribute, UMLClass, UMLMethod, UMLModel, UMLRelati
 from parser.preprocessor import preprocess
 
 
+def split_params_by_comma(s: str) -> List[str]:
+    parts = []
+    current = []
+    depth = 0
+    for char in s:
+        if char == "<":
+            depth += 1
+            current.append(char)
+        elif char == ">":
+            depth -= 1
+            current.append(char)
+        elif char == "," and depth == 0:
+            parts.append("".join(current).strip())
+            current = []
+        else:
+            current.append(char)
+    if current or not parts:
+        parts.append("".join(current).strip())
+    return [p for p in parts if p]
+
+
 class PlantUMLParser:
     def __init__(self, module_name: str, source_hash: str = "") -> None:
         self.module_name = module_name
@@ -89,34 +110,95 @@ class PlantUMLParser:
                     vis = clean_line[0]
                     clean_line = clean_line[1:].strip()
 
-                method_match = self.re_method.match(clean_line)
-                if method_match:
-                    name, params_str, ret_type = method_match.groups()
-                    params: tuple[str, ...] = ()
-                    if params_str and params_str.strip():
-                        params = tuple(p.strip() for p in params_str.split(","))
+                # Check if it has parentheses (method)
+                if "(" in clean_line and ")" in clean_line.split("(", 1)[1]:
+                    idx_open = clean_line.find("(")
+                    idx_close = clean_line.rfind(")")
 
-                    self.classes[self.current_class]["methods"].append(
-                        UMLMethod(
-                            name=name,
-                            parameters=params,
-                            return_type=ret_type.strip() if ret_type else "",
-                            visibility=vis or ""
-                        )
-                    )
-                    continue
+                    before_paren = clean_line[:idx_open].strip()
+                    params_str = clean_line[idx_open+1:idx_close].strip()
+                    after_paren = clean_line[idx_close+1:].strip()
 
-                attr_match = self.re_attr.match(clean_line)
-                if attr_match:
-                    name, attr_type = attr_match.groups()
-                    self.classes[self.current_class]["attributes"].append(
-                        UMLAttribute(
-                            name=name,
-                            type=attr_type.strip() if attr_type else "",
-                            visibility=vis or ""
+                    ret_type = ""
+                    if after_paren:
+                        if after_paren.startswith(":"):
+                            ret_type = after_paren[1:].strip()
+                        else:
+                            ret_type = after_paren.strip()
+
+                    parts = before_paren.split()
+                    if parts:
+                        method_name = parts[-1]
+                        if len(parts) > 1 and not ret_type:
+                            ret_type = " ".join(parts[:-1])
+
+                        params: tuple[str, ...] = ()
+                        if params_str:
+                            params = tuple(split_params_by_comma(params_str))
+
+                        self.classes[self.current_class]["methods"].append(
+                            UMLMethod(
+                                name=method_name,
+                                parameters=params,
+                                return_type=ret_type,
+                                visibility=vis or ""
+                            )
                         )
-                    )
-                    continue
+                        continue
+                else:
+                    # Parse as attribute
+                    if ":" in clean_line:
+                        name_part, rest = clean_line.split(":", 1)
+                        name_part = name_part.strip()
+                        rest = rest.strip()
+
+                        if "=" in rest:
+                            attr_type, default_val = rest.split("=", 1)
+                            attr_type = attr_type.strip()
+                            default_val = default_val.strip()
+                        else:
+                            attr_type = rest
+                            default_val = ""
+
+                        name_parts = name_part.split()
+                        if name_parts:
+                            attr_name = name_parts[-1]
+                            self.classes[self.current_class]["attributes"].append(
+                                UMLAttribute(
+                                    name=attr_name,
+                                    type=attr_type,
+                                    visibility=vis or "",
+                                    default_value=default_val
+                                )
+                            )
+                            continue
+                    else:
+                        if "=" in clean_line:
+                            rest, default_val = clean_line.split("=", 1)
+                            rest = rest.strip()
+                            default_val = default_val.strip()
+                        else:
+                            rest = clean_line
+                            default_val = ""
+
+                        words = rest.split()
+                        if words:
+                            if len(words) > 1:
+                                attr_name = words[-1]
+                                attr_type = " ".join(words[:-1])
+                            else:
+                                attr_name = words[0]
+                                attr_type = ""
+
+                            self.classes[self.current_class]["attributes"].append(
+                                UMLAttribute(
+                                    name=attr_name,
+                                    type=attr_type,
+                                    visibility=vis or "",
+                                    default_value=default_val
+                                )
+                            )
+                            continue
 
         # Assemble final model
         uml_classes = []

@@ -261,18 +261,21 @@ def compute_diff(base: UMLModel, pr: UMLModel, root_package: str = "", method_pa
 
 
 def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, changes: List[DiffItem], method_parameter_style: str = "types_only") -> None:
-    def _get_parameter_types(parameters: Tuple[str, ...] | List[str]) -> List[str]:
-        types = []
-        for p in parameters:
-            if ":" in p:
-                types.append(p.split(":", 1)[1].strip())
+    def get_type(p: str) -> str:
+        p = p.strip()
+        if ":" in p:
+            return p.split(":", 1)[1].strip()
+        parts = p.split()
+        if len(parts) > 1:
+            last_part = parts[-1]
+            if any(c in last_part for c in "<>,*&|"):
+                return p
             else:
-                parts = p.strip().split()
-                if len(parts) > 1:
-                    types.append(" ".join(parts[:-1]))
-                else:
-                    types.append(p.strip())
-        return types
+                return " ".join(parts[:-1])
+        return p
+
+    def _get_parameter_types(parameters: Tuple[str, ...] | List[str]) -> List[str]:
+        return [get_type(p) for p in parameters]
 
     # Compare attributes
     base_attrs = {a.name: a for a in base_c.attributes}
@@ -312,29 +315,11 @@ def _compare_members(base_c: UMLClass, pr_c: UMLClass, context_name: str, change
 
     # Compare methods with FULL signature as key
     def method_key(m: UMLMethod) -> str:
-        types = []
-        for p in m.parameters:
-            if ":" in p:
-                types.append(p.split(":", 1)[1].strip())
-            else:
-                parts = p.strip().split()
-                if len(parts) > 1:
-                    types.append(" ".join(parts[:-1]))
-                else:
-                    types.append(p.strip())
+        types = [get_type(p) for p in m.parameters]
         return f"{m.name}({','.join(types)})"
 
     def method_sig(m: UMLMethod) -> str:
-        types = []
-        for p in m.parameters:
-            if ":" in p:
-                types.append(p.split(":", 1)[1].strip())
-            else:
-                parts = p.strip().split()
-                if len(parts) > 1:
-                    types.append(" ".join(parts[:-1]))
-                else:
-                    types.append(p.strip())
+        types = [get_type(p) for p in m.parameters]
         return f"({','.join(types)}):{m.return_type}"
 
     base_methods = {method_key(m): m for m in base_c.methods}
