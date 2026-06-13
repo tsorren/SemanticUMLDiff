@@ -402,24 +402,66 @@ class LarkPlantUMLParser:
         clean_text = "@startuml\n" + "\n".join(clean_lines) + "\n@enduml"
         return self._parser.parse(clean_text)
 
+    def _validate_relations(self, model: UMLModel) -> UMLModel:
+        """Valida que los extremos de cada relación referencien clases existentes."""
+        class_names = {c.name for c in model.classes}
+        valid_relations = []
+        for rel in model.relations:
+            if rel.source in class_names and rel.target in class_names:
+                valid_relations.append(rel)
+            else:
+                import logging
+                logging.getLogger(__name__).warning(
+                    f"Relación {rel.source} -> {rel.target}: "
+                    f"al menos un extremo no existe en el modelo"
+                )
+                valid_relations.append(rel)
+        return UMLModel(
+            module_name=model.module_name,
+            classes=model.classes,
+            relations=tuple(valid_relations),
+            source_hash=model.source_hash,
+        )
+
     def parse(self, raw_text: str) -> UMLModel:
         """Pipeline completo: preprocesado -> CST -> AST -> UMLModel normalizado."""
+        import logging
+        from lark.exceptions import UnexpectedToken, UnexpectedCharacters
+        logger = logging.getLogger(__name__)
+
         if not self.source_hash:
             self.source_hash = hashlib.sha256(raw_text.encode('utf-8')).hexdigest()
             
-        tree = self.parse_tree(raw_text)
-        classes, relations = PlantUMLTransformer().transform(tree)
-        
-        # Normalización determinista (sorting canónico)
-        sorted_classes = tuple(sorted(classes, key=lambda c: c.name))
-        sorted_relations = tuple(sorted(
-            relations, key=lambda r: (r.source, r.target, r.relation_type)
-        ))
-        
-        return UMLModel(
-            module_name=self.module_name,
-            classes=sorted_classes,
-            relations=sorted_relations,
-            source_hash=self.source_hash,
-        )
+        try:
+            tree = self.parse_tree(raw_text)
+            classes, relations = PlantUMLTransformer().transform(tree)
+            
+            # Normalización determinista (sorting canónico)
+            sorted_classes = tuple(sorted(classes, key=lambda c: c.name))
+            sorted_relations = tuple(sorted(
+                relations, key=lambda r: (r.source, r.target, r.relation_type)
+            ))
+            
+            model = UMLModel(
+                module_name=self.module_name,
+                classes=sorted_classes,
+                relations=sorted_relations,
+                source_hash=self.source_hash,
+            )
+            return self._validate_relations(model)
+        except (UnexpectedToken, UnexpectedCharacters) as e:
+            logger.error(
+                f"Error sintáctico en módulo '{self.module_name}': "
+                f"Línea {getattr(e, 'line', '?')}, Columna {getattr(e, 'column', '?')}. "
+                f"Token inesperado: {getattr(e, 'token', e)!r}. "
+                f"Tokens esperados: {getattr(e, 'expected', '?')}"
+            )
+            # Degradación elegante: retornar modelo vacío (P-05)
+            return UMLModel(
+                module_name=self.module_name,
+                classes=(),
+                relations=(),
+                source_hash=self.source_hash,
+            )
+
 
