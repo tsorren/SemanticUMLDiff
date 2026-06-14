@@ -54,10 +54,12 @@ def _resolve_element(model: UMLModel, class_name: str, member_type: str, member_
                 for method in cls.methods:
                     from diff.serializer import _extract_type_from_parameter
                     types = [_extract_type_from_parameter(p) for p in method.parameters]
-                    sig = f"{method.name}({','.join(types)})"
-                    if sig == member_name:
+                    sig_types = f"{method.name}({','.join(types)})"
+                    sig_names = f"{method.name}({','.join(method.parameters)})"
+                    if sig_types == member_name or sig_names == member_name:
                         return method
     return None
+
 
 def _detect_root_package(base: UMLModel, pr: UMLModel, root_package: str = "") -> str:
     import os

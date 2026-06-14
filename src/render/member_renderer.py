@@ -177,8 +177,14 @@ class MemberFormatter:
 
         # Methods
         def method_key(m: UMLMethod) -> str:
-            types = [_get_type(p) for p in m.parameters]
-            return f"{m.name}({','.join(types)})"
+            params = []
+            for p in m.parameters:
+                if method_parameter_style == "types_only":
+                    params.append(_get_type(p))
+                else:
+                    params.append(p)
+            return f"{m.name}({','.join(params)})"
+
 
         renamed_old_keys = set()
         for item in member_diffs.values():
