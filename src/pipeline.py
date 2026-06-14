@@ -53,7 +53,8 @@ def process_module(
         method_parameter_style=config.method_parameter_style,
         group_by_package=config.group_by_package,
         theme=config.theme,
-        diagram_spacing=config.diagram_spacing
+        diagram_spacing=config.diagram_spacing,
+        render_style=config.render_style
     )
 
     # 4. Generate PNG locally if needed

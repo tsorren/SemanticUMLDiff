@@ -37,3 +37,5 @@ class IntegrationConfig:
     diagram_spacing: int = 30
     root_package: str = ""
     context_depth: int = 1
+    render_style: str = "default"
+

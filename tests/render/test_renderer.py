@@ -115,3 +115,33 @@ def test_render_relationships_with_multiplicity_and_label() -> None:
     puml = render_puml(base_model, pr_model, diff, spec)
     assert 'ClassA "1" *-- "*" ClassB : contains' in puml
 
+
+def test_render_puml_simple() -> None:
+    from domain.models import UMLRelation
+    c_a = UMLClass(name="com.pkg.ClassA", kind="class")
+    c_b = UMLClass(name="com.pkg.ClassB", kind="class")
+    rel = UMLRelation(
+        source="com.pkg.ClassA",
+        target="com.pkg.ClassB",
+        relation_type="composition",
+        multiplicity_source="1",
+        multiplicity_target="*",
+        label="contains"
+    )
+    base_model = UMLModel(module_name="test", classes=(c_a, c_b), relations=(rel,))
+    pr_model = UMLModel(module_name="test", classes=(c_a, c_b), relations=(rel,))
+    diff = DiffResult(module_name="test", changes=())
+    spec = RenderSpec(
+        included_nodes=("com.pkg.ClassA", "com.pkg.ClassB"),
+        included_edges=(rel,),
+        highlight_rules=()
+    )
+    puml = render_puml(base_model, pr_model, diff, spec, render_style="simple")
+
+    assert 'package "' not in puml
+    assert "com.pkg" not in puml
+    assert 'class "ClassA"' in puml
+    assert 'class "ClassB"' in puml
+    assert 'ClassA "1" *-- "*" ClassB : contains' in puml
+
+

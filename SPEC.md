@@ -1196,6 +1196,47 @@ Migration, Cleanup & Type Stabilization.
 * Se verificó que el suite completo de pruebas (93 tests en pytest) pase al 100%, con paridad de complejidad y regeneración correcta de diagramas de demo.
 
 
+---
+
+# PHASE 18 — Configurable Simple Renderer
+
+# Objetivo
+
+Implementar un modo de renderizado simplificado que remueva los bloques de paquetes y simplifique los nombres completamente calificados (FQN) a sus nombres cortos en las clases, tipos y relaciones. Hacer este modo seleccionable mediante la configuración `render_style` desde el pipeline y la GitHub Action.
+
+# Tareas Realizadas
+
+## T-1801
+Soporte a `render_style` en configuración.
+
+### Done cuando
+* Se agrega la opción `render_style` con valor por defecto `"default"` en `IntegrationConfig`.
+* Se expone el parámetro a nivel de la acción en `action.yml`.
+
+## T-1802
+Implementación del Renderizador Simple (`render_puml_simple`).
+
+### Done cuando
+* Se implementa `render_puml_simple` en `src/render/puml_renderer.py` que dibuja un diagrama sin anidamiento de paquetes (`package "..." { ... }`).
+* Todas las referencias y conexiones de herencia, asociación, agregación y composición usan los nombres cortos de las clases.
+* Se conservan las etiquetas de cambio (`<<added>>`, `<<modified>>`, colores en flechas, etc.) de manera limpia.
+
+## T-1803
+Integración con CLI y Pipeline.
+
+### Done cuando
+* `src/main.py` lee `INPUT_RENDER_STYLE` desde el entorno.
+* `process_module` en `src/pipeline.py` propaga la configuración al renderizador.
+
+## T-1804
+Pruebas automatizadas del renderizador simple.
+
+### Done cuando
+* Se implementa `test_render_puml_simple` en `tests/render/test_renderer.py` verificando que no se generen bloques `package` y que los FQNs sean simplificados.
+* Todos los 96 tests unitarios pasan exitosamente, y el código pasa la validación estática de `ruff` y `mypy`.
+
+
+
 
 
 

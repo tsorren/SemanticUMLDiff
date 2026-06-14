@@ -8,6 +8,10 @@ from render.member_renderer import MemberFormatter
 from render.themes import get_theme
 
 
+def _short_name(fqn: str) -> str:
+    return fqn.rsplit(".", 1)[-1]
+
+
 def _get_relation_arrow(r: UMLRelation) -> str:
     arrow = "-->"
     if r.relation_type == "inheritance":
@@ -196,6 +200,121 @@ def _render_relationships(
 
 
 
+def render_puml_simple(
+    base: UMLModel,
+    pr: UMLModel,
+    diff: DiffResult,
+    spec: RenderSpec,
+    layout_orthogonal_lines: bool = False,
+    method_parameter_style: str = "types_only",
+    theme: str = "modern",
+    diagram_spacing: int = 30
+) -> str:
+    lines: List[str] = []
+    lines.append("@startuml")
+    lines.append("left to right direction")
+
+    if layout_orthogonal_lines:
+        lines.append("skinparam linetype ortho")
+    else:
+        lines.append("skinparam linetype poly")
+
+    lines.append("set namespaceSeparator none")
+    lines.append(f"skinparam nodesep {diagram_spacing}")
+    lines.append(f"skinparam ranksep {diagram_spacing}")
+    lines.append("")
+
+    # Inject Theme CSS
+    theme_css = get_theme(theme)
+    if theme_css:
+        lines.append(theme_css)
+        lines.append("")
+
+    base_classes = {c.name: c for c in base.classes}
+    pr_classes = {c.name: c for c in pr.classes}
+    highlight_dict = dict(spec.highlight_rules)
+
+    # Helper to determine if a class is an enum
+    def is_enum(c: Optional[UMLClass]) -> bool:
+        return bool(c and c.kind == "enum")
+
+    # Render flat classes
+    for class_name in spec.included_nodes:
+        status = highlight_dict.get(class_name)
+        if status == "removed":
+            c = base_classes.get(class_name)
+        else:
+            c = pr_classes.get(class_name)
+
+        if not c:
+            continue
+
+        stereo_str = f" <<{status}>>" if status else ""
+        s_name = _short_name(class_name)
+
+        lines.append(f'{c.kind} "{s_name}"{stereo_str} {{')
+
+        base_c = base_classes.get(class_name)
+        pr_c = pr_classes.get(class_name)
+
+        if status == "moved":
+            diff_item = next((d for d in diff.changes if d.entity_type == "class" and d.entity_name == class_name and d.context == "moved"), None)
+            if diff_item and diff_item.before:
+                lines.append(f"  .. (moved from: {_short_name(diff_item.before)}) ..")
+
+        members_lines = _render_members(
+            base_c, pr_c, class_name, diff,
+            is_removed=(status == "removed"),
+            is_added=(status == "added"),
+            method_parameter_style=method_parameter_style,
+            is_enum=is_enum(c)
+        )
+        for mline in members_lines:
+            lines.append(mline)
+        lines.append("}")
+
+    lines.append("")
+
+    # Render relationships
+    for r in spec.included_edges:
+        arrow = _get_relation_arrow(r)
+        rel_sig = f"{r.source} {r.relation_type} {r.target}"
+
+        arrow_color = ""
+        for change in diff.changes:
+            if change.entity_type == "relation" and change.entity_name == rel_sig:
+                if change.change_type == ChangeType.ADDED:
+                    arrow_color = "[#green]"
+                elif change.change_type == ChangeType.REMOVED:
+                    arrow_color = "[#red]"
+                elif change.change_type == ChangeType.MODIFIED:
+                    arrow_color = "[#orange]"
+                break
+
+        if arrow_color:
+            if arrow.startswith("o--"):
+                arrow = f"o-{arrow_color}--"
+            elif arrow.startswith("*--"):
+                arrow = f"*-{arrow_color}--"
+            elif arrow.startswith("--"):
+                arrow = f"-{arrow_color}-{arrow[2:]}"
+            elif arrow.startswith("-"):
+                arrow = f"-{arrow_color}{arrow[1:]}"
+            elif arrow.startswith(".."):
+                arrow = f".{arrow_color}.{arrow[2:]}"
+
+        src_mult = f' "{r.multiplicity_source}"' if r.multiplicity_source else ""
+        tgt_mult = f' "{r.multiplicity_target}"' if r.multiplicity_target else ""
+        label_part = f" : {r.label}" if r.label else ""
+
+        src_short = _short_name(r.source)
+        tgt_short = _short_name(r.target)
+        lines.append(f"{src_short}{src_mult} {arrow}{tgt_mult} {tgt_short}{label_part}")
+
+    lines.append("@enduml")
+    return "\n".join(lines)
+
+
 def render_puml(
     base: UMLModel,
     pr: UMLModel,
@@ -205,8 +324,21 @@ def render_puml(
     method_parameter_style: str = "types_only",
     group_by_package: bool = True,
     theme: str = "modern",
-    diagram_spacing: int = 30
+    diagram_spacing: int = 30,
+    render_style: str = "default"
 ) -> str:
+    if render_style == "simple":
+        return render_puml_simple(
+            base=base,
+            pr=pr,
+            diff=diff,
+            spec=spec,
+            layout_orthogonal_lines=layout_orthogonal_lines,
+            method_parameter_style=method_parameter_style,
+            theme=theme,
+            diagram_spacing=diagram_spacing
+        )
+
     lines: List[str] = []
 
     # 1. Render Header and Theme

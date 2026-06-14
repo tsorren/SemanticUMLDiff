@@ -45,7 +45,8 @@ def main() -> None:
         theme=os.getenv("INPUT_THEME", "modern"),
         diagram_spacing=int(os.getenv("INPUT_DIAGRAM_SPACING", "30")),
         root_package=os.getenv("INPUT_ROOT_PACKAGE", ""),
-        context_depth=int(os.getenv("INPUT_CONTEXT_DEPTH", "1"))
+        context_depth=int(os.getenv("INPUT_CONTEXT_DEPTH", "1")),
+        render_style=os.getenv("INPUT_RENDER_STYLE", "default")
     )
 
     # 3. Match modules

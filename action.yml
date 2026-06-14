@@ -42,6 +42,10 @@ inputs:
     description: 'Depth of the context graph for impacted classes'
     required: false
     default: '1'
+  render_style:
+    description: 'The rendering style of the output diagram: default or simple'
+    required: false
+    default: 'default'
 runs:
   using: 'docker'
   image: 'Dockerfile'
