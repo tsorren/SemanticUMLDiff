@@ -131,20 +131,22 @@ def test_donaciones_service_end_to_end_diff() -> None:
     # -------------------------------------------------------------
     # Added compositions / associations (green arrows)
     assert (
-        "grupo5.donaciones.models.entities.beneficiarios.NecesidadRecurrente "
-        "o-[#green]-- "
-        "grupo5.donaciones.models.entities.beneficiarios.PeriodoNecesidad"
+        'grupo5.donaciones.models.entities.beneficiarios.NecesidadRecurrente "1" '
+        'o-[#green]-- "0..*" '
+        'grupo5.donaciones.models.entities.beneficiarios.PeriodoNecesidad : periodos'
     ) in puml
     assert (
-        "grupo5.donaciones.models.entities.beneficiarios.PeriodoNecesidad "
-        "o-[#green]-- "
-        "grupo5.donaciones.models.entities.beneficiarios.DonacionAsignada"
+        'grupo5.donaciones.models.entities.beneficiarios.PeriodoNecesidad "1" '
+        'o-[#green]-- "0..*" '
+        'grupo5.donaciones.models.entities.beneficiarios.DonacionAsignada : donacionesAsignadas'
     ) in puml
     assert (
-        "grupo5.donaciones.models.entities.beneficiarios.PlanificadorDeNecesidades "
-        "-[#green]-> "
-        "grupo5.donaciones.models.repositories.NecesidadRecurrenteRepository"
+        'grupo5.donaciones.models.entities.beneficiarios.PlanificadorDeNecesidades '
+        '-[#green]-> '
+        'grupo5.donaciones.models.repositories.NecesidadRecurrenteRepository : necesidadRepository'
     ) in puml
+
+
 
     # Implementation relations added for Localidad, Provincia, Pais (green inheritance arrow)
     assert 'grupo5.donaciones.models.entities.personas.direccion.Localidad -[#green]-|> grupo5.donaciones.models.privacidad.Anonimizable' in puml

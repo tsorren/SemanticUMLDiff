@@ -189,7 +189,11 @@ def _render_relationships(
             elif arrow.startswith(".."):
                 arrow = f".{arrow_color}.{arrow[2:]}"
 
-        lines.append(f"{r.source} {arrow} {r.target}")
+        src_mult = f' "{r.multiplicity_source}"' if r.multiplicity_source else ""
+        tgt_mult = f' "{r.multiplicity_target}"' if r.multiplicity_target else ""
+        label_part = f" : {r.label}" if r.label else ""
+        lines.append(f"{r.source}{src_mult} {arrow}{tgt_mult} {r.target}{label_part}")
+
 
 
 def render_puml(

@@ -75,6 +75,8 @@ def model_to_dict(model: UMLModel, method_parameter_style: str = "types_only") -
         result["relations"][rel_key] = {
             "multiplicity_source": rel.multiplicity_source,
             "multiplicity_target": rel.multiplicity_target,
+            "label": rel.label,
         }
+
 
     return result
