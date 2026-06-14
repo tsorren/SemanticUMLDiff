@@ -11,7 +11,8 @@ WORKDIR /app
 RUN wget -q https://github.com/plantuml/plantuml/releases/download/v1.2024.4/plantuml-1.2024.4.jar -O /app/plantuml.jar
 
 # Install Python dependencies natively
-RUN pip install --no-cache-dir networkx==3.* requests==2.*
+RUN pip install --no-cache-dir networkx==3.* requests==2.* lark==1.* deepdiff==6.*
+
 
 COPY src/ /app/src/
 
