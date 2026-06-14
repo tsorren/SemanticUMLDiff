@@ -1,0 +1,560 @@
+@startuml
+
+class grupo5.common.exceptions.BusinessStateException {
+}
+
+
+abstract class grupo5.common.exceptions.DonaTrackException {
+	{method} +getErrorCode () : String
+}
+
+
+enum grupo5.common.exceptions.ErrorCatalog {
+	{field} +AGREGAR_NECESIDAD_NULA
+	{field} +ASIGNAR_DONACION_NULA
+	{field} +BIEN_ESTADO_REQUERIDO
+	{field} +BIEN_NORMALIZADO_RANGO_CONFIANZA
+	{field} +BIEN_NORMALIZADO_SIN_BIEN
+	{field} +BIEN_NORMALIZADO_SIN_ESTADO
+	{field} +BIEN_NORMALIZADO_SIN_SUBCATEGORIA
+	{field} +BIEN_VENCIMIENTO_NO_PERMITIDO
+	{field} +BIEN_VENCIMIENTO_REQUERIDO
+	{field} +CANTIDAD_NECESITADA_INVALIDA
+	{field} +CATEGORIA_SIN_NOMBRE
+	{field} +CATEGORIA_SIN_UNIDAD
+	{field} +CATEGORIA_SIN_USO_DEFINIDO
+	{field} +CATEGORIA_SIN_VENCIMIENTO_DEFINIDO
+	{field} +CSV_PROCESS_ERROR
+	{field} +CSV_READ_ERROR
+	{field} +DESCRIPCION_BIEN_VACIA
+	{field} +DESCRIPCION_NECESIDAD_VACIA
+	{field} +DIRECCION_ALTURA_INVALIDA
+	{field} +DIRECCION_CALLE_VACIA
+	{field} +DIRECCION_CODIGO_POSTAL_VACIO
+	{field} +DIRECCION_LOCALIDAD_NULA
+	{field} +DONACION_INDEPENDIENTE_AGREGAR_ITEM_NULO
+	{field} +DONACION_INDEPENDIENTE_ORIGINAL_NULA
+	{field} +DONACION_INDEPENDIENTE_QUITAR_ITEM_INEXISTENTE
+	{field} +DONACION_ITEM_NO_PERTENECE
+	{field} +DONACION_ITEM_NULO
+	{field} +DONACION_ITEM_YA_AGREGADO
+	{field} +DONACION_NO_PERTENECE_A_NECESIDAD
+	{field} +DONACION_SIN_DONANTE
+	{field} +DONACION_YA_ASIGNADA
+	{field} +DONANTE_SIN_PERSONA
+	{field} +ENTIDAD_BENEFICIARIA_SIN_PERSONA_JURIDICA
+	{field} +FECHA_ASIGNACION_FUTURA
+	{field} +FECHA_INICIO_FUTURA
+	{field} +FECHA_INICIO_NULA
+	{field} +FRAGMENTACION_CANTIDAD_INSUFICIENTE
+	{field} +HUMANA_APELLIDO_VACIO
+	{field} +HUMANA_FECHA_NACIMIENTO_FUTURA
+	{field} +HUMANA_NOMBRE_VACIO
+	{field} +ITEM_DONACION_CANTIDAD_INVALIDA
+	{field} +ITEM_DONACION_INDEPENDIENTE_CANTIDAD_INVALIDA
+	{field} +ITEM_DONACION_INDEPENDIENTE_FRAGMENTACION_INVALIDA
+	{field} +ITEM_DONACION_INDEPENDIENTE_SIN_BIEN
+	{field} +ITEM_DONACION_SIN_BIEN
+	{field} +JURIDICA_AGREGAR_REPRESENTANTE_NULO
+	{field} +JURIDICA_QUITAR_REPRESENTANTE_INEXISTENTE
+	{field} +JURIDICA_SIN_REPRESENTANTES_RESTANTES
+	{field} +JURIDICA_SIN_REPRESENTANTE_INICIAL
+	{field} +NECESIDAD_NO_PERTENECE_A_ENTIDAD
+	{field} +NECESIDAD_RECURRENTE_SIN_PERIODO
+	{field} +NECESIDAD_SIN_SUBCATEGORIA
+	{field} +NECESIDAD_YA_REGISTRADA
+	{field} +PERIODO_DONACION_NULA
+	{field} +SIN_PERIODO_ACTIVO
+	{field} +SUBCATEGORIA_SIN_CATEGORIA
+	{field} +SUBCATEGORIA_SIN_NOMBRE
+	{field} +TEST_FECHA_INVALIDA
+}
+
+
+class grupo5.common.exceptions.InfrastructureException {
+}
+
+
+class grupo5.common.exceptions.ValidationException {
+}
+
+
+class grupo5.donaciones.DonacionesServiceApplication {
+	{method}  {static} +main ( args : [Ljava.lang.String; ) : void
+}
+
+
+class grupo5.donaciones.exceptions.ErrorResponse {
+	{field} -message : String
+	{field} -timestamp : java.time.Instant
+	{method} +equals ( o : Object ) : boolean
+	{method} +hashCode () : int
+	{method} +message () : String
+	{method} +timestamp () : java.time.Instant
+	{method} +toString () : String
+}
+
+
+class grupo5.donaciones.exceptions.GlobalExceptionHandler {
+	{method} +handleDonaTrackException ( ex : grupo5.common.exceptions.DonaTrackException ) : org.springframework.http.ResponseEntity
+}
+
+
+abstract class grupo5.donaciones.infraestructure.AbstractSegmentador {
+	{method} -agrupar ( itemsNormalizados : java.util.List ) : java.util.Map
+	{method}  {static} -crearDonacionIndependienteDesdeGrupo ( grupo : java.util.List ) : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente
+	{method} -crearDonacionesIndependientes ( grouped : java.util.Map ) : java.util.List
+	{method}  {static} -crearItemsIndependientes ( grupo : java.util.List ) : java.util.List
+	{method}  {abstract} #obtenerClaveDeAgrupacion ( item : grupo5.donaciones.models.entities.itemsNormalizados.ItemDonacionNormalizado ) : Object
+	{method} +segmentar ( itemsNormalizados : java.util.List ) : java.util.List
+}
+
+
+class grupo5.donaciones.infraestructure.LectorCSV {
+	{method} +cargarDonantes ( rutaArchivo : String ) : java.util.List
+}
+
+
+class grupo5.donaciones.infraestructure.SegmentadorComplejo {
+	{method} #obtenerClaveDeAgrupacion ( item : grupo5.donaciones.models.entities.itemsNormalizados.ItemDonacionNormalizado ) : grupo5.donaciones.infraestructure.SegmentadorComplejo$GroupingKey
+}
+
+
+class grupo5.donaciones.infraestructure.SegmentadorComplejo$GroupingKey {
+	{field} -fechaVencimiento : java.time.LocalDate
+	{method} +donacionOriginal () : grupo5.donaciones.models.entities.donaciones.Donacion
+	{method} +equals ( o : Object ) : boolean
+	{method} +estado () : grupo5.donaciones.models.entities.donaciones.Estado
+	{method} +fechaVencimiento () : java.time.LocalDate
+	{method} +hashCode () : int
+	{method} +subcategoria () : grupo5.donaciones.models.entities.categorias.Subcategoria
+	{method} +toString () : String
+	{method} +unidad () : grupo5.donaciones.models.entities.categorias.Unidad
+}
+
+
+class grupo5.donaciones.infraestructure.SegmentadorSimple {
+	{method} #obtenerClaveDeAgrupacion ( item : grupo5.donaciones.models.entities.itemsNormalizados.ItemDonacionNormalizado ) : grupo5.donaciones.infraestructure.SegmentadorSimple$GroupingKey
+}
+
+
+class grupo5.donaciones.infraestructure.SegmentadorSimple$GroupingKey {
+	{method} +donacionOriginal () : grupo5.donaciones.models.entities.donaciones.Donacion
+	{method} +equals ( o : Object ) : boolean
+	{method} +hashCode () : int
+	{method} +subcategoria () : grupo5.donaciones.models.entities.categorias.Subcategoria
+	{method} +toString () : String
+}
+
+
+class grupo5.donaciones.models.entities.beneficiarios.EntidadBeneficiaria {
+	{method} +anonimizar () : void
+}
+
+
+class grupo5.donaciones.models.entities.categorias.AliasSubcategoria {
+	{field} -alias : String
+}
+
+
+class grupo5.donaciones.models.entities.categorias.Categoria {
+	{field} +conUso : Boolean
+	{field} +conVencimiento : Boolean
+	{field} +nombre : String
+	{method}  {static} -validarCategoria ( nombre : String , conUso : Boolean , conVencimiento : Boolean , tipoUnidad : grupo5.donaciones.models.entities.categorias.Unidad ) : void
+}
+
+
+class grupo5.donaciones.models.entities.categorias.Subcategoria {
+	{field} +nombre : String
+	{method}  {static} -validarSubCategoria ( categoria : grupo5.donaciones.models.entities.categorias.Categoria , nombre : String ) : void
+}
+
+
+enum grupo5.donaciones.models.entities.categorias.Unidad {
+	{field} +KILOGRAMO
+	{field} +LITROS
+	{field} +METRO
+	{field} +METRO_CUADRADO
+	{field} +METRO_CUBICO
+	{field} +UNIDADES
+}
+
+
+class grupo5.donaciones.models.entities.donaciones.Bien {
+	{field} +descripcion : String
+	{field} +fechaVencimiento : java.time.LocalDate
+	{field} +fotoUrl : String
+	{method} +estaVencido () : boolean
+	{method} -validarReglasDeNegocio () : void
+}
+
+
+class grupo5.donaciones.models.entities.donaciones.Donacion {
+	{field} +descripcion : String
+	{field} +fecha : java.time.LocalDateTime
+	{method} +agregarItem ( item : grupo5.donaciones.models.entities.donaciones.ItemDonacion ) : void
+	{method} +quitarItem ( item : grupo5.donaciones.models.entities.donaciones.ItemDonacion ) : void
+}
+
+
+enum grupo5.donaciones.models.entities.donaciones.Estado {
+	{field} +DESGASTADO
+	{field} +NUEVO
+	{field} +USADO
+}
+
+
+class grupo5.donaciones.models.entities.donaciones.ItemDonacion {
+	{field} +cantidad : Integer
+	{method}  {static} -validarItemDonacion ( bien : grupo5.donaciones.models.entities.donaciones.Bien , cantidad : Integer ) : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.AsignacionRealizada {
+	{method} +planificarRuta ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +vencer ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.CambioEstado {
+	{field} -justificacion : String
+	{field} -timestamp : java.time.LocalDateTime
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente {
+	{field} -fechaRegistro : java.time.LocalDateTime
+	{method} +agregarItem ( item : grupo5.donaciones.models.entities.donacionesIndependientes.ItemDonacionIndependiente ) : void
+	{method} +asignadaA () : grupo5.donaciones.models.entities.necesidades.Asignable
+	{method} +asignar () : void
+	{method} +cambiarEstado ( nuevoEstado : grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion , justificacion : String ) : void
+	{method} +confirmarEntrega () : void
+	{method} +fragmentarse ( cantidadNecesitada : Integer ) : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente
+	{method} +getCantidad () : int
+	{method} +iniciarRecorrido () : void
+	{method} +planificarRuta () : void
+	{method} +quitarItem ( bien : grupo5.donaciones.models.entities.donacionesIndependientes.ItemDonacionIndependiente ) : void
+	{method} +registrar () : void
+	{method} +registrarFalla ( justificacion : String ) : void
+	{method} +retornar () : void
+	{method} +vencer () : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.EnDeposito {
+	{method} +asignar ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +registrar ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +vencer ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.EnTraslado {
+	{method} +confirmarEntrega ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +registrarFalla ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente , justificacion : String ) : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.EntregaFallida {
+	{method} +retornar ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +vencer ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.Entregada {
+}
+
+
+interface grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion {
+	{method} +asignar ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +confirmarEntrega ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +iniciarRecorrido ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +lanzarTransicionInvalida ( accion : String ) : void
+	{method} +planificarRuta ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +registrar ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +registrarFalla ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente , justificacion : String ) : void
+	{method} +retornar ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +vencer ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.ItemDonacionIndependiente {
+	{field} +cantidad : Integer
+	{method} +fragmentarse ( cantidadNecesitada : Integer ) : grupo5.donaciones.models.entities.donacionesIndependientes.ItemDonacionIndependiente
+	{method}  {static} -validarItemDonacion ( bien : grupo5.donaciones.models.entities.itemsNormalizados.BienNormalizado , cantidad : Integer ) : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.ListaParaEntregar {
+	{method} +iniciarRecorrido ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +vencer ( d : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+}
+
+
+class grupo5.donaciones.models.entities.donacionesIndependientes.Vencida {
+}
+
+
+class grupo5.donaciones.models.entities.donantes.Donante {
+	{method} +anonimizar () : void
+}
+
+
+class grupo5.donaciones.models.entities.itemsNormalizados.BienNormalizado {
+	{field} +confianza : Double
+	{method} +estaVencido () : Boolean
+	{method}  {static} -validarReglasDeNegocio ( bienOriginal : grupo5.donaciones.models.entities.donaciones.Bien , subcategoria : grupo5.donaciones.models.entities.categorias.Subcategoria , confianza : Double , estadoNormalizacion : grupo5.donaciones.models.entities.itemsNormalizados.EstadoNormalizacion ) : void
+}
+
+
+enum grupo5.donaciones.models.entities.itemsNormalizados.EstadoNormalizacion {
+	{field} +ACEPTADO
+	{field} +PENDIENTE_REVISION
+}
+
+
+class grupo5.donaciones.models.entities.itemsNormalizados.ItemDonacionNormalizado {
+	{field} -cantidad : Integer
+}
+
+
+interface grupo5.donaciones.models.entities.necesidades.Asignable {
+	{method}  {abstract} +obtenerNecesidad () : grupo5.donaciones.models.entities.necesidades.Necesidad
+}
+
+
+abstract class grupo5.donaciones.models.entities.necesidades.Necesidad {
+	{field} +cantidadNecesitada : Integer
+	{field} +descripcion : String
+	{field} +fechaInicio : java.time.LocalDate
+	{method}  {abstract} +asignarDonacion ( donacionAsignada : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method}  {abstract} +cantidadAcumulada () : Integer
+	{method}  {abstract} +estaSatisfecha () : boolean
+	{method}  {abstract} +quitarDonacion ( donacionAsignada : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} -validarNecesidad () : void
+}
+
+
+class grupo5.donaciones.models.entities.necesidades.NecesidadExtraordinaria {
+	{method} +asignarDonacion ( donacion : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +cantidadAcumulada () : Integer
+	{method} +estaSatisfecha () : boolean
+	{method} +obtenerNecesidad () : grupo5.donaciones.models.entities.necesidades.Necesidad
+	{method} +quitarDonacion ( donacion : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+}
+
+
+class grupo5.donaciones.models.entities.necesidades.NecesidadRecurrente {
+	{field} +activa : Boolean
+	{field} +periodo : java.time.Period
+	{method} +asignarDonacion ( donacionAsignada : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +cantidadAcumulada () : Integer
+	{method} +estaSatisfecha () : boolean
+	{method} +generarNuevoPeriodo () : void
+	{method} +hayQueGenerarNuevo ( fechaActual : java.time.LocalDate ) : boolean
+	{method} +obtenerPeriodoActual () : grupo5.donaciones.models.entities.necesidades.PeriodoNecesidad
+	{method} +quitarDonacion ( donacion : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} -validarNecesidadRecurrente ( fechaInicio : java.time.LocalDate ) : void
+}
+
+
+class grupo5.donaciones.models.entities.necesidades.PeriodoNecesidad {
+	{field} +cantidadObjetivo : Integer
+	{field} +fechaFin : java.time.LocalDate
+	{field} {static} -logger : java.util.logging.Logger
+	{method} +agregarDonacion ( donacion : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+	{method} +cantidadAcumulada () : Integer
+	{method} +estaEnPeriodo ( fecha : java.time.LocalDate ) : boolean
+	{method} +estaSatisfecha () : boolean
+	{method} +finalizo () : void
+	{method} +obtenerNecesidad () : grupo5.donaciones.models.entities.necesidades.Necesidad
+	{method} +quitarDonacion ( donacion : grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente ) : void
+}
+
+
+class grupo5.donaciones.models.entities.personas.Direccion {
+	{field} +altura : Integer
+	{field} +calle : String
+	{field} +codigoPostal : String
+	{field} +departamento : String
+	{field} +piso : Integer
+	{method} +anonimizar () : void
+	{method}  {static} -validarDireccion ( calle : String , altura : Integer , codigoPostal : String , localidad : grupo5.donaciones.models.entities.personas.Localidad ) : void
+}
+
+
+enum grupo5.donaciones.models.entities.personas.Genero {
+	{field} +HOMBRE
+	{field} +MUJER
+	{field} +NO_BINARIO
+	{field} +PREFIERO_NO_DECIR
+}
+
+
+class grupo5.donaciones.models.entities.personas.Humana {
+	{field} +apellido : String
+	{field} +fechaNacimiento : java.time.LocalDate
+	{field} +nombre : String
+	{method} +anonimizar () : void
+	{method}  {static} -validarDatosHumanos ( nombre : String , apellido : String , fechaNacimiento : java.time.LocalDate ) : void
+}
+
+
+class grupo5.donaciones.models.entities.personas.Juridica {
+	{field} +razonSocial : String
+	{field} +rubro : String
+	{method} +agregarRepresentante ( representante : grupo5.donaciones.models.entities.personas.Humana ) : void
+	{method} +anonimizar () : void
+	{method} +quitarRepresentante ( representante : grupo5.donaciones.models.entities.personas.Humana ) : void
+}
+
+
+class grupo5.donaciones.models.entities.personas.Localidad {
+	{field} +nombre : String
+	{method} +anonimizar () : void
+}
+
+
+class grupo5.donaciones.models.entities.personas.Pais {
+	{field} +nombre : String
+	{method} +anonimizar () : void
+}
+
+
+abstract class grupo5.donaciones.models.entities.personas.Persona {
+	{field} +documento : String
+	{field} +id : Long
+}
+
+
+class grupo5.donaciones.models.entities.personas.Provincia {
+	{field} +nombre : String
+	{method} +anonimizar () : void
+}
+
+
+enum grupo5.donaciones.models.entities.personas.TipoDocumento {
+	{field} +CUIT
+	{field} +DNI
+	{field} +LIBRETA
+	{field} +PASAPORTE
+}
+
+
+enum grupo5.donaciones.models.entities.personas.TipoJuridico {
+	{field} +EMPRESA
+	{field} +GUBERNAMENTAL
+	{field} +INSTITUCION
+	{field} +ONG
+}
+
+
+interface grupo5.donaciones.models.ports.CargadorDonantes {
+	{method}  {abstract} +cargarDonantes ( rutaArchivo : String ) : java.util.List
+}
+
+
+interface grupo5.donaciones.models.ports.Segmentador {
+	{method}  {abstract} +segmentar ( itemsNormalizados : java.util.List ) : java.util.List
+}
+
+
+interface grupo5.donaciones.models.privacidad.Anonimizable {
+	{field} {static} +VALOR_NUMERICO : Integer
+	{field} {static} +VALOR_STRING : String
+	{method}  {abstract} +anonimizar () : void
+}
+
+
+class grupo5.donaciones.models.repositories.NecesidadRecurrenteRepository {
+	{method} +findByActivaTrue () : java.util.List
+	{method} +save ( necesidad : grupo5.donaciones.models.entities.necesidades.NecesidadRecurrente ) : void
+}
+
+
+class grupo5.donaciones.schedulers.PlanificadorDeNecesidades {
+	{method} +crearPeriodoPara ( necesidadRecurrente : grupo5.donaciones.models.entities.necesidades.NecesidadRecurrente ) : void
+	{method} +generarNuevosPeriodos () : void
+}
+
+
+
+
+grupo5.common.exceptions.BusinessStateException --|>  grupo5.common.exceptions.DonaTrackException
+grupo5.common.exceptions.DonaTrackException *--  grupo5.common.exceptions.ErrorCatalog : error
+grupo5.common.exceptions.InfrastructureException --|>  grupo5.common.exceptions.DonaTrackException
+grupo5.common.exceptions.ValidationException --|>  grupo5.common.exceptions.DonaTrackException
+grupo5.donaciones.infraestructure.AbstractSegmentador ..|>  grupo5.donaciones.models.ports.Segmentador
+grupo5.donaciones.infraestructure.LectorCSV ..|>  grupo5.donaciones.models.ports.CargadorDonantes
+grupo5.donaciones.infraestructure.SegmentadorComplejo --|>  grupo5.donaciones.infraestructure.AbstractSegmentador
+grupo5.donaciones.infraestructure.SegmentadorComplejo$GroupingKey *--  grupo5.donaciones.models.entities.categorias.Subcategoria : subcategoria
+grupo5.donaciones.infraestructure.SegmentadorComplejo$GroupingKey *--  grupo5.donaciones.models.entities.categorias.Unidad : unidad
+grupo5.donaciones.infraestructure.SegmentadorComplejo$GroupingKey *--  grupo5.donaciones.models.entities.donaciones.Donacion : donacionOriginal
+grupo5.donaciones.infraestructure.SegmentadorComplejo$GroupingKey *--  grupo5.donaciones.models.entities.donaciones.Estado : estado
+grupo5.donaciones.infraestructure.SegmentadorSimple --|>  grupo5.donaciones.infraestructure.AbstractSegmentador
+grupo5.donaciones.infraestructure.SegmentadorSimple$GroupingKey *--  grupo5.donaciones.models.entities.categorias.Subcategoria : subcategoria
+grupo5.donaciones.infraestructure.SegmentadorSimple$GroupingKey *--  grupo5.donaciones.models.entities.donaciones.Donacion : donacionOriginal
+grupo5.donaciones.models.entities.beneficiarios.EntidadBeneficiaria -->  grupo5.donaciones.models.entities.personas.Juridica : juridica
+grupo5.donaciones.models.entities.beneficiarios.EntidadBeneficiaria ..|>  grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.categorias.AliasSubcategoria *--  grupo5.donaciones.models.entities.categorias.Subcategoria : subcategoria
+grupo5.donaciones.models.entities.categorias.Categoria -->  grupo5.donaciones.models.entities.categorias.Unidad : tipoUnidad
+grupo5.donaciones.models.entities.categorias.Subcategoria -->  grupo5.donaciones.models.entities.categorias.Categoria : categoria
+grupo5.donaciones.models.entities.donaciones.Bien -->  grupo5.donaciones.models.entities.donaciones.Estado : estado
+grupo5.donaciones.models.entities.donaciones.Donacion "1" o-- "0..*"  grupo5.donaciones.models.entities.donaciones.ItemDonacion : items
+grupo5.donaciones.models.entities.donaciones.Donacion -->  grupo5.donaciones.models.entities.donantes.Donante : donante
+grupo5.donaciones.models.entities.donaciones.ItemDonacion -->  grupo5.donaciones.models.entities.donaciones.Bien : bien
+grupo5.donaciones.models.entities.donacionesIndependientes.AsignacionRealizada ..|>  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion
+grupo5.donaciones.models.entities.donacionesIndependientes.CambioEstado *--  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion : estadoAnterior
+grupo5.donaciones.models.entities.donacionesIndependientes.CambioEstado *--  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion : estadoNuevo
+grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente "1" o-- "0..*"  grupo5.donaciones.models.entities.donacionesIndependientes.CambioEstado : historial
+grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente "1" o-- "0..*"  grupo5.donaciones.models.entities.donacionesIndependientes.ItemDonacionIndependiente : items
+grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente -->  grupo5.donaciones.models.entities.categorias.Subcategoria : subCategoria
+grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente -->  grupo5.donaciones.models.entities.donaciones.Donacion : donacionOriginal
+grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente -->  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion : estadoActual
+grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente -->  grupo5.donaciones.models.entities.necesidades.Asignable : asignadaA
+grupo5.donaciones.models.entities.donacionesIndependientes.EnDeposito ..|>  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion
+grupo5.donaciones.models.entities.donacionesIndependientes.EnTraslado ..|>  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion
+grupo5.donaciones.models.entities.donacionesIndependientes.EntregaFallida ..|>  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion
+grupo5.donaciones.models.entities.donacionesIndependientes.Entregada ..|>  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion
+grupo5.donaciones.models.entities.donacionesIndependientes.ItemDonacionIndependiente -->  grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente : donacionIndependiente
+grupo5.donaciones.models.entities.donacionesIndependientes.ItemDonacionIndependiente -->  grupo5.donaciones.models.entities.itemsNormalizados.BienNormalizado : bien
+grupo5.donaciones.models.entities.donacionesIndependientes.ListaParaEntregar ..|>  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion
+grupo5.donaciones.models.entities.donacionesIndependientes.Vencida ..|>  grupo5.donaciones.models.entities.donacionesIndependientes.EstadoDonacion
+grupo5.donaciones.models.entities.donantes.Donante -->  grupo5.donaciones.models.entities.personas.Persona : persona
+grupo5.donaciones.models.entities.donantes.Donante ..|>  grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.itemsNormalizados.BienNormalizado -->  grupo5.donaciones.models.entities.categorias.Subcategoria : subcategoria
+grupo5.donaciones.models.entities.itemsNormalizados.BienNormalizado -->  grupo5.donaciones.models.entities.donaciones.Bien : bienOriginal
+grupo5.donaciones.models.entities.itemsNormalizados.BienNormalizado -->  grupo5.donaciones.models.entities.itemsNormalizados.EstadoNormalizacion : estadoNormalizacion
+grupo5.donaciones.models.entities.itemsNormalizados.ItemDonacionNormalizado *--  grupo5.donaciones.models.entities.donaciones.Donacion : donacionOriginal
+grupo5.donaciones.models.entities.itemsNormalizados.ItemDonacionNormalizado *--  grupo5.donaciones.models.entities.itemsNormalizados.BienNormalizado : bien
+grupo5.donaciones.models.entities.necesidades.Necesidad "1" o-- "0..*"  grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente : donacionesAsignadas
+grupo5.donaciones.models.entities.necesidades.Necesidad -->  grupo5.donaciones.models.entities.beneficiarios.EntidadBeneficiaria : entidad
+grupo5.donaciones.models.entities.necesidades.Necesidad -->  grupo5.donaciones.models.entities.categorias.Subcategoria : subcategoria
+grupo5.donaciones.models.entities.necesidades.NecesidadExtraordinaria "1" o-- "0..*"  grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente : donacionesAsignadas
+grupo5.donaciones.models.entities.necesidades.NecesidadExtraordinaria --|>  grupo5.donaciones.models.entities.necesidades.Necesidad
+grupo5.donaciones.models.entities.necesidades.NecesidadExtraordinaria ..|>  grupo5.donaciones.models.entities.necesidades.Asignable
+grupo5.donaciones.models.entities.necesidades.NecesidadRecurrente "1" o-- "0..*"  grupo5.donaciones.models.entities.necesidades.PeriodoNecesidad : periodos
+grupo5.donaciones.models.entities.necesidades.NecesidadRecurrente --|>  grupo5.donaciones.models.entities.necesidades.Necesidad
+grupo5.donaciones.models.entities.necesidades.PeriodoNecesidad "1" o-- "0..*"  grupo5.donaciones.models.entities.donacionesIndependientes.DonacionIndependiente : donacionesAsignadas
+grupo5.donaciones.models.entities.necesidades.PeriodoNecesidad -->  grupo5.donaciones.models.entities.necesidades.NecesidadRecurrente : necesidadRecurrente
+grupo5.donaciones.models.entities.necesidades.PeriodoNecesidad ..|>  grupo5.donaciones.models.entities.necesidades.Asignable
+grupo5.donaciones.models.entities.personas.Direccion -->  grupo5.donaciones.models.entities.personas.Localidad : localidad
+grupo5.donaciones.models.entities.personas.Direccion ..|>  grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.personas.Humana -->  grupo5.donaciones.models.entities.personas.Genero : genero
+grupo5.donaciones.models.entities.personas.Humana --|>  grupo5.donaciones.models.entities.personas.Persona
+grupo5.donaciones.models.entities.personas.Juridica "1" o-- "0..*"  grupo5.donaciones.models.entities.personas.Humana : representantes
+grupo5.donaciones.models.entities.personas.Juridica -->  grupo5.donaciones.models.entities.personas.TipoJuridico : tipo
+grupo5.donaciones.models.entities.personas.Juridica --|>  grupo5.donaciones.models.entities.personas.Persona
+grupo5.donaciones.models.entities.personas.Localidad -->  grupo5.donaciones.models.entities.personas.Provincia : provincia
+grupo5.donaciones.models.entities.personas.Localidad ..|>  grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.personas.Pais ..|>  grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.personas.Persona -->  grupo5.donaciones.models.entities.personas.Direccion : direccion
+grupo5.donaciones.models.entities.personas.Persona -->  grupo5.donaciones.models.entities.personas.TipoDocumento : tipoDocumento
+grupo5.donaciones.models.entities.personas.Persona ..|>  grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.entities.personas.Provincia -->  grupo5.donaciones.models.entities.personas.Pais : pais
+grupo5.donaciones.models.entities.personas.Provincia ..|>  grupo5.donaciones.models.privacidad.Anonimizable
+grupo5.donaciones.models.repositories.NecesidadRecurrenteRepository "1" o-- "0..*"  grupo5.donaciones.models.entities.necesidades.NecesidadRecurrente : baseDeDatosFalsa
+grupo5.donaciones.schedulers.PlanificadorDeNecesidades *--  grupo5.donaciones.models.repositories.NecesidadRecurrenteRepository : necesidadRepository
+
+
+@enduml

@@ -41,7 +41,7 @@ ENV/
 .coverage.*
 htmlcov/
 .cache/
-
+output/
 # mypy
 .mypy_cache/
 
