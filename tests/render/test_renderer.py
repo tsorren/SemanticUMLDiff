@@ -90,3 +90,28 @@ def test_renderer_custom_configs() -> None:
     assert "skinparam linetype poly" in puml2
     assert "set namespaceSeparator none" in puml2
     assert "doSomething(param1 : String, param2 : int)" in puml2
+
+
+def test_render_relationships_with_multiplicity_and_label() -> None:
+    from domain.models import UMLRelation
+    c_a = UMLClass(name="ClassA", kind="class")
+    c_b = UMLClass(name="ClassB", kind="class")
+    rel = UMLRelation(
+        source="ClassA",
+        target="ClassB",
+        relation_type="composition",
+        multiplicity_source="1",
+        multiplicity_target="*",
+        label="contains"
+    )
+    base_model = UMLModel(module_name="test", classes=(c_a, c_b), relations=(rel,))
+    pr_model = UMLModel(module_name="test", classes=(c_a, c_b), relations=(rel,))
+    diff = DiffResult(module_name="test", changes=())
+    spec = RenderSpec(
+        included_nodes=("ClassA", "ClassB"),
+        included_edges=(rel,),
+        highlight_rules=()
+    )
+    puml = render_puml(base_model, pr_model, diff, spec)
+    assert 'ClassA "1" *-- "*" ClassB : contains' in puml
+

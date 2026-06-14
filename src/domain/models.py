@@ -39,6 +39,8 @@ class UMLRelation:
     relation_type: str  # e.g., "association", "inheritance", "composition", "aggregation"
     multiplicity_source: str = ""
     multiplicity_target: str = ""
+    label: str = ""
+
 
 
 @dataclass(frozen=True)

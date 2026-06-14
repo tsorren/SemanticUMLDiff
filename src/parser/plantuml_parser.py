@@ -396,6 +396,10 @@ class PlantUMLTransformer(Transformer[Any, Any]):
         target = str(items[current_idx])
         current_idx += 1
 
+        label = ""
+        if current_idx < len(items) and items[current_idx] is not None:
+            label = str(items[current_idx]).strip()
+
         # Determine relation type from arrow
         rel_type = "association"
         if "<|--" in arrow or "--|>" in arrow or "<|.." in arrow or "..|>" in arrow:
@@ -410,8 +414,10 @@ class PlantUMLTransformer(Transformer[Any, Any]):
             target=target,
             relation_type=rel_type,
             multiplicity_source=src_mult,
-            multiplicity_target=tgt_mult
+            multiplicity_target=tgt_mult,
+            label=label
         )
+
 
 
 class LarkPlantUMLParser:
