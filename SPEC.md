@@ -1140,33 +1140,61 @@ Integración con publicadores (GitHub y Discord).
 
 # Objetivo
 
-Migrar por completo el parser regex heredado a un parser formal LALR(1) basado en Lark, y el motor de comparación manual a una solución basada en DeepDiff y heurísticas refinadas (movimiento de clases y renombres de métodos).
+Migrar por completo el parser regex heredado a un parser formal LALR(1) basado en Lark, y el motor de comparación manual a una solución basada en DeepDiff y heurísticas refinadas (movimiento de clases y renombres de métodos), garantizando paridad funcional, tipado estricto y robustez frente a errores.
+
+---
 
 # Tareas Realizadas
 
 ## T-1701
-Parser Formal Lark LALR(1).
+EBNF Lark Grammar & Parser LALR(1) Base.
 
 ### Done cuando
-* Se escribió la gramática formal en `src/parser/lark_grammar.py` y se implementó el transformer en `src/parser/plantuml_parser.py`.
-* Se implementó `UMLType(str)` para resolver de manera elegante y determinista el parseo de retornos de tipo (prefijo y sufijo) y nombres de métodos sin importar el orden o presencia de parámetros.
-* Se resolvió el conflicto de tokens en Lark para descriptores y parámetros complejos priorizando `PARAM_TOKEN` y flexibilizando las declaraciones de paquetes sin comillas.
+* Se definió la gramática formal EBNF en `src/parser/lark_grammar.py` para soportar clases, interfaces, enums, miembros (atributos/métodos) y relaciones.
+* Se configuró Lark con el parser LALR(1) y se resolvieron las ambigüedades en la tokenización de firmas de métodos e identificadores complejos.
+
+---
 
 ## T-1702
-Motor de Diff Semántico basado en DeepDiff.
+AST Transformation & Parity Testing.
 
 ### Done cuando
-* Se serializan los modelos a diccionarios canónicos en `src/diff/serializer.py` con purificación de tipos de parámetros para compararlos usando `DeepDiff`.
-* Se configuró `threshold_to_diff_deeper=0` para obtener inserciones y remociones a nivel de miembros individuales de manera precisa.
-* Se re-integraron las heurísticas de movimiento de clases y renombre de métodos (`src/diff/heuristics.py`) como post-procesadores sobre los resultados crudos de DeepDiff.
+* Se implementó `PlantUMLTransformer` en `src/parser/plantuml_parser.py` para mapear el CST generado por Lark a objetos inmutables del dominio (`UMLClass`, `UMLRelation`, etc.).
+* Se introdujo `UMLType(str)` para distinguir tipos de datos y nombres durante la transformación sintáctica bajo la opción `maybe_placeholders=False`.
+* Se crearon pruebas de paridad comparando los resultados del parser Lark contra el parser regex heredado.
+
+---
 
 ## T-1703
-Migración, Limpieza y Validación.
+Static Semantic Validation, Scoping & Binding.
 
 ### Done cuando
-* Se eliminaron los módulos obsoletos y se renombraron los nuevos archivos a los nombres del legacy para mantener compatibilidad e higiene del código.
-* Se actualizaron todos los archivos de tests para ajustar importaciones de parser y diff.
-* Se validaron Ruff y Mypy en todo el código fuente de `src/`, y el suite de pruebas de pytest con 93 tests pasó al 100%, incluyendo la paridad de complejidad donaciones en exactamente 321 puntos y "Media 🟡".
+* Se implementó el soporte para declaraciones de paquetes (tanto con comillas como sin comillas) y se estructuró la propagación del namespace calificado (FQN).
+* Se incorporó la validación semántica `_validate_relations` que chequea que las relaciones involucren clases existentes en el modelo y advierte al respecto.
+* Se implementó el control de excepciones de Lark (`UnexpectedToken`, `UnexpectedCharacters`) para registrar logs de error detallados con línea/columna y degradar de manera elegante a un modelo vacío (`UMLModel`).
+
+---
+
+## T-1704
+Semantic Diff Engine via DeepDiff.
+
+### Done cuando
+* Se implementó el pipeline de serialización canónica en `src/diff/serializer.py` para convertir los modelos a estructuras de diccionarios puros comparables por `DeepDiff`.
+* Se configuró `DeepDiff` con `threshold_to_diff_deeper=0` para aislar inserciones, modificaciones y borrados a nivel de miembros individuales de manera exacta.
+* Se re-integraron las heurísticas refinadas de detección de movimiento de clases (`<<moved>>`) y de renombre de métodos en `src/diff/heuristics.py` como capas de post-procesamiento.
+
+---
+
+## T-1705
+Migration, Cleanup & Type Stabilization.
+
+### Done cuando
+* Se eliminaron los archivos del parser heredado, normalizador obsoleto y tests deprecados.
+* Se renombraron las nuevas implementaciones a los nombres originales (`plantuml_parser.py`, `compute.py`, `test_compute_deepdiff.py`) para mantener la arquitectura limpia y compatibilidad con el pipeline.
+* Se declararon los aliases de compatibilidad hacia atrás en las interfaces públicas.
+* Se validaron todas las restricciones de tipos con `mypy` y el estilo de código con `ruff check`.
+* Se verificó que el suite completo de pruebas (93 tests en pytest) pase al 100%, con paridad de complejidad y regeneración correcta de diagramas de demo.
+
 
 
 

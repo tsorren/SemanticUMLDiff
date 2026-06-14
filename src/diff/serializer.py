@@ -6,7 +6,9 @@ Las claves están ordenadas determinísticamente para garantizar hashing estable
 """
 
 from typing import Any, Dict
+
 from domain.models import UMLModel
+
 
 def _extract_type_from_parameter(param: str) -> str:
     """
