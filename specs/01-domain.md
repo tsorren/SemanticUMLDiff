@@ -280,24 +280,13 @@ The system should validate:
 
 ## Useful Implementation Notes
 
-### Regex strategy
-Start with a small supported subset instead of attempting full PlantUML parsing.
-
-Useful patterns to consider:
-- class declarations
-- interface declarations
-- enum declarations
-- method signatures
-- attribute declarations
-- relation declarations
-
-### Parser strategy
-Prefer:
-- line-oriented parsing,
-- canonical preprocessing,
-- and explicit state transitions.
-
-Avoid relying only on large permissive regexes for everything.
+### Compiler/Parser strategy
+The parser is implemented using a formal EBNF grammar in Lark with an LALR(1) parsing engine.
+It uses:
+- a preprocessing pipeline to clean block/inline comments and ignore styling elements,
+- a formal grammar defining classes, interfaces, enums, attributes, methods, packages, and relationships,
+- a Lark Transformer (`PlantUMLTransformer`) to convert the CST to AST domain models,
+- and a custom `UMLType(str)` wrapper to distinguish types from names during AST transformation.
 
 ### Graph strategy
 Use a graph model to compute:
