@@ -1,21 +1,28 @@
 import hashlib
+from typing import Any, List, Tuple
+
 import lark
-from lark import Transformer, Token, Tree
-from typing import Any, Dict, List, Tuple
+from lark import Token, Transformer, Tree
+
 from domain.models import UMLAttribute, UMLClass, UMLMethod, UMLModel, UMLRelation
 from parser.lark_grammar import PLANTUML_GRAMMAR
 from parser.preprocessor import preprocess
 
-class PlantUMLTransformer(Transformer):
+
+class UMLType(str):
+    """Subclase de str para diferenciar tipos de nombres en el CST/AST."""
+    pass
+
+class PlantUMLTransformer(Transformer[Any, Any]):
     """Traduce el Parse Tree de Lark a objetos inmutables del dominio."""
-    
+
     def start(self, items: List[Any]) -> Any:
         return items[0]
-        
+
     def document(self, items: List[Any]) -> Tuple[List[UMLClass], List[UMLRelation]]:
         classes: List[UMLClass] = []
         relations: List[UMLRelation] = []
-        
+
         for item in items:
             if isinstance(item, UMLClass):
                 classes.append(item)
@@ -31,7 +38,7 @@ class PlantUMLTransformer(Transformer):
 
     def package_decl(self, items: List[Any]) -> List[Any]:
         pkg_name = str(items[0]).strip('"')
-        children = []
+        children: List[Any] = []
         for item in items[1:]:
             if isinstance(item, UMLClass):
                 fqn = f"{pkg_name}.{item.name}" if "." not in item.name else item.name
@@ -46,16 +53,16 @@ class PlantUMLTransformer(Transformer):
                 children.extend(item)
         return children
 
-    def class_kind(self, items: List[Any]) -> Tree:
+    def class_kind(self, items: List[Any]) -> Tree[Any]:
         return Tree("class_kind", items)
 
-    def interface_kind(self, items: List[Any]) -> Tree:
+    def interface_kind(self, items: List[Any]) -> Tree[Any]:
         return Tree("interface_kind", items)
 
     def element_simple(self, items: List[Any]) -> UMLClass:
         kind_node = items[0]
         name_token = items[1]
-        
+
         kind_str = "class"
         is_abstract = False
         if isinstance(kind_node, Tree) and kind_node.data == "class_kind":
@@ -67,7 +74,7 @@ class PlantUMLTransformer(Transformer):
                 kind_str = "class"
         elif isinstance(kind_node, Tree) and kind_node.data == "interface_kind":
             kind_str = "interface"
-            
+
         attrs = []
         methods = []
         for item in items[2:]:
@@ -81,7 +88,7 @@ class PlantUMLTransformer(Transformer):
                         attrs.append(sub)
                     elif isinstance(sub, UMLMethod):
                         methods.append(sub)
-                
+
         modifiers = ("abstract",) if is_abstract else ()
         return UMLClass(
             name=str(name_token),
@@ -94,14 +101,14 @@ class PlantUMLTransformer(Transformer):
     def element_fqn(self, items: List[Any]) -> UMLClass:
         kind_node = items[0]
         quoted_name = str(items[1]).strip('"')
-        
+
         # Check alias
         alias = None
         current_idx = 2
         if current_idx < len(items) and isinstance(items[current_idx], Token) and items[current_idx].type == "IDENTIFIER":
             alias = str(items[current_idx])
             current_idx += 1
-            
+
         kind_str = "class"
         is_abstract = False
         if isinstance(kind_node, Tree) and kind_node.data == "class_kind":
@@ -112,7 +119,7 @@ class PlantUMLTransformer(Transformer):
                 kind_str = "class"
         elif isinstance(kind_node, Tree) and kind_node.data == "interface_kind":
             kind_str = "interface"
-            
+
         attrs = []
         methods = []
         for item in items[current_idx:]:
@@ -126,7 +133,7 @@ class PlantUMLTransformer(Transformer):
                         attrs.append(sub)
                     elif isinstance(sub, UMLMethod):
                         methods.append(sub)
-                
+
         modifiers = ("abstract",) if is_abstract else ()
         return UMLClass(
             name=alias if alias else quoted_name,
@@ -138,7 +145,7 @@ class PlantUMLTransformer(Transformer):
 
     def enum_simple(self, items: List[Any]) -> UMLClass:
         name_token = items[1] # items[0] is ENUM token
-        
+
         attrs = []
         methods = []
         for item in items[2:]:
@@ -152,7 +159,7 @@ class PlantUMLTransformer(Transformer):
                         attrs.append(sub)
                     elif isinstance(sub, UMLMethod):
                         methods.append(sub)
-                
+
         return UMLClass(
             name=str(name_token),
             kind="enum",
@@ -162,13 +169,13 @@ class PlantUMLTransformer(Transformer):
 
     def enum_fqn(self, items: List[Any]) -> UMLClass:
         quoted_name = str(items[1]).strip('"')
-        
+
         alias = None
         current_idx = 2
         if current_idx < len(items) and isinstance(items[current_idx], Token) and items[current_idx].type == "IDENTIFIER":
             alias = str(items[current_idx])
             current_idx += 1
-            
+
         attrs = []
         methods = []
         for item in items[current_idx:]:
@@ -182,7 +189,7 @@ class PlantUMLTransformer(Transformer):
                         attrs.append(sub)
                     elif isinstance(sub, UMLMethod):
                         methods.append(sub)
-                
+
         return UMLClass(
             name=alias if alias else quoted_name,
             kind="enum",
@@ -226,7 +233,7 @@ class PlantUMLTransformer(Transformer):
     def method_decl(self, items: List[Any]) -> UMLMethod:
         visibility = ""
         modifiers = []
-        
+
         current_idx = 0
         while current_idx < len(items):
             item = items[current_idx]
@@ -239,13 +246,24 @@ class PlantUMLTransformer(Transformer):
                 current_idx += 1
             else:
                 break
-                
-        name_str = str(items[current_idx])
-        current_idx += 1
-        
+
+        remaining = items[current_idx:]
+
+        ret_type = ""
+        name_str = ""
         params = []
-        if current_idx < len(items) and isinstance(items[current_idx], Tree) and items[current_idx].data == "parameters":
-            params_node = items[current_idx]
+
+        params_node = None
+        for item in remaining:
+            if isinstance(item, Tree) and item.data == "parameters":
+                params_node = item
+                break
+
+        if params_node is not None:
+            params_idx = remaining.index(params_node)
+            before_params = remaining[:params_idx]
+            after_params = remaining[params_idx+1:]
+
             for param_tree in params_node.children:
                 if param_tree.data == "param_colon":
                     p_name = str(param_tree.children[0].children[0]) if isinstance(param_tree.children[0], Tree) else str(param_tree.children[0])
@@ -257,16 +275,26 @@ class PlantUMLTransformer(Transformer):
                     params.append(f"{p_type} {p_name}")
                 elif param_tree.data == "param_type_only":
                     params.append(str(param_tree.children[0]))
-            current_idx += 1
-            
-        ret_type = ""
-        if current_idx < len(items) and items[current_idx] is not None:
-            ret_type = str(items[current_idx])
-            
+        else:
+            before_params = remaining
+            after_params = []
+            # Now we parse before_params and after_params:
+        # type is UMLType, name is str (but NOT UMLType)
+        for item in before_params:
+            if isinstance(item, UMLType):
+                ret_type = item
+            elif isinstance(item, str):
+                name_str = item
+
+        # Suffix type is in after_params
+        for item in after_params:
+            if isinstance(item, UMLType):
+                ret_type = item
+
         return UMLMethod(
             name=name_str,
             parameters=tuple(params),
-            return_type=ret_type,
+            return_type=str(ret_type),
             visibility=visibility,
             modifiers=tuple(modifiers)
         )
@@ -274,7 +302,7 @@ class PlantUMLTransformer(Transformer):
     def attribute_colon(self, items: List[Any]) -> UMLAttribute:
         visibility = ""
         modifiers = []
-        
+
         current_idx = 0
         while current_idx < len(items):
             item = items[current_idx]
@@ -287,17 +315,17 @@ class PlantUMLTransformer(Transformer):
                 current_idx += 1
             else:
                 break
-                
+
         name_str = str(items[current_idx])
         current_idx += 1
-        
+
         attr_type = str(items[current_idx])
         current_idx += 1
-        
+
         default_val = ""
         if current_idx < len(items) and items[current_idx] is not None:
             default_val = str(items[current_idx]).strip('"').strip()
-            
+
         return UMLAttribute(
             name=name_str,
             type=attr_type,
@@ -309,7 +337,7 @@ class PlantUMLTransformer(Transformer):
     def attribute_type_first(self, items: List[Any]) -> UMLAttribute:
         visibility = ""
         modifiers = []
-        
+
         current_idx = 0
         while current_idx < len(items):
             item = items[current_idx]
@@ -322,17 +350,17 @@ class PlantUMLTransformer(Transformer):
                 current_idx += 1
             else:
                 break
-                
+
         attr_type = str(items[current_idx])
         current_idx += 1
-        
+
         name_str = str(items[current_idx])
         current_idx += 1
-        
+
         default_val = ""
         if current_idx < len(items) and items[current_idx] is not None:
             default_val = str(items[current_idx]).strip('"').strip()
-            
+
         return UMLAttribute(
             name=name_str,
             type=attr_type,
@@ -341,33 +369,33 @@ class PlantUMLTransformer(Transformer):
             modifiers=tuple(modifiers)
         )
 
-    def generic_type(self, items: List[Any]) -> str:
+    def generic_type(self, items: List[Any]) -> UMLType:
         base = str(items[0].children[0]) if isinstance(items[0], Tree) else str(items[0])
         if len(items) > 1:
             args = ", ".join(str(a) for a in items[1:])
-            return f"{base}<{args}>"
-        return base
+            return UMLType(f"{base}<{args}>")
+        return UMLType(base)
 
     def relationship_decl(self, items: List[Any]) -> UMLRelation:
         source = str(items[0])
-        
+
         src_mult = ""
         current_idx = 1
         if isinstance(items[current_idx], Token) and items[current_idx].type == "ESCAPED_STRING":
             src_mult = str(items[current_idx]).strip('"')
             current_idx += 1
-            
+
         arrow = str(items[current_idx])
         current_idx += 1
-        
+
         tgt_mult = ""
         if isinstance(items[current_idx], Token) and items[current_idx].type == "ESCAPED_STRING":
             tgt_mult = str(items[current_idx]).strip('"')
             current_idx += 1
-            
+
         target = str(items[current_idx])
         current_idx += 1
-        
+
         # Determine relation type from arrow
         rel_type = "association"
         if "<|--" in arrow or "--|>" in arrow or "<|.." in arrow or "..|>" in arrow:
@@ -376,7 +404,7 @@ class PlantUMLTransformer(Transformer):
             rel_type = "composition"
         elif "o--" in arrow or "--o" in arrow:
             rel_type = "aggregation"
-            
+
         return UMLRelation(
             source=source,
             target=target,
@@ -388,7 +416,7 @@ class PlantUMLTransformer(Transformer):
 
 class LarkPlantUMLParser:
     """Parser PlantUML basado en Lark LALR(1)."""
-    
+
     def __init__(self, module_name: str, source_hash: str = "") -> None:
         self.module_name = module_name
         self.source_hash = source_hash
@@ -398,8 +426,8 @@ class LarkPlantUMLParser:
             parser="lalr",
             maybe_placeholders=False,
         )
-    
-    def parse_tree(self, raw_text: str) -> lark.Tree:
+
+    def parse_tree(self, raw_text: str) -> lark.Tree[Any]:
         """Genera el Parse Tree (CST) sin transformar a modelos de dominio."""
         clean_lines = preprocess(raw_text)
         clean_text = "@startuml\n" + "\n".join(clean_lines) + "\n@enduml"
@@ -429,22 +457,23 @@ class LarkPlantUMLParser:
     def parse(self, raw_text: str) -> UMLModel:
         """Pipeline completo: preprocesado -> CST -> AST -> UMLModel normalizado."""
         import logging
-        from lark.exceptions import UnexpectedToken, UnexpectedCharacters
+
+        from lark.exceptions import UnexpectedCharacters, UnexpectedToken
         logger = logging.getLogger(__name__)
 
         if not self.source_hash:
             self.source_hash = hashlib.sha256(raw_text.encode('utf-8')).hexdigest()
-            
+
         try:
             tree = self.parse_tree(raw_text)
             classes, relations = PlantUMLTransformer().transform(tree)
-            
+
             # Normalización determinista (sorting canónico)
             sorted_classes = tuple(sorted(classes, key=lambda c: c.name))
             sorted_relations = tuple(sorted(
                 relations, key=lambda r: (r.source, r.target, r.relation_type)
             ))
-            
+
             model = UMLModel(
                 module_name=self.module_name,
                 classes=sorted_classes,

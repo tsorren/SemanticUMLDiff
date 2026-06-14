@@ -28,21 +28,21 @@ package com.example.project {
     assert len(model.classes) == 3
 
     # 1. Interface
-    iface = next(c for c in model.classes if c.name == "NotificacionSender")
+    iface = next(c for c in model.classes if c.name == "com.example.project.NotificacionSender")
     assert iface.kind == "interface"
     assert len(iface.methods) == 2
 
     m1 = next(m for m in iface.methods if m.name == "enviarMensaje")
     assert m1.visibility == "+"
     assert m1.return_type == "boolean"
-    assert m1.parameters == ("paramString1 : String", "sender : NotificacionSender")
+    assert m1.parameters == ("paramString1: String", "sender: NotificacionSender")
 
     m1_b = next(m for m in iface.methods if m.name == "otroMensaje")
     assert m1_b.visibility == "+"
     assert m1_b.return_type == "void"
 
     # 2. Abstract Class
-    abs_cls = next(c for c in model.classes if c.name == "AbstractSender")
+    abs_cls = next(c for c in model.classes if c.name == "com.example.project.AbstractSender")
     assert abs_cls.kind == "abstract class"
     assert len(abs_cls.attributes) == 1
     assert abs_cls.attributes[0].name == "id"
@@ -58,5 +58,5 @@ package com.example.project {
     assert m3.visibility == "~"
 
     # 3. Enum
-    enum_cls = next(c for c in model.classes if c.name == "Status")
+    enum_cls = next(c for c in model.classes if c.name == "com.example.project.Status")
     assert enum_cls.kind == "enum"

@@ -1,10 +1,13 @@
 import os
 from pathlib import Path
+
 import pytest
-from parser.plantuml_parser import LarkPlantUMLParser
+
 from diff.compute import compute_diff_deepdiff
 from graph.reducer import reduce_graph
+from parser.plantuml_parser import LarkPlantUMLParser
 from render.puml_renderer import render_puml
+
 
 def test_donaciones_puml_snapshot() -> None:
     # 1. Paths to files

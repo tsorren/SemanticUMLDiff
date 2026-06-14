@@ -1,6 +1,5 @@
-import pytest
 from parser.plantuml_parser import LarkPlantUMLParser
-from domain.models import UMLModel, UMLClass, UMLAttribute, UMLMethod
+
 
 def test_modifiers_order_parity():
     parser = LarkPlantUMLParser("test")

@@ -1,6 +1,5 @@
-import pytest
 from parser.plantuml_parser import LarkPlantUMLParser
-from domain.models import UMLClass, UMLAttribute, UMLMethod, UMLRelation
+
 
 def test_class_transformation():
     parser = LarkPlantUMLParser("test")

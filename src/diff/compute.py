@@ -5,9 +5,11 @@ Traduce los paths sintácticos de DeepDiff en cambios semánticos de dominio.
 """
 import re
 from typing import Any, Dict, List, Tuple
+
 from deepdiff import DeepDiff
+
 from domain.diff_models import ChangeType, DiffItem, DiffResult
-from domain.models import UMLClass, UMLAttribute, UMLMethod, UMLRelation, UMLModel
+from domain.models import UMLClass, UMLModel
 
 # Regex para parsear paths de DeepDiff
 PATH_RE = re.compile(
@@ -16,16 +18,16 @@ PATH_RE = re.compile(
     r"(?:\['(\w+)'\])?"
 )
 
-def _parse_deepdiff_path(path: str) -> dict:
+def _parse_deepdiff_path(path: str) -> Dict[str, Any]:
     """
     Parsea un path de DeepDiff y extrae la información semántica.
-    
+
     Returns: dict con keys: category, entity_name, member_type, member_name, field
     """
     m = PATH_RE.match(path)
     if not m:
         return {}
-    
+
     groups = m.groups()
     result = {
         "category": groups[0],       # "classes" | "relations"
@@ -37,10 +39,10 @@ def _parse_deepdiff_path(path: str) -> dict:
         result["member_name"] = groups[3]   # nombre del atributo o firma del método
     if groups[4]:
         result["field"] = groups[4]         # "type" | "visibility" | "return_type" | "kind" ...
-    
+
     return result
 
-def _resolve_element(model: UMLModel, class_name: str, member_type: str, member_name: str):
+def _resolve_element(model: UMLModel, class_name: str, member_type: str, member_name: str) -> Any:
     """Busca el objeto de dominio original en el modelo."""
     for cls in model.classes:
         if cls.name == class_name:
@@ -134,31 +136,32 @@ def compute_diff_deepdiff(
     """
     Computa la diferencia semántica entre dos modelos UML usando DeepDiff.
     """
-    from diff.serializer import model_to_dict
-    from diff.heuristics import detect_moved_classes, detect_method_renames
     from dataclasses import replace
-    
+
+    from diff.heuristics import detect_method_renames, detect_moved_classes
+    from diff.serializer import model_to_dict
+
     root_package = _detect_root_package(base, pr, root_package)
-    
+
     base_filtered = _apply_filters(base, root_package)
     pr_filtered = _apply_filters(pr, root_package)
-    
+
     base_dict = model_to_dict(base_filtered, method_parameter_style)
     pr_dict = model_to_dict(pr_filtered, method_parameter_style)
-    
+
     ddiff = DeepDiff(base_dict, pr_dict, ignore_order=True, threshold_to_diff_deeper=0)
-    
+
     changes: List[DiffItem] = []
-    
+
     # 1. Dictionary Items Added
     for path in ddiff.get("dictionary_item_added", []):
         info = _parse_deepdiff_path(path)
         if not info:
             continue
-        
+
         category = info["category"]
         entity_name = info["entity_name"]
-        
+
         if category == "classes":
             if "member_type" not in info or not info["member_type"]:
                 # Class added
@@ -194,16 +197,16 @@ def compute_diff_deepdiff(
                     entity_name=entity_name,
                     change_type=ChangeType.ADDED
                 ))
-                
+
     # 2. Dictionary Items Removed
     for path in ddiff.get("dictionary_item_removed", []):
         info = _parse_deepdiff_path(path)
         if not info:
             continue
-        
+
         category = info["category"]
         entity_name = info["entity_name"]
-        
+
         if category == "classes":
             if "member_type" not in info or not info["member_type"]:
                 # Class removed
@@ -231,21 +234,21 @@ def compute_diff_deepdiff(
                 entity_name=entity_name,
                 change_type=ChangeType.REMOVED
             ))
-            
+
     # 3. Values Changed (modified properties)
     # We group changes by member to avoid duplicates
-    modified_members = {}
+    modified_members: Dict[Tuple[str, str, str], List[Tuple[str, Any]]] = {}
     modified_classes = {}
     modified_relations = {}
-    
+
     for path, detail in ddiff.get("values_changed", {}).items():
         info = _parse_deepdiff_path(path)
         if not info:
             continue
-        
+
         category = info["category"]
         entity_name = info["entity_name"]
-        
+
         if category == "classes":
             if "member_type" not in info or not info["member_type"]:
                 # Class property changed (e.g. kind)
@@ -253,14 +256,14 @@ def compute_diff_deepdiff(
             else:
                 member_type = info["member_type"]
                 member_name = info["member_name"]
-                key = (entity_name, member_type, member_name)
-                if key not in modified_members:
-                    modified_members[key] = []
-                modified_members[key].append((info["field"], detail))
+                member_key = (entity_name, member_type, member_name)
+                if member_key not in modified_members:
+                    modified_members[member_key] = []
+                modified_members[member_key].append((info["field"], detail))
         elif category == "relations":
             # Relation property changed (e.g. multiplicity)
             modified_relations[entity_name] = detail
-            
+
     # Process modified classes
     for class_name, detail in modified_classes.items():
         # Typically class kind changed
@@ -274,12 +277,12 @@ def compute_diff_deepdiff(
                 before=base_cls.kind,
                 after=pr_cls.kind
             ))
-            
+
     # Process modified members
     for (entity_name, member_type, member_name), field_changes in modified_members.items():
         base_elem = _resolve_element(base_filtered, entity_name, member_type, member_name)
         pr_elem = _resolve_element(pr_filtered, entity_name, member_type, member_name)
-        
+
         if member_type == "attributes":
             if base_elem and pr_elem:
                 before_str = f"{base_elem.visibility} {base_elem.name}: {base_elem.type}".strip()
@@ -308,7 +311,7 @@ def compute_diff_deepdiff(
                     before_element=base_elem,
                     after_element=pr_elem
                 ))
-                
+
     # Process modified relations
     for rel_name, detail in modified_relations.items():
         # E.g. key is "SourceType target"
@@ -324,23 +327,23 @@ def compute_diff_deepdiff(
                 before=base_rel.relation_type,
                 after=pr_rel.relation_type
             ))
-            
+
     # Apply heuristics
     base_classes_dict = {c.name: c for c in base_filtered.classes}
     pr_classes_dict = {c.name: c for c in pr_filtered.classes}
-    
+
     # 1. Detect Moved Classes
     changes, moved_pairs = detect_moved_classes(
         changes, base_classes_dict, pr_classes_dict, method_parameter_style
     )
-    
+
     # Compare members of moved classes using DeepDiff recursively on dummy models
     for rm_name, add_name in moved_pairs:
         rm_c = base_classes_dict.get(rm_name)
         add_c = pr_classes_dict.get(add_name)
         if rm_c and add_c:
             rm_c_renamed = replace(rm_c, name=add_name)
-            
+
             dummy_base = UMLModel(
                 module_name=base_filtered.module_name,
                 classes=(rm_c_renamed,),
@@ -353,15 +356,15 @@ def compute_diff_deepdiff(
                 relations=(),
                 source_hash=pr_filtered.source_hash
             )
-            
+
             dummy_result = compute_diff_deepdiff(
                 dummy_base, dummy_pr, root_package="", method_parameter_style=method_parameter_style
             )
-            
+
             for ch in dummy_result.changes:
                 if ch.entity_type in ("method", "attribute"):
                     changes.append(ch)
-                    
+
     # Map moved class names in base_classes_dict to their original class objects
     # under the new name so that method rename detection can resolve contexts
     base_classes_for_renames = dict(base_classes_dict)
@@ -369,15 +372,15 @@ def compute_diff_deepdiff(
         rm_c = base_classes_dict.get(rm_name)
         if rm_c:
             base_classes_for_renames[add_name] = rm_c
-            
+
     # 2. Detect Method Renames and Signature changes
     changes = detect_method_renames(
         changes, base_classes_for_renames, pr_classes_dict, method_parameter_style
     )
-    
+
     # 4. Package Comparison (Legacy behavior)
     _compare_packages_legacy(base_filtered, pr_filtered, changes)
-    
+
     return DiffResult(module_name=pr.module_name, changes=tuple(changes))
 
 

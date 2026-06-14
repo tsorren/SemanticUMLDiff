@@ -1134,5 +1134,40 @@ Integración con publicadores (GitHub y Discord).
 * El comentario del PR en GitHub muestra la complejidad del módulo.
 * La notificación en Discord muestra la complejidad y adapta el color del embed (Verde para Baja, Amarillo para Media, Rojo para Alta).
 
+---
+
+# PHASE 17 — Lark LALR(1) & DeepDiff Engine Migration
+
+# Objetivo
+
+Migrar por completo el parser regex heredado a un parser formal LALR(1) basado en Lark, y el motor de comparación manual a una solución basada en DeepDiff y heurísticas refinadas (movimiento de clases y renombres de métodos).
+
+# Tareas Realizadas
+
+## T-1701
+Parser Formal Lark LALR(1).
+
+### Done cuando
+* Se escribió la gramática formal en `src/parser/lark_grammar.py` y se implementó el transformer en `src/parser/plantuml_parser.py`.
+* Se implementó `UMLType(str)` para resolver de manera elegante y determinista el parseo de retornos de tipo (prefijo y sufijo) y nombres de métodos sin importar el orden o presencia de parámetros.
+* Se resolvió el conflicto de tokens en Lark para descriptores y parámetros complejos priorizando `PARAM_TOKEN` y flexibilizando las declaraciones de paquetes sin comillas.
+
+## T-1702
+Motor de Diff Semántico basado en DeepDiff.
+
+### Done cuando
+* Se serializan los modelos a diccionarios canónicos en `src/diff/serializer.py` con purificación de tipos de parámetros para compararlos usando `DeepDiff`.
+* Se configuró `threshold_to_diff_deeper=0` para obtener inserciones y remociones a nivel de miembros individuales de manera precisa.
+* Se re-integraron las heurísticas de movimiento de clases y renombre de métodos (`src/diff/heuristics.py`) como post-procesadores sobre los resultados crudos de DeepDiff.
+
+## T-1703
+Migración, Limpieza y Validación.
+
+### Done cuando
+* Se eliminaron los módulos obsoletos y se renombraron los nuevos archivos a los nombres del legacy para mantener compatibilidad e higiene del código.
+* Se actualizaron todos los archivos de tests para ajustar importaciones de parser y diff.
+* Se validaron Ruff y Mypy en todo el código fuente de `src/`, y el suite de pruebas de pytest con 93 tests pasó al 100%, incluyendo la paridad de complejidad donaciones en exactamente 321 puntos y "Media 🟡".
+
+
 
 

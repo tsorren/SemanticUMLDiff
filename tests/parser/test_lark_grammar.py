@@ -1,6 +1,8 @@
-import pytest
 import lark
+import pytest
+
 from parser.plantuml_parser import LarkPlantUMLParser
+
 
 def test_basic_class():
     parser = LarkPlantUMLParser("test")

@@ -1,8 +1,7 @@
-import pytest
-import difflib
-from domain.models import UMLModel, UMLClass, UMLAttribute, UMLMethod, UMLRelation
-from domain.diff_models import ChangeType, DiffItem
 from diff.compute import compute_diff_deepdiff
+from domain.diff_models import ChangeType
+from domain.models import UMLAttribute, UMLClass, UMLMethod, UMLModel
+
 
 def test_moved_class_jaccard_similarity():
     # Base class: a.b.C1 with x, y attributes and m1() method
@@ -19,12 +18,12 @@ def test_moved_class_jaccard_similarity():
         attributes=(UMLAttribute("x", "int", "+"), UMLAttribute("y", "String", "+")),
         methods=(UMLMethod("m1", (), "void", "+"),)
     )
-    
+
     base = UMLModel("test", classes=(base_class,), relations=())
     pr = UMLModel("test", classes=(pr_class,), relations=())
-    
+
     diff = compute_diff_deepdiff(base, pr)
-    
+
     # Filter for non-package changes
     non_pkg_changes = [ch for ch in diff.changes if ch.entity_type != "package"]
     assert len(non_pkg_changes) == 1
@@ -51,22 +50,22 @@ def test_moved_class_unique_candidate():
         attributes=(UMLAttribute("x", "int", "+"),),
         methods=(UMLMethod("m1", (), "void", "+"),)
     )
-    
+
     base = UMLModel("test", classes=(base_class,), relations=())
     pr = UMLModel("test", classes=(pr_class,), relations=())
-    
+
     diff = compute_diff_deepdiff(base, pr)
-    
+
     # Should detect the move, AND detect the removal of attribute 'y'
     non_pkg_changes = [ch for ch in diff.changes if ch.entity_type != "package"]
     assert len(non_pkg_changes) == 2
-    
+
     move_ch = next(c for c in non_pkg_changes if c.entity_type == "class")
     assert move_ch.change_type == ChangeType.MODIFIED
     assert move_ch.context == "moved"
     assert move_ch.before == "a.b.C1"
     assert move_ch.after == "a.c.C1"
-    
+
     attr_ch = next(c for c in non_pkg_changes if c.entity_type == "attribute")
     assert attr_ch.change_type == ChangeType.REMOVED
     assert attr_ch.entity_name == "y"
@@ -87,12 +86,12 @@ def test_moved_class_rejected():
         attributes=(UMLAttribute("z", "String", "+"),),
         methods=()
     )
-    
+
     base = UMLModel("test", classes=(base_class,), relations=())
     pr = UMLModel("test", classes=(pr_class,), relations=())
-    
+
     diff = compute_diff_deepdiff(base, pr)
-    
+
     # Move should be rejected, so we should get ADDED and REMOVED changes for classes and members
     classes_changed = [c for c in diff.changes if c.entity_type == "class"]
     assert len(classes_changed) == 2
@@ -103,12 +102,12 @@ def test_method_rename_ratio():
     # SequenceMatcher ratio for "sendMessage" -> "sendMsg" is 14/20 = 70%
     base_m = UMLMethod("sendMessage", ("data: String",), "void", "+")
     pr_m = UMLMethod("sendMsg", ("data: String",), "void", "+")
-    
+
     base = UMLModel("test", classes=(UMLClass("User", "class", methods=(base_m,)),), relations=())
     pr = UMLModel("test", classes=(UMLClass("User", "class", methods=(pr_m,)),), relations=())
-    
+
     diff = compute_diff_deepdiff(base, pr)
-    
+
     assert len(diff.changes) == 1
     ch = diff.changes[0]
     assert ch.entity_type == "method"
@@ -123,12 +122,12 @@ def test_method_rename_rejected():
     base_m2 = UMLMethod("receiveMessage", ("data: String",), "void", "+")
     pr_m1 = UMLMethod("post", ("data: String",), "void", "+")
     pr_m2 = UMLMethod("fetch", ("data: String",), "void", "+")
-    
+
     base = UMLModel("test", classes=(UMLClass("User", "class", methods=(base_m1, base_m2)),), relations=())
     pr = UMLModel("test", classes=(UMLClass("User", "class", methods=(pr_m1, pr_m2)),), relations=())
-    
+
     diff = compute_diff_deepdiff(base, pr)
-    
+
     # We should get separate ADDED and REMOVED method changes
     added_methods = [c for c in diff.changes if c.change_type == ChangeType.ADDED]
     removed_methods = [c for c in diff.changes if c.change_type == ChangeType.REMOVED]
@@ -139,12 +138,12 @@ def test_method_parameter_type_changed():
     # Same name, different parameter signature
     base_m = UMLMethod("process", ("id: int",), "void", "+")
     pr_m = UMLMethod("process", ("id: String",), "void", "+")
-    
+
     base = UMLModel("test", classes=(UMLClass("User", "class", methods=(base_m,)),), relations=())
     pr = UMLModel("test", classes=(UMLClass("User", "class", methods=(pr_m,)),), relations=())
-    
+
     diff = compute_diff_deepdiff(base, pr)
-    
+
     assert len(diff.changes) == 1
     ch = diff.changes[0]
     assert ch.entity_type == "method"
