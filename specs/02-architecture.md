@@ -54,14 +54,10 @@ Responsibilities:
 Transforms textual PlantUML into a semantic intermediate model.
 
 Responsibilities:
-- parse supported UML subset,
-- normalize syntax differences,
-- validate references,
-- reject or warn on unsupported constructs.
-
-Implementation note:
-- start with controlled regexes and line-based parsing.
-- do not parse the entire PlantUML language initially.
+- preprocess input to strip comments and style lines,
+- parse EBNF Lark LALR(1) grammar for classes, interfaces, enums, packages, and relationships,
+- validate scoping and reference resolution,
+- reject or warn on syntax errors and degrade gracefully to empty models.
 
 ### 4. Semantic Model Layer
 Contains the normalized in-memory representation.
@@ -125,32 +121,36 @@ Responsibilities:
 
 ---
 
-## Recommended Internal Package Structure
+## Internal Package Structure
 
 ```text
 src/
   domain/
     models.py
-    diff.py
-    render.py
+    diff_models.py
+    integration_models.py
   parser/
     plantuml_parser.py
-    normalization.py
-    validators.py
+    lark_grammar.py
+    preprocessor.py
   diff/
-    semantic_diff.py
-    rename_detection.py
+    compute.py
+    heuristics.py
+    serializer.py
+    complexity.py
   graph/
-    graph_builder.py
-    graph_reduction.py
+    reducer.py
   render/
-    plantuml_builder.py
-    plantuml_renderer.py
+    puml_renderer.py
+    themes.py
   integrations/
-    github.py
-    discord.py
-  cli/
-    main.py
+    hosting.py
+    plantuml.py
+    publishers/
+      github.py
+      discord.py
+  pipeline.py
+  main.py
 tests/
 ```
 
@@ -254,7 +254,7 @@ The GitHub Action is designed to be called within a larger workflow that runs on
 
 ## Technical Debt & Future Work
 
-* **Rename Detection:** Currently, renaming a class, attribute, or method is processed as a `REMOVED` entity and a newly `ADDED` entity. This is a deliberate simplification for the MVP. The `DiffItem` and `ChangeType` enums are designed to be extensible so a `RENAMED` state can be cleanly added in future iterations when structural similarity heuristics are developed.
+* **Architecture Drift & Coupling:** Future iterations could evaluate historical diff timelines, architecture cycle detection, and coupling metrics directly from the generated models.
 
 ### Visualizing Differences
 The final `.puml` artifact communicates differences through explicit colors and HTML markup:
@@ -308,20 +308,13 @@ Optional later pass:
 
 ---
 
-## Suggested Regex Strategy
+## Suggested Grammar Strategy
 
-The parser should use a small and explicit set of regexes.
-
-Typical patterns to support:
-
-- class declaration
-- interface declaration
-- enum declaration
-- method signature
-- attribute declaration
-- relation declaration
-
-Avoid regexes that attempt to support all PlantUML language features in one pass.
+The parser compiles an explicit EBNF grammar to handle:
+- class/interface/enum structure and body elements (attributes and methods),
+- method return types and signatures with parameter sub-types,
+- visibility symbols and static/abstract modifiers,
+- relationships and cardinality notations.
 
 ---
 
